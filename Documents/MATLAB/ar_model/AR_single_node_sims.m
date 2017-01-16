@@ -66,20 +66,8 @@ tic
 [ adj_stand] = build_ar( data, nlags );          % Build network using standard ar
 standardtime = toc;
 
-% subplot 234; 
-% adj_true = [1];          % Plot true network
-% plotNetwork(adj_true)
-% title('Truth');
-% subplot 235;                               % Plot network using standard regressors
-% str = {num2str(standardtime), ' seconds' };
-% plotNetwork(adj_stand)
-% title(strcat({'Standard, '},num2str(standardtime),{' s'}))
-% subplot 236;                               % Plot network using spline regressors
-% plotNetwork(adj_spline)
-% title(strcat({'Spline, '},num2str(splinetime),{' s'}))
-
- 
-b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,1); % Run goodness of fit tests
+which_electrode = 1;
+b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,which_electrode); % Run goodness of fit tests
 
 
 %% AR(2) High Frequency
@@ -148,21 +136,10 @@ splinetime  = toc;
 tic
 [ adj_stand] = build_ar( data, nlags );          % Build network using standard ar
 standardtime = toc;
-% 
-% subplot 234; 
-% adj_true = [1];          % Plot true network
-% plotNetwork(adj_true)
-% title('Truth');
-% subplot 235;                               % Plot network using standard regressors
-% str = {num2str(standardtime), ' seconds' };
-% plotNetwork(adj_stand)
-% title(strcat({'Standard, '},num2str(standardtime),{' s'}))
-% subplot 236;                               % Plot network using spline regressors
-% plotNetwork(adj_spline)
-% title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
- 
-b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,1); % Run goodness of fit tests
+
+which_electrode = 1;
+b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,which_electrode); % Run goodness of fit tests
 
 
 %% AR(2) Low Frequency

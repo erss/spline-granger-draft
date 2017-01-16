@@ -1,4 +1,4 @@
-function bhat= ar_gof( adj_mat, data, nlags, true_coeffs,noise, taxis, which_electrode)
+function bhat= ar_gof( adj_mat, data, nlags, true_coeffs,taxis, which_electrode)
 % AR_GOF  builds AR-Spline models of data for given adjacencey matrix and tests 
 %         goodness of fit.
 % 
@@ -109,9 +109,9 @@ for ii = 1:nelectrodes
     
         figure;
         [yhat ylo yhi] = glmval(alpha,Xfull,'identity',stats); % Get signal estimate.
-        yhat = yhat + noise.*randn(size(yhat));
+ %       yhat = yhat + noise.*randn(size(yhat));
         subplot 311
-        %%%% xaxis = t0:1/f0:T;
+        
         plot(taxis(nlags+1:end),y,'k','LineWidth',1.5)          %% plot true signal
         hold on;
         plot(taxis(nlags+1:end),yhat,'r','LineWidth',1.5)       %% plot estimated signal
@@ -136,28 +136,28 @@ for ii = 1:nelectrodes
 %%%  KS plot for signal fit of which_electrode-------------------------------------------
       
       
-         figure; suptitle('KS Plots for Signal Fits')
-        % p = get(gcf,'Number');
-      
-
-     [emp_cdf, x1, L, U] = ecdf(yhat);
-     [theo_cdf x2, L2, U2] = ecdf(y);       
-
-       n = length(y);
-        % KS plot
-        
-        plot(x1,emp_cdf,'k'); hold on; 
-        plot(x2,theo_cdf,'r'); 
-        plot(x1,L,'--k','LineWidth',1);
-        plot(x1,U,'--k','LineWidth',1);
-        xlabel(strcat({'Electrode '},num2str(ii)),'FontSize',12);
-      
-       axis tight
-       
-     
-       h= legend('Empirical CDF','Theoretical CDF', 'Lower CI', 'Upper CI');
-       set(h,'FontSize',8);
-       set(h,'Location','southeast')
+%          figure; suptitle('KS Plots for Signal Fits')
+%         % p = get(gcf,'Number');
+%       
+% 
+%      [emp_cdf, x1, L, U] = ecdf(yhat);
+%      [theo_cdf x2, L2, U2] = ecdf(y);       
+% 
+%        n = length(y);
+%         % KS plot
+%         
+%         plot(x1,emp_cdf,'k'); hold on; 
+%         plot(x2,theo_cdf,'r'); 
+%         plot(x1,L,'--k','LineWidth',1);
+%         plot(x1,U,'--k','LineWidth',1);
+%         xlabel(strcat({'Electrode '},num2str(ii)),'FontSize',12);
+%       
+%        axis tight
+%        
+%      
+%        h= legend('Empirical CDF','Theoretical CDF', 'Lower CI', 'Upper CI');
+%        set(h,'FontSize',8);
+%        set(h,'Location','southeast')
        
        
        figure;

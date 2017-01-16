@@ -1,6 +1,17 @@
-function [ b] = generate_surrogates( data, adj_mat,nlags, which_electrode , nsims )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+function [ b] = generate_surrogates( data, adj_mat, nlags, which_electrode , nsims )
+% GENERATE_SURROGATES creates surrogates for the coefficients estimates
+% when building AR models in the spline basis.
+%
+% INPUTS:
+%  data            = A matrix of electode data with dimensions electrodes x
+%                  time
+%  adj_mat         = adjacencey matrix for corresponding network
+%  nlags           = The number of lags used as used for predictor variables
+%  which_electrode = the electrode whose data is used for the model fit
+%  nsims           = number of surrogates
+% 
+% OUTPUTS:
+%  b  = contains estimates for coefficients in each row.
 
 
    nelectrodes = size(data,1);            % number electrodes
