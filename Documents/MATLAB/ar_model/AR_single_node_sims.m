@@ -18,7 +18,7 @@ N = N1+L;                                 % Number of time steps.
 
 x1 = zeros(N,1);    
 
-noise = 1;                                 % noise level
+noise = 7;                                 % noise level
 
 for k=L+1:N                                % For each time step,
     x1(k) = sum(a1.*x1(k-1:-1:k-L)) + noise*randn();
@@ -90,7 +90,7 @@ N = N1+L;                                 % Number of time steps.
 
 x1 = zeros(N,1);    
 
-noise = 1;                                 % noise level
+noise = 7;                                 % noise level
 
 for k=L+1:N                                % For each time step,
     x1(k) = sum(a1.*x1(k-1:-1:k-L)) + noise*randn();

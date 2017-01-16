@@ -84,7 +84,7 @@ plotNetwork(adj_spline)
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
 
-b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,3); % Run goodness of fit tests
+b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,1); % Run goodness of fit tests
 
 %%% Simulation 2, 3 N network
 

@@ -1,4 +1,4 @@
-function [ b ] = estimate_coef( data, adj_mat, nlags)
+function [ b, yhat ] = estimate_coef( data, adj_mat, nlags)
 % ESTIMATE_COEF builds an AR model using splines, given a known network configuration.
 % DATA has dimension number of electrodes by time, ADJ_MAT contains network
 % connectivity, NLAGS is the number of lags for each electrode used to fit
@@ -9,6 +9,8 @@ function [ b ] = estimate_coef( data, adj_mat, nlags)
    nobservations = length(data(1,nlags+1:end)); % number of observations
 
 b = zeros(nelectrodes,nlags*nelectrodes);
+yhat = zeros(nelectrodes,size(data,2));
+yhat = yhat(:,nlags+1:end);
 %%% Define control points and build predictors
 
 c_pt_times = [0:10:nlags];  % Define Control Point Locations
@@ -65,7 +67,10 @@ for ii = 1:nelectrodes
        [alpha,~,stats] = glmfit(Xfull,y);  % estimate values at control points, alpha
        bhat = Z1*alpha(2:end);             % calculate beta values, for every point in space
                                            % only for electrodes in network
-         
+       
+      yhat(ii,:) = glmval(alpha,Xfull,'identity'); % Get signal estimate.
+                                    
+                                           
         j =1;
         for k = 1:nelectrodes             
            if preds(k)
