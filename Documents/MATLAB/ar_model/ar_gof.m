@@ -1,6 +1,6 @@
 function bhat= ar_gof( adj_mat, data, nlags, true_coeffs,taxis, which_electrode)
 % AR_GOF  builds AR-Spline models of data for given adjacencey matrix and tests 
-%         goodness of fit.
+%         goodness of fit for one of the electrodes.
 % 
 % INPUTS:
 %  ad_mat = the adjacency matrix
