@@ -11,13 +11,20 @@ function [ conf_int ] = myBootstrap( data, nshuffles, nsamples )
  end
  
  std_means = std(meansample); % standard deviation of means
- avg_means = mean(meansample); % mean 
- meansample = sort(meansample);
+ avg_means = mean(meansample); % mean of means
  
- lower_ind = nshuffles * 0.025;
- upper_ind = nshuffles * 0.975;
- CI(1) = mean([meansample(ceil(lower_ind)),meansample(floor(lower_ind))]);
- CI(2) = mean([meansample(ceil(upper_ind)),meansample(floor(upper_ind))]);
+ meansample = sort(meansample);   % sort data
+ lower_ind = nshuffles * 0.025;   % finds index of 2.5%
+ upper_ind = nshuffles * 0.975;   %            ... 97.5 %
+ 
+ 
+ %histogram(meansample)
+ % if lower_ind and upper_ind aren't integer numbers, take average
+ % meansample at ceiling and floor index
+ %CI(1) = mean([meansample(ceil(lower_ind)),meansample(floor(lower_ind))]);
+ %CI(2) = mean([meansample(ceil(upper_ind)),meansample(floor(upper_ind))]);
+ CI(1) = meansample(lower
+ % 95% confidence interval
  conf_int = [avg_means - std_means*(CI(1)-CI(2)); avg_means + std_means*(CI(1)-CI(2))];
  
 

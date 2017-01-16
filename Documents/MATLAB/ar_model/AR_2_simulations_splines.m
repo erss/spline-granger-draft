@@ -8,7 +8,7 @@ fNQ = f0/2; % Nyquist frequency
 
 taxis = dt:dt:T; % time axis
 
-%% Simulation 1, 3 N network
+%%% Simulation 1, 3 N network
 %%% simulate data ---------------------------------------------------------
 a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   %AR coefficients for signal 1
 a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';    %                  ...signal 2
@@ -86,7 +86,7 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
 b_est = ar_gof(adj_spline, data, nlags,true_coeffs,noise,taxis,3); % Run goodness of fit tests
 
-%% Simulation 2, 3 N network
+%%% Simulation 2, 3 N network
 
 %%% Simulate signals --------------------------------------------------
 a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   %AR coeffictients for signal 1
@@ -165,7 +165,7 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
  
 b_est = ar_gof(adj_spline, data, nlags,true_coeffs,noise,taxis,1); % Goodness of fit tests
 
-%% Simulation 3, 3 N network
+%%% Simulation 3, 3 N network
 
 
 %%% Simulate signals ----------------------------------------------------
@@ -375,8 +375,8 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
  
 b_est = ar_gof(adj_spline, data, nlags,true_coeffs,noise,taxis,2); % Run goodness of fit tests
 
-%%
-h = get(0,'children');
-for i=1:length(h)
-  saveas(h(i), ['figure' num2str(i)], 'jpg');
-end
+% %%
+% h = get(0,'children');
+% for i=1:length(h)
+%   saveas(h(i), ['figure' num2str(i)], 'jpg');
+% end
