@@ -62,7 +62,7 @@ plot(b(which_electrode,:),'--k','LineWidth',1) % plot original model fit
 %%% Bootstrap for each coefficient estimate on the surrogate data ---------
 bounds = zeros(2,size(b_trial,2));
 nshuffles = 1000; % number of times you resample from data
-nsamples = nsurrogates*0.75; % number of samples you take
+nsamples = nsurrogates; % number of samples you take
 for k = 1:size(b_trial,2)
     
     bounds(:,k) = myBootstrap(b_trial(:,k),b(which_electrode,k),nshuffles, nsamples);

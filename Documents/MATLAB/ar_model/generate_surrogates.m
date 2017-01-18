@@ -72,12 +72,12 @@ ii = which_electrode;
 
     % Fit full model and calculate RSS
        Xfull = X * Z1;      % regressors for y_hat = X*Z1*alpha
-       [alpha,~,stats] = glmfit(Xfull,y);  % estimate values at control points, alpha
+       [alpha,~,stats] = glmfit(Xfull,y,'normal','constant','off');  % estimate values at control points, alpha
        
        for kk = 1:nsims
        alpha_hat = alpha + sqrtm(stats.covb)*normrnd(0,1,length(alpha),1);
-       bhat(kk,:) = Z1*alpha_hat(2:end);             % calculate beta values, for every point in space
-                                           % only for electrodes in network
+     %  bhat(kk,:) = Z1*alpha_hat(2:end);             % calculate beta values, for every point in space
+        bhat(kk,:) = Z1*alpha_hat;                                     % only for electrodes in network
               j =1;
             for k = 1:nelectrodes
                if preds(k)

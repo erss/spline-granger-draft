@@ -7,7 +7,7 @@ function [ conf_int ] = myBootstrap( data, b, nshuffles, nsamples )
 
  for ii = 1:nshuffles  % shuffles data nshuffles number of times
     dsample = datasample(data,nsamples);  % randomly samples nsamples with replacement
-    delta(ii) = mean(dsample) -b;       % takes mean for every sample and 
+    delta(ii) = mean(dsample) - b;       % takes mean for every sample and 
                                         % calculates difference from 'true'
  end
  

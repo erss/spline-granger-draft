@@ -72,14 +72,15 @@ end
 
 
         % Fit full model and calculate RSS
-        Xfull = X * Z1;      % regressors for y_hat = X*Z1*b
-        [b,~,stats] = glmfit(Xfull,y);
-        fit.weights = b;
+        Xfull = X * Z1;      % regressors for y_hat = X*Z1*alpha
+        [alpha,~,stats] = glmfit(Xfull,y,'normal','constant','off');
+        fit.weights = alpha;
         fit.pvals = stats.p;
         fit.se = stats.se;
      
-        A =[ones(size(Xfull,1),1) Xfull];
-        y_hat = A*round(b,10);
+        %A =[ones(size(Xfull,1),1) Xfull];
+        A = [Xfull]; %%% constant off
+        y_hat = A*round(alpha,10);
         error = (y_hat - y).^2;
         rss = sum(error);
 
@@ -87,14 +88,15 @@ end
         for ii = 1:nelectrodes
           indices = ~(e_names == ii); % returns logical vector
           X0 = X(:,indices); % only look at subset of history not including electrode ii
-          X0full = X0 * Z0;  % regressors for y_hat = X0*Z0*b
-          [b0,~,stats] = glmfit(X0full,y);
-          fit0.weights = b;
+          X0full = X0 * Z0;  % regressors for y_hat = X0*Z0*a0
+          [a0,~,stats] = glmfit(X0full,y,'normal','constant','off');
+          fit0.weights = alpha;
           fit0.pvals = stats.p;
           fit0.se = stats.se;
 
-          A =[ones(size(X0full,1),1) X0full];
-          y_hat = A*round(b0,10) ;
+         % A =[ones(size(X0full,1),1) X0full];
+           A = [X0full];
+          y_hat = A*round(a0,10) ;
 
           error = (y_hat - y).^2;
           rss0 = sum(error);
