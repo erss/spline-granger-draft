@@ -30,7 +30,8 @@ function bhat= ar_gof( adj_mat, data, nlags, true_coeffs,taxis, which_electrode)
     
 
 %%% Get coefficient estimates and signal estimates
-    [bhat, yhat] = estimate_coef(data,adj_mat,nlags);
+    flag =1; % spline model 
+    [bhat, yhat] = estimate_coef(data,adj_mat,nlags,flag);
     yhat = yhat(which_electrode,:); % only compare which_electrode
     bhat = bhat(which_electrode,:); %  
 

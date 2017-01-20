@@ -26,7 +26,7 @@ title('KS plot','FontSize',20);
 legend('1-1 line', 'Lower CI', 'Upper CI','KS line');
 xlim([0 1]);
 ylim([0 1]);
-
+hold off;
 % plot(xaxis,y_cdf,'r')
 % hold on;
 % plot(xaxis,yhat_cdf,'k')

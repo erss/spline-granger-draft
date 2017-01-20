@@ -45,10 +45,6 @@ title('Zoomed signal','FontSize',15);
 subplot(2,3,6)
 mySpec(x1,f0)
 
-
-
-
-
 %%% Define inputs for model building and GoF -------------------------
 data = x1';                      % Conglomerate data in one matrix
 nlags = 200;                               % Define order of AR model
@@ -67,7 +63,11 @@ tic
 standardtime = toc;
 
 which_electrode = 1;
-b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,which_electrode); % Run goodness of fit tests
+%b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,which_electrode); % Run goodness of fit tests
+[ bhat, yhat ] = estimate_coef( data, adj_stand, nlags, 0);
+
+figure;
+plot(bhat); 
 
 
 %% AR(2) High Frequency
@@ -141,6 +141,10 @@ standardtime = toc;
 which_electrode = 1;
 b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,which_electrode); % Run goodness of fit tests
 
+[ bhat, yhat ] = estimate_coef( data, adj_stand, nlags, 0);
+
+figure;
+plot(bhat); 
 
 %% AR(2) Low Frequency
 
@@ -189,6 +193,14 @@ title('Zoomed signal','FontSize',15);
 
 subplot(2,3,6)
 mySpec(x1,f0)
+
+which_electrode = 1;
+b_est = ar_gof(adj_spline, data, nlags,true_coeffs,taxis,which_electrode); % Run goodness of fit tests
+
+[ bhat, yhat ] = estimate_coef( data, adj_stand, nlags, 0);
+
+figure;
+plot(bhat); 
 
 %% Low frequency, bandpass filtered
 

@@ -1,4 +1,4 @@
-function [ b, yhat ] = estimate_coef( data, adj_mat, nlags)
+function [ b, yhat ] = estimate_coef( data, adj_mat, nlags, flag)
 % ESTIMATE_COEF builds an AR model using splines, given a known network configuration.
 % DATA has dimension number of electrodes by time, ADJ_MAT contains network
 % connectivity, NLAGS is the number of lags for each electrode used to fit
@@ -62,6 +62,8 @@ for ii = 1:nelectrodes
         y = data(ii,nlags+1:end);   
         y = y';
 
+        
+        if flag == 1 % splines
     % Fit full model and calculate RSS
        Xfull = X * Z1;      % regressors for y_hat = X*Z1*alpha
        [alpha,~,stats] = glmfit(Xfull,y,'normal','constant','off');  % estimate values at control points, alpha
@@ -69,7 +71,13 @@ for ii = 1:nelectrodes
          bhat = Z1*alpha;                                     % only for electrodes in network
        
       yhat(ii,:) = glmval(alpha,Xfull,'identity','constant','off'); % Get signal estimate.
-                                    
+        end
+        
+        if flag ==0  % traditional AR
+          [bhat,~,stats] = glmfit(X,y,'normal','constant','off');
+          yhat(ii,:) = glmval(bhat,X,'identity','constant','off'); % Get signal estimate.
+
+        end
                                            
         j =1;
         for k = 1:nelectrodes             

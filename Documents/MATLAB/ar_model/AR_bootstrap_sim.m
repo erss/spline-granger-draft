@@ -41,32 +41,22 @@ nlags = 40;                               % Define order of AR model
 %%% Build network using splines -----------------------------------------
 
 [ adj_spline ] = build_ar_splines( data, nlags); 
-b = estimate_coef(data,adj_spline, nlags); % estimated coefficients  from adj_spline
+b = estimate_coef(data,adj_spline, nlags,1); % estimated coefficients  from adj_spline
 
-%%% Generate surrogate data given adj_spline ----------------------------
+%%% Bootstrap for each coefficient estimate on the surrogate data ---------
 
 which_electrode = 1; % which electrode in network to generate data for 
+nsurrogates = 10000; % number of surrogates
 
-nsurrogates = 1000; % number of surrogates
-
-b_trial = generate_surrogates(data,adj_spline,nlags,which_electrode,nsurrogates);
+[b_surrogates, bounds]= myBootstrap(data,adj_spline,nlags,which_electrode,nsurrogates);
 
 figure;
 for row = 1:nsurrogates
- plot(b_trial(row,:))  % plot surrogate data
+ plot(b_surrogates(row,:))  % plot surrogate data
  hold on;
 end
 
 plot(b(which_electrode,:),'--k','LineWidth',1) % plot original model fit
-
-%%% Bootstrap for each coefficient estimate on the surrogate data ---------
-bounds = zeros(2,size(b_trial,2));
-nshuffles = 1000; % number of times you resample from data
-nsamples = nsurrogates; % number of samples you take
-for k = 1:size(b_trial,2)
-    
-    bounds(:,k) = myBootstrap(b_trial(:,k),b(which_electrode,k),nshuffles, nsamples);
-end
 
 
 %%% plot estimated coefficients and confidence bounds --------------------
