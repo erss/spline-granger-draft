@@ -41,10 +41,10 @@ for ii = 1:nelectrodes
     preds = logical(adj_mat(ii,:)); %% Use results of F-test to input in network
     data_copy = data(preds,:); %% Remove electrodes not connected in spline network
     
-    
+    if sum(data_copy) ~= 0
     Z1 = kron(eye(size(data_copy,1)),Z);     % Build block diagonal spline regressors
   
-     X = [];                                 % Build history matrix
+          X = [];                                 % Build history matrix
     for k = 1:size(data_copy,1)
         X_temp = []; 
         sgnl = data_copy(k,:)';
@@ -66,15 +66,15 @@ for ii = 1:nelectrodes
         if flag == 1 % splines
     % Fit full model and calculate RSS
        Xfull = X * Z1;      % regressors for y_hat = X*Z1*alpha
-       [alpha,~,stats] = glmfit(Xfull,y,'normal','constant','off');  % estimate values at control points, alpha
+       [alpha,~,~] = glmfit(Xfull,y,'normal','constant','off');  % estimate values at control points, alpha
      %  bhat = Z1*alpha(2:end);             % calculate beta values, for every point in space
          bhat = Z1*alpha;                                     % only for electrodes in network
        
       yhat(ii,:) = glmval(alpha,Xfull,'identity','constant','off'); % Get signal estimate.
         end
         
-        if flag ==0  % traditional AR
-          [bhat,~,stats] = glmfit(X,y,'normal','constant','off');
+        if flag == 0  % traditional AR
+          [bhat,~,~] = glmfit(X,y,'normal','constant','off');
           yhat(ii,:) = glmval(bhat,X,'identity','constant','off'); % Get signal estimate.
 
         end
@@ -86,8 +86,11 @@ for ii = 1:nelectrodes
                j = j+1;
            end
         end
-
+   
     end
+
+end
+    
 
 end
 
