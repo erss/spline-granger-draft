@@ -84,7 +84,7 @@ plotNetwork(adj_spline)
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
 
-b_est = ar_gof(adj_spline, adj_stand,data, nlags,true_coeffs,taxis,1); % Run goodness of fit tests
+b_est = ar_gof(adj_spline, adj_stand,data, nlags,true_coeffs,taxis,2); % Run goodness of fit tests
 
 %% Simulation 2, 3 N network
 T = 5;      % total length of recording (seconds)
@@ -403,7 +403,7 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 b_est = ar_gof(adj_spline, adj_stand,data, nlags,true_coeffs,taxis,1); % Run goodness of fit tests
 
 % %%
-% h = get(0,'children');
-% for i=1:length(h)
-%   saveas(h(i), ['figure' num2str(i)], 'jpg');
-% end
+ h = get(0,'children');
+ for i=1:length(h)
+   saveas(h(i), ['figure' num2str(i)], 'jpg');
+ end
