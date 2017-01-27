@@ -74,7 +74,6 @@ title('estimated network','FontSize',15);
 
 %%% Simulate independent network ---------------------------------------
 
-%%% Simulate signals --------------------------------------------------
 a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   %AR coeffictients for signal 1
 a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';   %                  ...signal 2
 a3 = -.3*ones(size(a1));                    %                  ...signal 3
@@ -130,21 +129,21 @@ title('independent signal');
 
 
 figure();
-plot(X,H,'k');
+plot(X,H,'k','LineWidth',1.5);
 hold on
-plot(X1,H1,'r');
-plot(X2,H2,'g');
+plot(X1,H1,'r','LineWidth',1.5);
+plot(X2,H2,'g','LineWidth',1.5);
 legend('True Signal','Estimated Signal','Independent Signal')
 title('CDFs of Spectrum');
 
-% Compute confidence bounds
+% Compute confidence bounds Priestley p 478
 
 a = 2.2414; % for 95% confidence bounds
 N = N1; % number of observations from which H is computed ? length of signal ?
 
 flag = 'biased'; % dive by 1/N
 
-R = xcorr(y,flag); % autocorrelation of true signal
+R = xcorr(yhat,flag); % autocorrelation of estimated signal
 
 G = sum(R(2:end-2).^2);
 G = G/(4*pi);
@@ -153,4 +152,13 @@ conf = a*sqrt(8*pi*G/N);
 
 plot(X1,H1 + conf, '--r');
 plot(X1,H1 - conf, '--r');
+
+R = xcorr(zhat,flag); % autocorrelation of independent signal
+G = sum(R(2:end-2).^2);
+G = G/(4*pi);
+
+conf = a*sqrt(8*pi*G/N);
+
+plot(X2,H2 + conf, '--g');
+plot(X2,H2 - conf, '--g');
 
