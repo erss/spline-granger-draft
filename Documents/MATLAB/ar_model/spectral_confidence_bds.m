@@ -123,7 +123,7 @@ subplot 133
 title('independent signal');
 
 % compute and plot cumulative distributions of spectra
-[H, X] = ecdf(h);
+[H, X] = ecdf(h);           
 [H1, X1] = ecdf(h_hat);
 [H2, X2] = ecdf(h_z);
 
@@ -136,12 +136,12 @@ plot(X2,H2,'g','LineWidth',1.5);
 legend('True Signal','Estimated Signal','Independent Signal')
 title('CDFs of Spectrum');
 
-% Compute confidence bounds Priestley p 478
+% Compute confidence bounds for estimated signal (Priestley p 478)
 
 a = 2.2414; % for 95% confidence bounds
 N = N1; % number of observations from which H is computed ? length of signal ?
 
-flag = 'biased'; % dive by 1/N
+flag = 'biased'; % divide by 1/N
 
 R = xcov(yhat,flag); % autocovariance of estimated signal
 
@@ -152,6 +152,9 @@ conf = a*sqrt(8*pi*G/N);
 
 plot(X1,H1 + conf, '--r');
 plot(X1,H1 - conf, '--r');
+
+
+% Compute confidence bounds for independent signal (Priestley p 478)
 
 R = xcov(zhat,flag); % autocovariance of independent signal
 G = sum(R(2:end-2).^2);
