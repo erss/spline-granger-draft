@@ -143,7 +143,7 @@ N = N1; % number of observations from which H is computed ? length of signal ?
 
 flag = 'biased'; % dive by 1/N
 
-R = xcorr(yhat,flag); % autocorrelation of estimated signal
+R = xcov(yhat,flag); % autocovariance of estimated signal
 
 G = sum(R(2:end-2).^2);
 G = G/(4*pi);
@@ -153,7 +153,7 @@ conf = a*sqrt(8*pi*G/N);
 plot(X1,H1 + conf, '--r');
 plot(X1,H1 - conf, '--r');
 
-R = xcorr(zhat,flag); % autocorrelation of independent signal
+R = xcov(zhat,flag); % autocovariance of independent signal
 G = sum(R(2:end-2).^2);
 G = G/(4*pi);
 
