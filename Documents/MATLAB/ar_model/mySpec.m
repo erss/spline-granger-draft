@@ -1,4 +1,4 @@
-function mySpec( x, f0 )
+function [faxis, Sxx] = mySpec( x, f0 )
 % MYSPEC computes the spectrum of a signal, x, at a sampling frequency, f0.
 %  
 
