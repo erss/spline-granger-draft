@@ -46,7 +46,7 @@ xlabel('Time (seconds)','FontSize',15)
 title('Zoomed signal','FontSize',15);
 
 subplot(2,3,6)
-mySpec(x1,f0)
+mySpec(x1,f0);
 
 %%% Define inputs for model building and GoF -------------------------
 data = x1';                      % Conglomerate data in one matrix
@@ -116,7 +116,7 @@ xlabel('Time (seconds)','FontSize',15)
 title('Zoomed signal','FontSize',15);
 
 subplot(2,3,6)
-mySpec(x1,f0)
+mySpec(x1,f0);
 
 order = 300;
 band = [10 20]; % if BAND(1) >0 and BAND(2) <fNQ
@@ -144,7 +144,7 @@ xlabel('Time (seconds)','FontSize',15)
 title('Zoomed signal','FontSize',15);
 
 subplot(2,3,6)
-mySpec(y,f0)
+mySpec(y,f0);
 
 
 

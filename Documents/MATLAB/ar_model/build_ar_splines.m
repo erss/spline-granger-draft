@@ -90,7 +90,7 @@ end
           X0 = X(:,indices); % only look at subset of history not including electrode ii
           X0full = X0 * Z0;  % regressors for y_hat = X0*Z0*a0
           [a0,~,stats] = glmfit(X0full,y,'normal','constant','off');
-          fit0.weights = alpha;
+          fit0.weights = a0;
           fit0.pvals = stats.p;
           fit0.se = stats.se;
 
@@ -103,7 +103,7 @@ end
           
           % Compute F statistic
   
-           F(electrode,ii) = ((rss0 - rss)/num_c_pts)/(rss/(nobservations-nelectrodes*num_c_pts-1));
+           F(electrode,ii) = ((rss0 - rss)/num_c_pts)/(rss/(nobservations-nelectrodes*num_c_pts));
           
         end
         
@@ -113,9 +113,9 @@ end
     % Hypothesis test
     
     
-    adj_mat = fpdf(F,num_c_pts,nobservations-nelectrodes*num_c_pts-1);
+    adj_mat = fpdf(F,num_c_pts,nobservations-nelectrodes*num_c_pts);
     
-    q = 0.1; % max number acceptable proportion of false discoveries 
+    q = 0.01; % max number acceptable proportion of false discoveries 
     m = nelectrodes^2; % number of total tests performed
     
     ivals = 1:m;

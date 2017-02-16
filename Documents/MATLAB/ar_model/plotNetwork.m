@@ -1,5 +1,5 @@
 function plotNetwork( adj)
-imagesc(adj); colormap gray
+imagesc(adj); colormap(flipud(gray))
 
 
 NumTicks = size(adj,2)+1;

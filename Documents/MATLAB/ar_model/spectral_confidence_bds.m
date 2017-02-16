@@ -10,8 +10,8 @@ fNQ = f0/2;    % Nyquist frequency
 noise=.25;
 taxis = dt:dt:T; % time axis
 
-electrode = 1;
-nrealizations = 100;
+electrode = 1; % which electrode to run GOF on
+nrealizations = 1; % number of realizations for each process
 
 %%% simulate 'true' network --------------------------------------------------
 a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   %AR coefficients for signal 1
@@ -20,7 +20,6 @@ a3 = -.3*ones(size(a1));                    %                  ...signal 3
 
 L = length(a1);                             % Number of AR terms.
 N = N1+L;                                   % Number of time steps.
-
            
 nlags = 40;                               % Define order of AR model
                                            % needs to be larger than true
@@ -30,6 +29,7 @@ b(1,1:40) = a2;
 b(1,41:80) = a3;
 b(2,41:80) = a3;
 b(3,81:120) = a1;
+
 h_sum = 0;
 for i = 1:nrealizations
     data = zeros(3,N);
@@ -173,6 +173,10 @@ title('true signal','FontSize',15);
 [H, X] = ecdf(h);           
 [H1, X1] = ecdf(h_hat);
 [H2, X2] = ecdf(h_z);
+% 
+% H=2*H;
+% H1 = 2*H1;
+% H2 = 2*H2;
 
 
 figure();

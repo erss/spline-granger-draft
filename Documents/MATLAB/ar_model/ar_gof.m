@@ -1,4 +1,4 @@
-function bhat= ar_gof( adj_spline,adj_stand, data, nlags, true_coeffs,taxis, which_electrode)
+function [bhat H P]= ar_gof( adj_spline,adj_stand, data, nlags, true_coeffs,taxis, which_electrode)
 % AR_GOF  builds AR-Spline models of data for given adjacencey matrix and tests 
 %         goodness of fit for one of the electrodes.
 % 
@@ -40,9 +40,60 @@ function bhat= ar_gof( adj_spline,adj_stand, data, nlags, true_coeffs,taxis, whi
     [bhat0, yhat0] = estimate_coef(data,adj_stand,nlags,flag);
     yhat0 = yhat0(which_electrode,:); % only compare which_electrode
     bhat0 = bhat0(which_electrode,:); %  
-
     
+%%% Residual analysis ---------------------------------------------------
 
+residuals_spline_model = y - yhat;
+residuals_standard_model = y - yhat0;
+
+figure;
+subplot 321
+plot(residuals_spline_model,'.');
+title('residuals spline model');
+subplot 322
+plot(residuals_standard_model,'.');
+title('residuals standard model');
+
+subplot 323
+autocorr(residuals_spline_model);
+subplot 324
+autocorr(residuals_standard_model);
+
+subplot 325
+n= length(residuals_spline_model);
+[F,x] = ecdf(residuals_spline_model);
+Fn = normcdf(x,mean(residuals_spline_model),std(residuals_spline_model));
+
+plot(F,F,'b','LineWidth',2);
+hold on;
+plot(F,F-1.36/sqrt(n),'--r','LineWidth',2);
+plot(F,F+1.36/sqrt(n),'--r','LineWidth',2);
+plot(F,Fn,'g','LineWidth',2);
+
+legend('1-1 line', 'Lower CI', 'Upper CI','Emp vs Theoretical');
+xlim([0 1]);
+ylim([0 1]);
+
+subplot 326
+
+n= length(residuals_standard_model);
+[F,x] = ecdf(residuals_standard_model);
+Fn = normcdf(x,mean(residuals_standard_model),std(residuals_standard_model));
+
+plot(F,F,'b','LineWidth',2);
+hold on;
+plot(F,F-1.36/sqrt(n),'--r','LineWidth',2);
+plot(F,F+1.36/sqrt(n),'--r','LineWidth',2);
+plot(F,Fn,'g','LineWidth',2);
+
+legend('1-1 line', 'Lower CI', 'Upper CI','Emp vs Theoretical');
+xlim([0 1]);
+ylim([0 1]);
+
+
+%%% KStest
+
+[H,P]=kstest(zscore(residuals_standard_model))
 %%% Plot coefficient fits -----------------------------------
  
 
@@ -113,15 +164,15 @@ nsurrogates = 10000; % number of surrogates
    figure; 
    f0 = 1/(taxis(2)-taxis(1));
    subplot 131
-   mySpec(y,f0)
+   mySpec(y,f0);
    title('True signal','FontSize',12);
    
    subplot 132
-    mySpec(yhat,f0)
+    mySpec(yhat,f0);
    title('Spline model','FontSize',12);
    
    subplot 133
-    mySpec(yhat0,f0)
+    mySpec(yhat0,f0);
    title('Standard model','FontSize',12);
 
     
