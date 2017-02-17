@@ -17,8 +17,8 @@ set(gca,'XTickLabel',stringy)
 L = get(gca,'YLim');
 set(gca,'YTick',linspace(L(1),L(2),NumTicks))
 set(gca,'YTickLabel',stringy)
-xlabel('electrode', 'FontSize',12);
-ylabel('electrode', 'FontSize',12);
+ylabel('electrode - target', 'FontSize',12);
+xlabel('electrode - source', 'FontSize',12);
 
 grid on
 
