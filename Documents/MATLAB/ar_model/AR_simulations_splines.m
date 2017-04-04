@@ -34,15 +34,17 @@ x3 = x3(L+1:end);
 
 figure;
 subplot (2,3,[1 3])                              %Plot signals.
-% plot(taxis,x1)
-% hold on
-% plot(taxis,x2)
-% plot(taxis,x3)
-% plotchannels([x1';x2';x3']')
+plot(taxis,x1)
+hold on
+plot(taxis,x2)
+plot(taxis,x3)
+
 ylabel('Signal')
 xlabel('Time (seconds)')
 legend('x1','x2','x3')
 title('Sim 1','FontSize',15);
+
+
 
 %%% Define inputs for model building and GoF -------------------------
 data = [x1';x2';x3'];                      % Conglomerate data in one matrix
@@ -50,9 +52,11 @@ nlags = 40;                               % Define order of AR model
                                            % needs to be larger than true
                                            % order
                                            
-data = lsfilter(data', f0, [4 50]);
-figure; plotchannels(data);
-data = data';
+%data = lsfilter(data', f0, [4 50]);
+figure; 
+subplot(2,3,[1 3]);
+plotSignals(data);
+
 %%%% true coefficients 
 true_coeffs = cell(3);
 true_coeffs{1,1} = padarray(a1,nlags-L,'post'); % True coefficents up to 

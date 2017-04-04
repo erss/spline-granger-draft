@@ -116,7 +116,7 @@ end
     adj_mat = fpdf(F,nlags,nobservations-nelectrodes*nlags-1);
     
     
-    q = 0.1; % max number acceptable proportion of false discoveries 
+    q = 0.01; % max number acceptable proportion of false discoveries 
     m = nelectrodes^2; % number of total tests performed
     
     ivals = 1:m;

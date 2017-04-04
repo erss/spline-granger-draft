@@ -1,5 +1,5 @@
 %%% 1 Node network simulations, AR(2)
-%% AR(1) Low Frequency
+%% AR 
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
 
