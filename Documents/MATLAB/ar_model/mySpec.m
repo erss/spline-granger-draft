@@ -7,7 +7,7 @@ if nargin == 2
 end
 % 
 % NO TAPERS
-x = x - mean(x);
+x = x - ones(size(x)).*mean(x);
 dt = 1/f0;
 T = length(x)/f0;  % total length of recording (seconds)
 

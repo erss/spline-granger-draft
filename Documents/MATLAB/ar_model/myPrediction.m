@@ -1,4 +1,4 @@
-function [ y] = myPrediction( data, model_coefficients, nlags)
+function [ y] = myPrediction( data, model_coefficients)
 % MYPREDICTION computes the one-step prediction for an AR network model of
 % coefficients
 %
@@ -7,7 +7,6 @@ function [ y] = myPrediction( data, model_coefficients, nlags)
 %                    time
 %  model_coef      = model coefficients with dimensions electrodes x number 
 %                    predictor variables
-%  nlags          = The number of lags used as used for each signal
 % 
 % OUTPUTS:
 %  y =  The one-step prediction for each electrode in network with
@@ -19,20 +18,25 @@ function [ y] = myPrediction( data, model_coefficients, nlags)
 %     data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
 % end
 %
-% NOTE model_coefficents and nlags depend on each other
 
 nelectrodes = size(data,1);
+nlags = size(model_coefficients,3);
 
 %%% Build predictor variables--------------------------------------------
-   
-X= [];
-   
-for n = 1:nelectrodes
-    X = [X, data(n,end:-1:end-nlags+1)];
-end
+  
+for p = 1:nelectrodes
+    X = [];
+    b = [];  
+    for n = 1:nelectrodes
+        X = [X, data(n,end:-1:end-nlags+1)];
+        b = [b, squeeze(model_coefficients(p,n,:))'];
 
+    end
+     y(p) = X*b';
+  
+end
 %%% Put into model--------------------------------------------------------
-  y = X*model_coefficients';
+
   y = y';
 
 end

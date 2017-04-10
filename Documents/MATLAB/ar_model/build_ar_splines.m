@@ -21,7 +21,7 @@ function [ adj_mat] = build_ar_splines( data, nlags, c_pt_times )
 %% Define control points and build predictors
 
 if nargin == 2
-    c_pt_times = [0:10:nlags] ;  % Define Control Point Locations
+    c_pt_times = unique([0:10:nlags nlags]) ;  % Define Control Point Locations
 end
             
 s = 0.5;                                    % Define Tension Parameter

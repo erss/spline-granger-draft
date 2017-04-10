@@ -16,28 +16,44 @@ taxis = dt:dt:T; % time axis
 noise = 0.7;
 data = zeros(1,N);
 
+%%%% WHITE NOISE
 % % HIGH FREQUENCY SCENARIO 
+b = zeros(1,1,2);
+b(1,1,:)= [0.9 -0.8];
+nlags = size(b,3);
+%%% Note AIC/BIC indicate 2 is the best order
 
-b= [0.9 -0.8 .1 .1 .1];
-nlags = length(b);
-% % % 
-% % LOW FREQUENCY SCENARIO 
-% b= [0.9];
-% nlags = length(b);
+% % % % 
+% % % LOW FREQUENCY SCENARIO 
+% b = zeros(1,1,1);
+% b(1,1,:)= [0.9];
+% nlags = size(b,3);
 % 
-% %LOW FREQUENCY SCENARIO 
-% b= [0.3 0.3];
-% nlags = length(b);
-% 
-% % LOW FREQUENCY SCENARIO 
-
+% % 
+% % %LOW FREQUENCY SCENARIO 
+% b = zeros(1,1,2);
+% b(1,1,:)= [0.3 0.3];
+% nlags = size(b,3);
+% % b= [0.3 0.3];
+% % nlags = length(b);
+% % 
+% % % LOW FREQUENCY SCENARIO 
+% b = zeros(1,1,2);
+% b(1,1,:)= [0.9 -0.1];
+% nlags = size(b,3);
 % b= [0.9 -0.1];
 % nlags = length(b);
- 
+
 for k = nlags:length(data)-1;
-    data(:,k+1) = myPrediction(data(:,1:k),b,nlags);
-    data(:,k+1) = data(:,k+1) + noise.*randn;
+   data(:,k+1) = myPrediction(data(:,1:k),b);
+   data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
+      
 end
+
+%%%% PINK NOISE
+%  alpha = 0.33;
+%  data  = make_pink_noise(alpha,nobs,dt);
+
 subplot(3,2,[1 2])
  plot(data(1,:));
 
@@ -73,3 +89,6 @@ title('Estimated Coefficients','FontSize',15);
 subplot(3,2,4)
 mySpec(yhat,f0);
 title('Estimated signal spectrogram','FontSize',15);
+
+mvar_aic;
+

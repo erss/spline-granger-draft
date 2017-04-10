@@ -7,6 +7,18 @@ function [ b, yhat ] = estimate_coef( data, adj_mat, nlags, flag,c_pt_times)
 % flag =0; general AR
 % flag = 1; splines
 
+
+
+% b = [1:6;7:12;13:18]
+% nlags = 2;
+% nelectrodes = 3;
+% 
+% b = reshape(b,[nelectrodes nlags nelectrodes]);
+% 
+% b1 = b(1,:,:)
+% b1 = squeeze(b1)';
+% plotSignals(b1)
+
    nelectrodes = size(data,1);            % number electrodes
    nobservations = length(data(1,nlags+1:end)); % number of observations
 
