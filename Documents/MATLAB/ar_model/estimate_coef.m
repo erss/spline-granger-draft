@@ -1,33 +1,23 @@
-function [ b, yhat ] = estimate_coef( data, adj_mat, nlags, flag,c_pt_times)
+function [ b, yhat ] = estimate_coef( data, adj_mat, model_order, flag,c_pt_times)
 % ESTIMATE_COEF builds an AR model using splines, given a known network configuration.
 % DATA has dimension number of electrodes by time, ADJ_MAT contains network
-% connectivity, NLAGS is the number of lags for each electrode used to fit
+% connectivity, model_order is the number of lags for each electrode used to fit
 % the model.  B and YHAT are matrices containing the model fit coefficients and signal, 
 % respectively, for each electrode in each row.
 % flag =0; general AR
 % flag = 1; splines
 
 
-
-% b = [1:6;7:12;13:18]
-% nlags = 2;
-% nelectrodes = 3;
-% 
-% b = reshape(b,[nelectrodes nlags nelectrodes]);
-% 
-% b1 = b(1,:,:)
-% b1 = squeeze(b1)';
-% plotSignals(b1)
-
    nelectrodes = size(data,1);            % number electrodes
-   nobservations = length(data(1,nlags+1:end)); % number of observations
+   nobservations = length(data(1,model_order+1:end)); % number of observations
 
-b = zeros(nelectrodes,nlags*nelectrodes);
+%b = zeros(nelectrodes,model_order*nelectrodes);
+b = zeros(nelectrodes,nelectrodes,model_order);
 yhat = zeros(nelectrodes,size(data,2));
-yhat = yhat(:,nlags+1:end);
+yhat = yhat(:,model_order+1:end);
 %%% Define control points and build predictors
 if nargin == 4
-    c_pt_times = [0:10:nlags] ;  % Define Control Point Locations
+    c_pt_times = [0:10:model_order] ;  % Define Control Point Locations
 end
 
             
@@ -35,9 +25,9 @@ s = 0.5;                                    % Define Tension Parameter
 
 % Construct spline regressors for case nelectrodes = 1.
 c_pt_times_all = [c_pt_times(1)-2 c_pt_times c_pt_times(end)+2];
-Z = zeros(nlags,length(c_pt_times_all));
+Z = zeros(model_order,length(c_pt_times_all));
 num_c_pts = length(c_pt_times_all);  %number of control points in total
-for i=1:nlags
+for i=1:model_order
     nearest_c_pt_index = max(find(c_pt_times_all<i));
     nearest_c_pt_time = c_pt_times_all(nearest_c_pt_index);
     next_c_pt_time = c_pt_times_all(nearest_c_pt_index+1);
@@ -63,10 +53,10 @@ for ii = 1:nelectrodes
     for k = 1:size(data_copy,1)
         X_temp = []; 
         sgnl = data_copy(k,:)';
-        for i=1:nlags                                   %For each lag,
+        for i=1:model_order                                   %For each lag,
             X_temp = [X_temp, circshift(sgnl,i)];   %... shift x and store it.
         end
-        X_temp = X_temp(nlags+1:end,:);  
+        X_temp = X_temp(model_order+1:end,:);  
         X = [X X_temp];
     end
     
@@ -74,7 +64,7 @@ for ii = 1:nelectrodes
     %%% Build Model
      
     % Generate observations for given y
-        y = data(ii,nlags+1:end);   
+        y = data(ii,model_order+1:end);   
         y = y';
 
         
@@ -85,7 +75,9 @@ for ii = 1:nelectrodes
      %  bhat = Z1*alpha(2:end);             % calculate beta values, for every point in space
          bhat = Z1*alpha;                                     % only for electrodes in network
        
-      yhat(ii,:) = glmval(alpha,Xfull,'identity','constant','off'); % Get signal estimate.
+         yhat(ii,:) = glmval(alpha,Xfull,'identity','constant','off'); % Get signal estimate.
+         
+        
         end
         
         if flag == 0  % traditional AR
@@ -94,21 +86,21 @@ for ii = 1:nelectrodes
 
         end
                                            
-        j =1;
-        for k = 1:nelectrodes             
-           if preds(k)
-               b(ii,((k-1)*nlags + 1): k*nlags) = bhat(((j-1)*nlags + 1): j*nlags);         
-               j = j+1;
-           end
-        end
+%         j =1;
+%         for k = 1:nelectrodes             
+%            if preds(k)
+%                b(ii,((k-1)*model_order + 1): k*model_order) = bhat(((j-1)*model_order + 1): j*model_order);         
+%                j = j+1;
+%            end
+%         end
         
-        
+       
         
    
     end
 
 end
-    
-b = reshape(b,[nelectrodes nlags nelectrodes]);
+ b=b;   
+%b = reshape(b,[nelectrodes nelectrodes model_order]);
 end
 
