@@ -25,15 +25,15 @@ nlags = 40;                               % Define order of AR model
                                            % needs to be larger than true
                                            % order                                      
 b = zeros(3,3,nlags);
-b(1,1,:)=a2;
-b(1,2,:) = a3;
-b(2,2,:) =a3;
-b(3,3,:) = a1;
+% b(1,1,:)=a2;
+% b(1,2,:) = a3;
+% b(2,2,:) =a3;
+% b(3,3,:) = a1;
 
-% b(1,1:40) = a2;
-% b(1,41:80) = a3;
-% b(2,41:80) = a3;
-% b(3,81:120) = a1;
+b(1,1,:) = a1;            
+b(1,2,:) = a2;                                               
+b(2,2,:) = a2;
+b(3,3,:) = a3;
 
 h_sum = 0;
 for i = 1:nrealizations
@@ -212,12 +212,12 @@ plot(X1,H1 - conf1, '--r');
 
 % Compute confidence bounds for independent signal (Priestley p 478)
 
-R = xcov(zhat,flag); % autocovariance of independent signal
-G = sum(R(3:end-2).^2); % 3:9997, M = 3
-G = G/(4*pi);
-
-conf2 = a*sqrt(8*pi*G/N);
-
-plot(X2,H2 + conf2, '--g');
-plot(X2,H2 - conf2, '--g');
+% R = xcov(zhat,flag); % autocovariance of independent signal
+% G = sum(R(3:end-2).^2); % 3:9997, M = 3
+% G = G/(4*pi);
+% 
+% conf2 = a*sqrt(8*pi*G/N);
+% 
+% plot(X2,H2 + conf2, '--g');
+% plot(X2,H2 - conf2, '--g');
 

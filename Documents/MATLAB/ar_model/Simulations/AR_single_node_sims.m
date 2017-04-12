@@ -14,7 +14,7 @@ df = 1/T;   % frequency resolution
 fNQ = f0/2; % Nyquist frequency
 
 taxis = dt:dt:T; % time axis
-noise = 0.7;
+noise = 0.2;
 data = zeros(1,N);
 model_order = 20; % order used in model estimation
 
@@ -71,16 +71,12 @@ cntrl_pts = make_knots(model_order,10);
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
 [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order,cntrl_pts );
 
-
+%%% Plot results ---------------------------------------------------------
 subplot(3,2,[5 6])
 plot(squeeze(bhat(1,1,:)),'LineWidth',1.5)
 hold on
 plot(cntrl_pts(2:end),squeeze(bhat(1,1,cntrl_pts(2:end))),'o')
 title('Estimated Coefficients','FontSize',15);
-% figure;
-% plot(data);
-% hold on
-% plot(yhat,'--r');
 
 
 subplot(3,2,4)
@@ -90,4 +86,6 @@ title('Estimated signal spectrogram','FontSize',15);
 
 %%% Determine what AIC thinks is best order
 a=b;
-mvar_aic;
+% mvar_aic;
+
+goodness_of_fit_spectrum;

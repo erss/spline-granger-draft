@@ -11,6 +11,7 @@ fNQ = f0/2; % Nyquist frequency
 
 taxis = dt:dt:T; % time axis
 noise = 0.7;
+nelectrodes = 6;
 %%% Model coefficients
 data = zeros(6,N);
 a1 = 0.07*[0.1*hann(20)', -0.5*ones(20,1)']';
@@ -42,10 +43,7 @@ for k = nlags:length(data)-1;
     data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
 end
 
-mvar_aic;
-
-
-
+%mvar_aic;
 
 subplot(2,2,[1 2])
 for i = 1:6
@@ -117,4 +115,6 @@ plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
 
 end
 
+b=a;
+goodness_of_fit_spectrum;
 

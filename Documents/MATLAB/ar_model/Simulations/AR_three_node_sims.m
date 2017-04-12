@@ -2,7 +2,7 @@
 clear all;
 %%% Define model inputs ---------------------------------------------------
 
-
+nelectrodes = 3; % number of electrodes
 nlags = 40;  % true model order
 model_order = 100; % order used in model estimation
 T = 5;      % total length of recording (seconds)
@@ -14,7 +14,7 @@ fNQ = f0/2; % Nyquist frequency
 
 N = T*f0 + nlags;
 taxis = dt:dt:T; % time axis
-noise = 7;
+noise = 0.25;
 data = zeros(3,N);
 
 
@@ -100,6 +100,7 @@ subplot(2,2,4)
 mySpec(yhat(1,:),f0);
 title('Estimated signal spectrogram','FontSize',15);
 
+figure;
 subplot(1,3,1)
 plotNetwork(adj_true)
 title('True Network')
@@ -131,3 +132,5 @@ plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
 
 end
 
+b=a;
+goodness_of_fit_spectrum;
