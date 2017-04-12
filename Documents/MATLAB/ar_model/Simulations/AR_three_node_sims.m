@@ -2,7 +2,9 @@
 clear all;
 %%% Define model inputs ---------------------------------------------------
 
-model_order = 40;
+
+nlags = 40;  % true model order
+model_order = 100; % order used in model estimation
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
 
@@ -10,7 +12,7 @@ f0 = 1/dt;  % sampling frequency (Hz)
 df = 1/T;   % frequency resolution
 fNQ = f0/2; % Nyquist frequency
 
-N = T*f0 + model_order;
+N = T*f0 + nlags;
 taxis = dt:dt:T; % time axis
 noise = 7;
 data = zeros(3,N);
@@ -59,7 +61,7 @@ for k = nlags:length(data)-1;
     data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
 end
 
-mvar_aic;
+% mvar_aic; run to see mvgc toolbox order result
 
 
 
@@ -89,7 +91,7 @@ cntrl_pts = make_knots(model_order,10);
 tic
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
 splinetime  = toc;
-[ bhat, yhat ] = estimate_coefficient_fits( data, adj_mat, nlags, cntrl_pts);
+[ bhat, yhat ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
 
 
 %%% Plot results ----------------------------------------------------------

@@ -3,6 +3,7 @@ clear all;
 %%% Define model inputs ---------------------------------------------------
 nobs = 1000;   % number of observations per trial
 sgnl = 1;
+nelectrodes = 1;
 
 f0 = 200;  % sampling frequency (Hz)
 T = nobs/f0;      % total length of recording (seconds)
@@ -15,6 +16,7 @@ fNQ = f0/2; % Nyquist frequency
 taxis = dt:dt:T; % time axis
 noise = 0.7;
 data = zeros(1,N);
+model_order = 20; % order used in model estimation
 
 %%%% WHITE NOISE ---------------------------------------------------------
 %%% Sim 1 - HIGH FREQUENCY -----------------------------------------------
@@ -64,9 +66,6 @@ subplot(3,2,3)
 mySpec(data(1,:),f0);
 
 %%% Fit spline to data ---------------------------------------------------
-
-
-model_order =20;
 
 cntrl_pts = make_knots(model_order,10);
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );

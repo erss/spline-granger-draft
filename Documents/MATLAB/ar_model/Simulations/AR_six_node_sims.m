@@ -3,7 +3,7 @@ clear all;
 %%% Define model inputs ---------------------------------------------------
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
-model_order = 40;
+model_order = 40; % order used in model estimation
 f0 = 1/dt;  % sampling frequency (Hz)
 N = T*f0+model_order;   % number of samples needed
 df = 1/T;   % frequency resolution
@@ -35,6 +35,7 @@ a(6,3,:) = a4;
 adj_true = [1 1 0 0 0 0; 0 1 0 1 0 0; 0 0 1 1 0 0; 0 0 0 1 0 0; 0 1 0 0 1 0; 0 0 1 0 0 1];  
 
 nlags = length(a1);
+
 %%% Simulate data ------------------------------------------
 for k = nlags:length(data)-1;
     data(:,k+1) = myPrediction(data(:,1:k),a);
