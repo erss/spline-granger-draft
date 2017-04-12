@@ -24,17 +24,22 @@ N = N1+L;                                   % Number of time steps.
 nlags = 40;                               % Define order of AR model
                                            % needs to be larger than true
                                            % order                                      
-b = zeros(3,3*nlags);
-b(1,1:40) = a2;
-b(1,41:80) = a3;
-b(2,41:80) = a3;
-b(3,81:120) = a1;
+b = zeros(3,3,nlags);
+b(1,1,:)=a2;
+b(1,2,:) = a3;
+b(2,2,:) =a3;
+b(3,3,:) = a1;
+
+% b(1,1:40) = a2;
+% b(1,41:80) = a3;
+% b(2,41:80) = a3;
+% b(3,81:120) = a1;
 
 h_sum = 0;
 for i = 1:nrealizations
     data = zeros(3,N);
     for k = nlags:length(data)-1;
-        data(:,k+1) = myPrediction(data(:,1:k),b,nlags);
+        data(:,k+1) = myPrediction(data(:,1:k),b);
         data(:,k+1) = data(:,k+1) + noise.*randn(3,1);
     end
     
@@ -61,17 +66,17 @@ title('true network','FontSize',15);
 
 %%Get coefficient estimates and signal estimates
 
-flag = 1; % use splines to estimate
-[bhat, yhat] = estimate_coef(data,adj_mat,nlags,flag);
+cntrl_pts = make_knots(nlags,10);
+[bhat, yhat] = estimate_coefficient_fits( data, adj_mat, nlags, cntrl_pts );
 
 h_sum = 0;
 for i = 1:nrealizations
         data_hat = zeros(3,N);
     for k = nlags:length(data_hat)-1;
-        data_hat(:,k+1) = myPrediction(data_hat(:,1:k),bhat,nlags);
+        data_hat(:,k+1) = myPrediction(data_hat(:,1:k),bhat);
         data_hat(:,k+1) = data_hat(:,k+1) + noise.*randn(3,1);
     end
-    data_hat= data_hat(:,41:end);
+    data_hat= data_hat(:,nlags+1:end);
     yhat = data_hat(electrode,:);   
     [faxis, h_hat] = mySpec( yhat, f0,0 ); % compute spectra
     h_sum = h_hat + h_sum;
@@ -88,7 +93,7 @@ xlabel('Time (seconds)')
 legend('x1','x2','x3')
 title('estimated network','FontSize',15);
 
-
+%%
 %%% Simulate independent network ---------------------------------------
 
 a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   %AR coeffictients for signal 1
@@ -108,7 +113,7 @@ for i = 1:nrealizations
     data_z = zeros(3,N);
     
     for k = nlags:length(data_z)-1;
-        data_z(:,k+1) = myPrediction(data_z(:,1:k),z,nlags);
+        data_z(:,k+1) = myPrediction(data_z(:,1:k),z);
         data_z(:,k+1) = data_z(:,k+1) + noise.*randn(3,1);
     end
     

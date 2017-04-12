@@ -66,15 +66,7 @@ cntrl_pts = make_knots(model_order,10);
 
 %%
 
-for i = 1:3
-    for k = 1:3
-        figure;
-plot(squeeze(bhat(i,k,:)));
-hold on;
-plot(squeeze(a(i,k,:)));
-    end
 
-end
 %%
 subplot(3,2,[5 6])
 % plot(bhat,'LineWidth',1.5)
@@ -93,4 +85,16 @@ title('Estimated signal spectrogram','FontSize',15);
 
 figure; plotSignals(data)
 figure; plotSignals(yhat)
+
+ figure; 
+for i = 1:3
+    for k = 1:3
+      
+plot(squeeze(bhat(i,k,:)),'--r','LineWidth',1.5);
+hold on;
+plot(cntrl_pts(2:end),squeeze(bhat(i,k,cntrl_pts(2:end))),'ro')
+plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
+    end
+
+end
 
