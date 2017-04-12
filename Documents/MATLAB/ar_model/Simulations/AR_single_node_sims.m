@@ -1,4 +1,5 @@
 %%%%%%%% Single node network simulations ----------------------------------
+clear all;
 %%% Define model inputs ---------------------------------------------------
 nobs = 1000;   % number of observations per trial
 sgnl = 1;
@@ -22,21 +23,21 @@ b(1,1,:)= [0.9 -0.8];
 nlags = size(b,3);
 %%% Note AIC/BIC indicate 2 is the best order
 
-%%% Sim 2 - LOW FREQUENCY I -----------------------------------------------
-b = zeros(1,1,1);
-b(1,1,:)= [0.9];
-nlags = size(b,3);
-
-%%% Sim 3 - LOW FREQUENCY II ----------------------------------------------
-b = zeros(1,1,2);
-b(1,1,:)= [0.3 0.3];
-nlags = size(b,3);
- 
-%%% Sim 3 - LOW FREQUENCY III ---------------------------------------------
-
-b = zeros(1,1,2);
-b(1,1,:)= [0.9 -0.1];
-nlags = size(b,3);
+% %%% Sim 2 - LOW FREQUENCY I -----------------------------------------------
+% b = zeros(1,1,1);
+% b(1,1,:)= [0.9];
+% nlags = size(b,3);
+% 
+% %%% Sim 3 - LOW FREQUENCY II ----------------------------------------------
+% b = zeros(1,1,2);
+% b(1,1,:)= [0.3 0.3];
+% nlags = size(b,3);
+%  
+% %%% Sim 3 - LOW FREQUENCY III ---------------------------------------------
+% 
+% b = zeros(1,1,2);
+% b(1,1,:)= [0.9 -0.1];
+% nlags = size(b,3);
 
 
 %%% Generate white noise data from above coefficients
@@ -63,12 +64,13 @@ subplot(3,2,3)
 mySpec(data(1,:),f0);
 
 %%% Fit spline to data ---------------------------------------------------
-nlags =100;
-flag = 1; % use splines
-cntrl_pts = make_knots(nlags,10);
-%cntrl_pts = 0:10:nlags;
-[ adj_mat] = build_ar_splines( data, nlags, cntrl_pts );
-[bhat, yhat] = estimate_coefficient_fits( data, adj_mat, nlags,cntrl_pts );
+
+
+model_order =20;
+
+cntrl_pts = make_knots(model_order,10);
+[ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
+[bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order,cntrl_pts );
 
 
 subplot(3,2,[5 6])
@@ -86,6 +88,7 @@ subplot(3,2,4)
 mySpec(yhat,f0);
 title('Estimated signal spectrogram','FontSize',15);
 
+
+%%% Determine what AIC thinks is best order
 a=b;
 mvar_aic;
-

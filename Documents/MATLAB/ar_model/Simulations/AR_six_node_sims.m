@@ -1,4 +1,5 @@
 %%%%%%%% Six node network simulations -----------------------------------
+clear all;
 %%% Define model inputs ---------------------------------------------------
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
@@ -9,7 +10,7 @@ df = 1/T;   % frequency resolution
 fNQ = f0/2; % Nyquist frequency
 
 taxis = dt:dt:T; % time axis
-
+noise = 0.7;
 %%% Model coefficients
 data = zeros(6,N);
 a1 = 0.07*[0.1*hann(20)', -0.5*ones(20,1)']';
@@ -33,7 +34,7 @@ a(6,6,:) = a6;
 a(6,3,:) = a4;
 adj_true = [1 1 0 0 0 0; 0 1 0 1 0 0; 0 0 1 1 0 0; 0 0 0 1 0 0; 0 1 0 0 1 0; 0 0 1 0 0 1];  
 
-
+nlags = length(a1);
 %%% Simulate data ------------------------------------------
 for k = nlags:length(data)-1;
     data(:,k+1) = myPrediction(data(:,1:k),a);
@@ -45,7 +46,7 @@ mvar_aic;
 
 
 
-subplot(3,2,[1 2])
+subplot(2,2,[1 2])
 for i = 1:6
    plot(data(i,:));
  hold on; 
@@ -57,32 +58,51 @@ xlabel('Time (seconds)')
 title('Simulated Signal','FontSize',15);
 
 
-subplot(3,2,3)
+subplot(2,2,3)
 mySpec(data(1,:),f0);
+
+%%% Fit standard AR to data ----------------------------------------------
+tic
+[ adj_standard] = build_ar( data, model_order);
+standardtime = toc;
 
 %%% Fit spline to data ---------------------------------------------------
 
 cntrl_pts = make_knots(model_order,10);
+tic
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
-
+splinetime = toc;
 [ bhat, yhat ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
 
 
 %%% Plot results ----------------------------------------------------------
-subplot(3,2,5)
-plotNetwork(adj_true)
-title('True Network')
-subplot(3,2,6)
-plotNetwork(adj_mat)
-title('Spline Network')
 
 
-subplot(3,2,4)
+subplot(2,2,4)
 mySpec(yhat(1,:),f0);
 title('Estimated signal spectrogram','FontSize',15);
 
 %figure; plotSignals(data)
 %figure; plotSignals(yhat)
+
+subplot(2,2,4)
+mySpec(yhat(1,:),f0);
+title('Estimated signal spectrogram','FontSize',15);
+
+figure;
+subplot(1,3,1)
+plotNetwork(adj_true)
+title('True Network')
+
+subplot(1,3,2)
+plotNetwork(adj_standard)
+title(strcat({'Standard, '},num2str(standardtime),{' s'}))
+
+
+subplot(1,3,3)
+plotNetwork(adj_mat)
+title('Spline Network')
+title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
  figure; 
 for i = 1:6
