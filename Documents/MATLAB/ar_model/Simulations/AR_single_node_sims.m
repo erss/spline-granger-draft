@@ -1,14 +1,13 @@
-%%%%%%%% simulate data --------------------------------------------------
+%%%%%%%% Single node network simulations ----------------------------------
+%%% Define model inputs ---------------------------------------------------
 nobs = 1000;   % number of observations per trial
 sgnl = 1;
 
-
-% parameters
 f0 = 200;  % sampling frequency (Hz)
 T = nobs/f0;      % total length of recording (seconds)
 dt = 1/f0; % seconds
 
-N = T*f0;   % number of samples needed
+N = T*f0 +2;   % number of samples needed +2
 df = 1/T;   % frequency resolution
 fNQ = f0/2; % Nyquist frequency
 
@@ -16,41 +15,38 @@ taxis = dt:dt:T; % time axis
 noise = 0.7;
 data = zeros(1,N);
 
-%%%% WHITE NOISE
-% % HIGH FREQUENCY SCENARIO 
+%%%% WHITE NOISE ---------------------------------------------------------
+%%% Sim 1 - HIGH FREQUENCY -----------------------------------------------
 b = zeros(1,1,2);
 b(1,1,:)= [0.9 -0.8];
 nlags = size(b,3);
 %%% Note AIC/BIC indicate 2 is the best order
 
-% % % % 
-% % % LOW FREQUENCY SCENARIO 
-% b = zeros(1,1,1);
-% b(1,1,:)= [0.9];
-% nlags = size(b,3);
-% 
-% % 
-% % %LOW FREQUENCY SCENARIO 
-% b = zeros(1,1,2);
-% b(1,1,:)= [0.3 0.3];
-% nlags = size(b,3);
-% % b= [0.3 0.3];
-% % nlags = length(b);
-% % 
-% % % LOW FREQUENCY SCENARIO 
-% b = zeros(1,1,2);
-% b(1,1,:)= [0.9 -0.1];
-% nlags = size(b,3);
-% b= [0.9 -0.1];
-% nlags = length(b);
+%%% Sim 2 - LOW FREQUENCY I -----------------------------------------------
+b = zeros(1,1,1);
+b(1,1,:)= [0.9];
+nlags = size(b,3);
 
+%%% Sim 3 - LOW FREQUENCY II ----------------------------------------------
+b = zeros(1,1,2);
+b(1,1,:)= [0.3 0.3];
+nlags = size(b,3);
+ 
+%%% Sim 3 - LOW FREQUENCY III ---------------------------------------------
+
+b = zeros(1,1,2);
+b(1,1,:)= [0.9 -0.1];
+nlags = size(b,3);
+
+
+%%% Generate white noise data from above coefficients
 for k = nlags:length(data)-1;
    data(:,k+1) = myPrediction(data(:,1:k),b);
    data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
       
 end
 
-%%%% PINK NOISE
+%%%% PINK NOISE ----------------------------------------------------------
 %  alpha = 0.33;
 %  data  = make_pink_noise(alpha,nobs,dt);
 
@@ -72,13 +68,13 @@ flag = 1; % use splines
 cntrl_pts = make_knots(nlags,10);
 %cntrl_pts = 0:10:nlags;
 [ adj_mat] = build_ar_splines( data, nlags, cntrl_pts );
-[ bhat, yhat ] = estimate_coef( data, adj_mat, nlags, flag,cntrl_pts);
+[bhat, yhat] = estimate_coefficient_fits( data, adj_mat, nlags,cntrl_pts );
 
 
 subplot(3,2,[5 6])
-plot(bhat,'LineWidth',1.5)
+plot(squeeze(bhat(1,1,:)),'LineWidth',1.5)
 hold on
-plot(cntrl_pts(2:end),bhat(cntrl_pts(2:end)),'o')
+plot(cntrl_pts(2:end),squeeze(bhat(1,1,cntrl_pts(2:end))),'o')
 title('Estimated Coefficients','FontSize',15);
 % figure;
 % plot(data);
@@ -90,5 +86,6 @@ subplot(3,2,4)
 mySpec(yhat,f0);
 title('Estimated signal spectrogram','FontSize',15);
 
+a=b;
 mvar_aic;
 
