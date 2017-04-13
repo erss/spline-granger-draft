@@ -1,7 +1,7 @@
 %%% Generate data -------------------------------------------------------
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
-
+nelectrodes = 3;
 f0 = 1/dt;  % sampling frequency (Hz)
 N1 = T*f0;   % number of samples needed
 df = 1/T;   % frequency resolution
@@ -38,6 +38,7 @@ data = [x1';x2';x3'];                      % Conglomerate data in one matrix
 nlags = 40;                               % Define order of AR model
                                            % needs to be larger than true
                                            % order
+model_order = nlags;
 %%% Build network using splines -----------------------------------------
 cntrl_pts = make_knots(nlags,10);
 [ adj_spline ] = build_ar_splines( data, nlags,cntrl_pts); 

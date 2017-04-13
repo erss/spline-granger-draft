@@ -212,12 +212,12 @@ plot(X1,H1 - conf1, '--r');
 
 % Compute confidence bounds for independent signal (Priestley p 478)
 
-% R = xcov(zhat,flag); % autocovariance of independent signal
-% G = sum(R(3:end-2).^2); % 3:9997, M = 3
-% G = G/(4*pi);
-% 
-% conf2 = a*sqrt(8*pi*G/N);
-% 
-% plot(X2,H2 + conf2, '--g');
-% plot(X2,H2 - conf2, '--g');
+R = xcov(zhat,flag); % autocovariance of independent signal
+G = sum(R(3:end-2).^2); % 3:9997, M = 3
+G = G/(4*pi);
+
+conf2 = a*sqrt(8*pi*G/N);
+
+plot(X2,H2 + conf2, '--g');
+plot(X2,H2 - conf2, '--g');
 

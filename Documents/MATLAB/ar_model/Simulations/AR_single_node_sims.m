@@ -16,6 +16,7 @@ fNQ = f0/2; % Nyquist frequency
 taxis = dt:dt:T; % time axis
 noise = 0.2;
 data = zeros(1,N);
+
 model_order = 20; % order used in model estimation
 
 %%%% WHITE NOISE ---------------------------------------------------------
