@@ -1,15 +1,16 @@
 function [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order, c_pt_times )
-% BUILD_AR_SPLINES builds network model from MVAR modeling and uses
-% regression splines to reduce dimensionality
+% ESTIMATE_COEFFICIENT_FITS builds network model from MVAR spline modeling 
 %
 % INPUTS:
 %  data           = A matrix of electode data with dimensions electrodes x
 %                    time
-%  nlags          = The number of lags used as used for predictor variables
-%  c_pt_times     = (OPTIONAL) The number of lags used as used for predictor variables
+%  adj_mat        = network configuration
+%  model_order         = The number of lags used as used for predictor variables
+%  c_pt_times     = The number of lags used as used for predictor variables
 % 
 % OUTPUTS:
-%  adj_mat = adjacencey matrix for corresponding network
+%  bhat   = coefficient estimates
+%  yhat    = signal estimates
 
 
 %% Initialize variables & outputs
@@ -20,9 +21,9 @@ function [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order, c
     yhat = yhat(:,model_order+1:end);
 %% Define control points and build predictors
 
-if nargin == 2
-    c_pt_times = unique([0:10:model_order model_order]) ;  % Define Control Point Locations
-end
+% if nargin == 3
+%     c_pt_times = unique([0:10:model_order model_order]) ;  % Define Control Point Locations
+% end
             
 s = 0.5;                                    % Define Tension Parameter
 

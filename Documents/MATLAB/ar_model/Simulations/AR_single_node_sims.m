@@ -89,3 +89,4 @@ a=b;
 % mvar_aic;
 
 goodness_of_fit_spectrum;
+goodness_of_fit_bootstrap;

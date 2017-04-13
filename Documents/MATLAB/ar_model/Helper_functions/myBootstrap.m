@@ -1,4 +1,4 @@
-function [ b, bounds] = myBootstrap( data, adj_mat, nlags, which_electrode , nsurrogates )
+function [ b, bounds] = myBootstrap( data, adj_mat, model_order, electrode , nsurrogates,cntrl_pts )
 % MYBOOTSTRAP creates surrogates for the coefficients estimates
 % when building AR models in the spline basis and computes 95% confidence
 % intervals.
@@ -7,8 +7,8 @@ function [ b, bounds] = myBootstrap( data, adj_mat, nlags, which_electrode , nsu
 %  data            = A matrix of electode data with dimensions electrodes x
 %                    time
 %  adj_mat         = adjacencey matrix for corresponding network
-%  nlags           = The number of lags used as used for predictor variables
-%  which_electrode = the electrode whose data is used for the model fit
+%  model_order           = The number of lags used as used for predictor variables
+%  electrode = the electrode whose data is used for the model fit
 %  nsurrogates     = number of surrogates
 % 
 % OUTPUTS:
@@ -17,22 +17,22 @@ function [ b, bounds] = myBootstrap( data, adj_mat, nlags, which_electrode , nsu
 
 
    nelectrodes = size(data,1);            % number electrodes
-   nobservations = length(data(1,nlags+1:end)); % number of observations
+   nobservations = length(data(1,model_order+1:end)); % number of observations
 
-b = zeros(nsurrogates,nlags*nelectrodes);
+b = zeros(nsurrogates,model_order*nelectrodes);
 
 %%% Define control points and build predictors
 
-c_pt_times = [0:10:nlags];  % Define Control Point Locations
+c_pt_times = cntrl_pts;  % Define Control Point Locations
 
             
 s = 0.5;                                    % Define Tension Parameter
 
 % Construct spline regressors for case nelectrodes = 1.
 c_pt_times_all = [c_pt_times(1)-2 c_pt_times c_pt_times(end)+2];
-Z = zeros(nlags,length(c_pt_times_all));
+Z = zeros(model_order,length(c_pt_times_all));
 num_c_pts = length(c_pt_times_all);  %number of control points in total
-for i=1:nlags
+for i=1:model_order
     nearest_c_pt_index = max(find(c_pt_times_all<i));
     nearest_c_pt_time = c_pt_times_all(nearest_c_pt_index);
     next_c_pt_time = c_pt_times_all(nearest_c_pt_index+1);
@@ -44,7 +44,7 @@ end
 
 
 %%% Build model for every electrode in network
-ii = which_electrode;
+ii = electrode;
 
     % Build history regressors
    
@@ -58,10 +58,10 @@ ii = which_electrode;
     for k = 1:size(data_copy,1)
         X_temp = []; 
         sgnl = data_copy(k,:)';
-        for i=1:nlags                                   %For each lag,
+        for i=1:model_order                                   %For each lag,
             X_temp = [X_temp, circshift(sgnl,i)];   %... shift x and store it.
         end
-        X_temp = X_temp(nlags+1:end,:);  
+        X_temp = X_temp(model_order+1:end,:);  
         X = [X X_temp];
     end
     
@@ -69,7 +69,7 @@ ii = which_electrode;
     %%% Build Model
      
     % Generate observations for given y
-        y = data(ii,nlags+1:end);   
+        y = data(ii,model_order+1:end);   
         y = y';
 
     % Fit full model and calculate RSS
@@ -78,12 +78,12 @@ ii = which_electrode;
        
        for kk = 1:nsurrogates
        alpha_hat = alpha + sqrtm(stats.covb)*normrnd(0,1,length(alpha),1);
-     %  bhat(kk,:) = Z1*alpha_hat(2:end);             % calculate beta values, for every point in space
+                  % calculate beta values, for every point in space
         bhat(kk,:) = Z1*alpha_hat;                                     % only for electrodes in network
               j =1;
             for k = 1:nelectrodes
                if preds(k)
-                   b(kk,((k-1)*nlags + 1): k*nlags) = bhat(kk,((j-1)*nlags + 1): j*nlags);         
+                   b(kk,((k-1)*model_order + 1): k*model_order) = bhat(kk,((j-1)*model_order + 1): j*model_order);         
                    j = j+1;
                end
             end  

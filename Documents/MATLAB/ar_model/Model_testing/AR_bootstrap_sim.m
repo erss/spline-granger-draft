@@ -39,29 +39,39 @@ nlags = 40;                               % Define order of AR model
                                            % needs to be larger than true
                                            % order
 %%% Build network using splines -----------------------------------------
-
-[ adj_spline ] = build_ar_splines( data, nlags); 
+cntrl_pts = make_knots(nlags,10);
+[ adj_spline ] = build_ar_splines( data, nlags,cntrl_pts); 
 b = estimate_coef(data,adj_spline, nlags,1); % estimated coefficients  from adj_spline
 
 %%% Bootstrap for each coefficient estimate on the surrogate data ---------
 
-which_electrode = 1; % which electrode in network to generate data for 
-nsurrogates = 10000; % number of surrogates
+electrode = 1; % which electrode in network to generate data for 
+nsurrogates = 1000; % number of surrogates
 
-[b_surrogates, bounds]= myBootstrap(data,adj_spline,nlags,which_electrode,nsurrogates);
+[b_surrogates, bounds]= myBootstrap(data,adj_spline,nlags,electrode,nsurrogates,cntrl_pts);
+
+   j=1;
+      for p = 1:nelectrodes
+        if adj_mat(electrode,p) == 1
+            bhat(electrode,p,:) = b(j:j+model_order-1);
+            j= j+model_order;
+        end    
+     end
+
+
 
 figure;
 for row = 1:nsurrogates
  plot(b_surrogates(row,:))  % plot surrogate data
  hold on;
 end
-
-plot(b(which_electrode,:),'--k','LineWidth',1) % plot original model fit
+figure;
+plot(b(electrode,:),'--k','LineWidth',1) % plot original model fit
 
 
 %%% plot estimated coefficients and confidence bounds --------------------
 figure;
-plot(b(which_electrode,:),'r');
+plot(b(electrode,:),'r');
 hold on
 plot((bounds(1,:)),'--r');
 plot((bounds(2,:)),'--r');

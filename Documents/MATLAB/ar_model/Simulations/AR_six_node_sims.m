@@ -42,7 +42,7 @@ for k = nlags:length(data)-1;
     data(:,k+1) = myPrediction(data(:,1:k),a);
     data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
 end
-
+data = data(:,nlags+1:end);
 %mvar_aic;
 
 subplot(2,2,[1 2])
@@ -116,5 +116,6 @@ plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
 end
 
 b=a;
-goodness_of_fit_spectrum;
 
+%goodness_of_fit_spectrum;
+%goodness_of_fit_bootstrap;
