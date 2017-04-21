@@ -43,7 +43,7 @@ end
 
 
 
-%%% Build model for every electrode in network
+%%% Build model for given electrode
 ii = electrode;
 
     % Build history regressors
@@ -88,14 +88,18 @@ ii = electrode;
                end
             end  
        
-       end                                    
-         
+       end          
+       figure;
+     for p = 1:20 %%% plot 20 surrogates
+        plot(real(b(p,:)));
+        hold on;
+     end
 
     ind1 =round(nsurrogates*0.025);
     ind2 = round(nsurrogates*0.975);
 
     for k = 1:size(b,2)
-        sorted_data = sort(b(:,k)); % sorts surrogate estimates for each lag
+        sorted_data = sort(real(b(:,k))); % sorts surrogate estimates for each lag
         bounds(:,k) = [sorted_data(ind1); sorted_data(ind2) ]; % 95% interval
     end
 
