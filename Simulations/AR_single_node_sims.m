@@ -14,7 +14,7 @@ df = 1/T;   % frequency resolution
 fNQ = f0/2; % Nyquist frequency
 
 taxis = dt:dt:T; % time axis
-noise = 0.2;
+noise = 0.9;
 data = zeros(1,N);
 
 model_order = 20; % order used in model estimation
@@ -44,12 +44,13 @@ nlags = size(b,3);
 
 
 %%% Generate white noise data from above coefficients
+i=1;
 for k = nlags:length(data)-1;
    data(:,k+1) = myPrediction(data(:,1:k),b);
-   data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
-      
+   noise_process(i) = noise.*randn(size(data,1),1);
+   data(:,k+1) = data(:,k+1) + noise_process(i);
+      i=i+1;
 end
-
 %%%% PINK NOISE ----------------------------------------------------------
 %  alpha = 0.33;
 %  data  = make_pink_noise(alpha,nobs,dt);
@@ -62,12 +63,14 @@ xlabel('Time (seconds)')
 legend('x1')
 title('Simulated Signal','FontSize',15);
 
-
-subplot(3,2,3)
+%subplot(3,2,3)
+figure;
 mySpec(data(1,:),f0);
-
+figure;
+[faxis,S] = myTheoreticalSpectrum(squeeze(b),noise_process,f0);
+plot(faxis,S,'.');
 %%% Fit spline to data ---------------------------------------------------
-
+%%
 cntrl_pts = make_knots(model_order,10);
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
 [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order,cntrl_pts );
@@ -88,6 +91,5 @@ title('Estimated signal spectrogram','FontSize',15);
 %%% Determine what AIC thinks is best order
 a=b;
 % mvar_aic;
-
-goodness_of_fit_spectrum;
+% goodness_of_fit_spectrum;
 goodness_of_fit_bootstrap;

@@ -38,9 +38,12 @@ adj_true = [1 1 0 0 0 0; 0 1 0 1 0 0; 0 0 1 1 0 0; 0 0 0 1 0 0; 0 1 0 0 1 0; 0 0
 nlags = length(a1);
 
 %%% Simulate data ------------------------------------------
+
 for k = nlags:length(data)-1;
     data(:,k+1) = myPrediction(data(:,1:k),a);
+  
     data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
+
 end
 data = data(:,nlags+1:end);
 %mvar_aic;
@@ -103,8 +106,9 @@ plotNetwork(adj_mat)
 title('Spline Network')
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
- figure; 
+ 
 for i = 1:6
+    figure; 
     for k = 1:6
       
 plot(squeeze(bhat(i,k,:)),'--r','LineWidth',1.5);
@@ -116,6 +120,6 @@ plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
 end
 
 b=a;
-
-goodness_of_fit_spectrum;
-goodness_of_fit_bootstrap;
+% 
+% goodness_of_fit_spectrum;
+% goodness_of_fit_bootstrap;

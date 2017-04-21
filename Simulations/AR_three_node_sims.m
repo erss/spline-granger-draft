@@ -120,18 +120,20 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 %figure; plotSignals(data)
 %figure; plotSignals(yhat)
 
- figure; 
+ 
 for i = 1:3
+      figure;  
     for k = 1:3
-      
+   
 plot(squeeze(bhat(i,k,:)),'--r','LineWidth',1.5);
-hold on;
+hold on
 plot(cntrl_pts(2:end),squeeze(bhat(i,k,cntrl_pts(2:end))),'ro')
 plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
     end
 
 end
 
+
 b=a;
-goodness_of_fit_spectrum;
-goodness_of_fit_bootstrap;
+% goodness_of_fit_spectrum;
+% goodness_of_fit_bootstrap;
