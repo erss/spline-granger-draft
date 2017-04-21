@@ -2,12 +2,12 @@
 %%%%%% NOTE highly dependent on noise used to generate model
 % Define model inputs
 electrode = 1; % which electrode to run GOF on
-nrealizations = 1; % number of realizations for each process
+nrealizations = 10; % number of realizations for each process
 
 
 % Simulate data using true coefficients 
 h_sum = 0;
-for i = 1:nrealizations
+for i = 1:1 %nrealizations
     data_true = zeros(nelectrodes,N);
     for k = nlags:length(data_true)-1;
         data_true(:,k+1) = myPrediction(data_true(:,1:k),b);
