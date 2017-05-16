@@ -1,6 +1,6 @@
 function [ adj_mat] = build_ar_splines( data, nlags, c_pt_times )
 % BUILD_AR_SPLINES builds network model from MVAR modeling and uses
-% regression splines to reduce dimensionality
+% regression splines to reduce dimensionality.
 %
 % INPUTS:
 %  data           = A matrix of electode data with dimensions electrodes x
@@ -11,7 +11,7 @@ function [ adj_mat] = build_ar_splines( data, nlags, c_pt_times )
 % OUTPUTS:
 %  adj_mat = adjacencey matrix for corresponding network
 
-
+warning off
 %% Initialize variables & outputs
     nelectrodes = size(data,1);            % number electrodes
     adj_mat = zeros(nelectrodes);
