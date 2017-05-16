@@ -1,34 +1,46 @@
-%%% Spectral confidence bounds
+%%% SPECTRAL CONFIDENCE BOUNDS --------------------------------------------
+%%% Using algorithm developed by Priestley, we develop a simulation to
+%%% compare the spectra of signals to assess goodness of fit.  In this
+%%% simulation, a three-node network is simulated, labeled the 'true'
+%%% network.  We use the spline Granger causality algorithm to
+%%% estimate the model coefficients of the 'true' network.  Then, we run
+%%% multiple realizations of the estimated process and compute the spectrum
+%%% of one of the signals in the estimated network to build confidence
+%%% bounds.  If the bounds of the estimated signal spectrum contain the
+%%% spectrum of the true signal, then we can say they are likely fron the
+%%% same process and thus a good fit. In this simulation, we run many
+%%% realizations from an independent network to show an example of a poor
+%%% fit.
+
+
 close all; clear all;
+
+% Define model parameters
+
 T = 5;         % total length of recording (seconds)
 dt = 0.001;    % seconds
-
 f0 = 1/dt;     % sampling frequency (Hz)
 N1 = T*f0;     % number of samples needed
 df = 1/T;      % frequency resolution
 fNQ = f0/2;    % Nyquist frequency
-noise=.25;
+noise= 0.25;
 taxis = dt:dt:T; % time axis
 
 electrode = 1; % which electrode to run GOF on
-nrealizations = 1; % number of realizations for each process
+nrealizations = 10; % number of realizations for each process
 
 %%% simulate 'true' network --------------------------------------------------
-a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   %AR coefficients for signal 1
+a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   % AR coefficients for signal 1
 a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';   %                  ...signal 2
 a3 = -.3*ones(size(a1));                    %                  ...signal 3
 
 L = length(a1);                             % Number of AR terms.
 N = N1+L;                                   % Number of time steps.
            
-nlags = 40;                               % Define order of AR model
+nlags = 40;                                % Define order of AR model
                                            % needs to be larger than true
                                            % order                                      
 b = zeros(3,3,nlags);
-% b(1,1,:)=a2;
-% b(1,2,:) = a3;
-% b(2,2,:) =a3;
-% b(3,3,:) = a1;
 
 b(1,1,:) = a1;            
 b(1,2,:) = a2;                                               
@@ -62,11 +74,10 @@ title('true network','FontSize',15);
 
 %%% simulate 'estimated' network------------------------------------
 % Estimate network using splines
-[ adj_mat ] = build_ar_splines( data, nlags); % Build network using splines
+cntrl_pts = make_knots(nlags,10);
+[ adj_mat ] = build_ar_splines( data, nlags,cntrl_pts); % Build network using splines
 
 %%Get coefficient estimates and signal estimates
-
-cntrl_pts = make_knots(nlags,10);
 [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, nlags, cntrl_pts );
 
 h_sum = 0;
@@ -93,7 +104,6 @@ xlabel('Time (seconds)')
 legend('x1','x2','x3')
 title('estimated network','FontSize',15);
 
-%%
 %%% Simulate independent network ---------------------------------------
 
 a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   %AR coeffictients for signal 1
@@ -124,10 +134,6 @@ for i = 1:nrealizations
 end
 h_z = h_sum/nrealizations;
 
-
-
-
-
 subplot 313
  plot(taxis,data_z(1,:));
  hold on
@@ -137,8 +143,6 @@ ylabel('Signal')
 xlabel('Time (seconds)')
 legend('x1','x2','x3')
 title('independent network','FontSize',15);
-
-
 
 %%% Construct goodness-of-fit -------------------------------------------
 
@@ -162,8 +166,8 @@ subplot 132
 plot(faxis,h_hat);     
 xlim([0 f0/4]);
 xlabel('Frequency (Hz)','FontSize',15);
-ylabel('Power','FontSize',15);
-title('true signal','FontSize',15);
+ylabel('Averaged Power','FontSize',15);
+title('estimated signal','FontSize',15);
 
 subplot 133
 %[faxis_z, h_z] = mySpec( zhat, f0 ,1);
@@ -171,8 +175,8 @@ subplot 133
 plot(faxis,h_z);     
 xlim([0 f0/4]);
 xlabel('Frequency (Hz)','FontSize',15);
-ylabel('Power','FontSize',15);
-title('true signal','FontSize',15);
+ylabel('Averaged Power','FontSize',15);
+title('independent signal','FontSize',15);
 
 % compute and plot cumulative distributions of spectra
 [H, X] = ecdf(h);           
