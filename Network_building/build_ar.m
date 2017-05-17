@@ -1,15 +1,15 @@
-function [ adj_mat] = build_ar( data, nlags )
+function [ adj_mat] = build_ar( data, model_order )
 % BUILD_AR builds network model from MVAR modeling
 %
 % INPUTS:
 %  data           = A matrix of electode data with dimensions electrodes x
 %                  time
-%  nlags          = The number of lags used as used for predictor variables
+%  model_order    = The number of lags used as used for predictor variables
 % 
 % OUTPUTS:
 %  adj_mat = adjacencey matrix for corresponding network
 
-    nobservations = length(data(1,nlags+1:end)); %  the number of 
+    nobservations = length(data(1,model_order+1:end)); %  the number of 
                                                  % observations used for response variables
 
 
@@ -26,17 +26,17 @@ X = [];
 
 % Vector of electrode names corresponding to order in build matrix
 % e.g. for trivariate case with two lags, [1 1 2 2 3 3]
-e_names = zeros(1,nlags*nelectrodes); 
+e_names = zeros(1,model_order*nelectrodes); 
 j = 1;
 for k = 1:nelectrodes
     X_temp = []; 
     sgnl = data(k,:)';
-    for i=1:nlags                                   %For each lag,
+    for i=1:model_order                                   %For each lag,
         X_temp = [X_temp, circshift(sgnl,i)];   %... shift x and store it.
         e_names(j) = k;
         j = j+ 1;
     end
-    X_temp = X_temp(nlags+1:end,:);  
+    X_temp = X_temp(model_order+1:end,:);  
     X = [X X_temp];
 end
 % 
@@ -64,7 +64,7 @@ end
    
          % Generate observations for given y
         x = data(electrode,:);
-        y = x(nlags+1:end);   
+        y = x(model_order+1:end);   
         y = y';
 
         % Fit full model
@@ -102,7 +102,7 @@ end
       %    rss0 = prod(error);
           
           % Compute F statistic
-          F(electrode,ii) = ((rss0 - rss)/nlags)/(rss/(nobservations-nelectrodes*nlags-1));
+          F(electrode,ii) = ((rss0 - rss)/model_order)/(rss/(nobservations-nelectrodes*model_order-1));
            
           
         end
@@ -113,7 +113,7 @@ end
     % Hypothesis test
     
     
-    adj_mat = fpdf(F,nlags,nobservations-nelectrodes*nlags-1);
+    adj_mat = fpdf(F,model_order,nobservations-nelectrodes*model_order-1);
     
     
     q = 0.01; % max number acceptable proportion of false discoveries 

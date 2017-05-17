@@ -95,11 +95,6 @@ splinetime  = toc;
 
 
 %%% Plot results ----------------------------------------------------------
-% 
-% subplot(2,2,4)
-% mySpec(yhat(1,:),f0);
-% title('Estimated signal spectrogram','FontSize',15);
-
 
 subplot(2,3,4)
 plotNetwork(adj_true)
