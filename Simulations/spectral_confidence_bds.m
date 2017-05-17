@@ -1,7 +1,8 @@
 %%% SPECTRAL CONFIDENCE BOUNDS --------------------------------------------
-%%% Using algorithm developed by Priestley, we develop a simulation to
-%%% compare the spectra of signals to assess goodness of fit.  In this
-%%% simulation, a three-node network is simulated, labeled the 'true'
+%%% Using algorithm developed by Priestley in Spectral Analysis and Time
+%%% Series, Volume 1: Univariate Series, Secton 6.2.6, we develop a
+%%% simulation to compare the spectra of signals to assess goodness of fit.  
+%%% In this simulation, a three-node network is simulated, labeled the 'true'
 %%% network.  We use the spline Granger causality algorithm to
 %%% estimate the model coefficients of the 'true' network.  Then, we run
 %%% multiple realizations of the estimated process and compute the spectrum
@@ -26,7 +27,7 @@ fNQ = f0/2;    % Nyquist frequency
 noise= 0.25;
 taxis = dt:dt:T; % time axis
 
-electrode = 1; % which electrode to run GOF on
+electrode = 1;      % which electrode to run GOF on
 nrealizations = 10; % number of realizations for each process
 
 %%% simulate 'true' network --------------------------------------------------
