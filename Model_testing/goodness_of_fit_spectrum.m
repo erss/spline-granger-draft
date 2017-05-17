@@ -1,11 +1,14 @@
 %%% Compare spectrum of true signal and of estimated signal
 %%%%%% NOTE highly dependent on noise used to generate model
 % Define model inputs
-electrode = 1; % which electrode to run GOF on
-for electrode = 1:nelectrodes
-    nrealizations = 10; % number of realizations for each process
+if nelectrodes > 3
+    nrealizations = 2;
+else
+    nrealizations = 10;  % number of realizations for each process
+end
 
-
+for electrode = 1:nelectrodes % run GOF on all electrodes
+    
     % Simulate data using true coefficients 
     h_sum = 0;
     for i = 1:nrealizations
@@ -61,7 +64,8 @@ for electrode = 1:nelectrodes
     xlabel('Frequency (Hz)','FontSize',15);
     ylabel('Averaged Power','FontSize',15);
     title('estimated signal','FontSize',15);
-    suptitle('Averaged spectra from many realizations');
+    str1 = strcat({'Averaged spectra of electrode '},num2str(electrode),{' for '}, num2str(nrealizations),{' realizations.'});
+    suptitle(str1);
 
     % Compute empircal cdf
     [H, X] = ecdf(h);           

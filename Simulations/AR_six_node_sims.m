@@ -1,6 +1,6 @@
 %%%%%%%% Six node network simulations -----------------------------------
 clear all;
-%%% Define model inputs ---------------------------------------------------
+%%% Define çmodel inputs ------------------------------------------------
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
 model_order = 40; % order used in model estimation
@@ -10,7 +10,7 @@ df = 1/T;   % frequency resolution
 fNQ = f0/2; % Nyquist frequency
 
 taxis = dt:dt:T; % time axis
-noise = 0.7;
+noise = 0.25;
 nelectrodes = 6;
 %%% Model coefficients
 data = zeros(6,N);
@@ -48,7 +48,7 @@ end
 data = data(:,nlags+1:end);
 %mvar_aic;
 
-subplot(2,2,[1 2])
+subplot(2,3,[1 3])
 for i = 1:6
    plot(data(i,:));
  hold on; 
@@ -60,8 +60,6 @@ xlabel('Time (seconds)')
 title('Simulated Signal','FontSize',15);
 
 
-subplot(2,2,3)
-mySpec(data(1,:),f0);
 
 %%% Fit standard AR to data ----------------------------------------------
 tic
@@ -80,47 +78,22 @@ splinetime = toc;
 
 %%% Plot results ----------------------------------------------------------
 
-
-subplot(2,2,4)
-mySpec(yhat(1,:),f0);
-title('Estimated signal spectrogram','FontSize',15);
-
-%figure; plotSignals(data)
-%figure; plotSignals(yhat)
-
-subplot(2,2,4)
-mySpec(yhat(1,:),f0);
-title('Estimated signal spectrogram','FontSize',15);
-
-figure;
-subplot(1,3,1)
+subplot(2,3,4)
 plotNetwork(adj_true)
 title('True Network')
 
-subplot(1,3,2)
+subplot(2,3,5)
 plotNetwork(adj_standard)
 title(strcat({'Standard, '},num2str(standardtime),{' s'}))
 
 
-subplot(1,3,3)
+subplot(2,3,6)
 plotNetwork(adj_mat)
 title('Spline Network')
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
  
-% for i = 1:6
-%     figure; 
-%     for k = 1:6
-%       
-% plot(squeeze(bhat(i,k,:)),'--r','LineWidth',1.5);
-% hold on;
-% plot(cntrl_pts(2:end),squeeze(bhat(i,k,cntrl_pts(2:end))),'ro')
-% plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
-%     end
-% 
-% end
-
-b=a;
-% 
-% goodness_of_fit_spectrum;
-% goodness_of_fit_bootstrap;
+%%% Goodness of fit -------------------------------------------------------
+b=a; 
+goodness_of_fit_spectrum;
+goodness_of_fit_bootstrap;
