@@ -65,7 +65,7 @@ end
 
 
 
-subplot(2,2,[1 2])
+subplot(2,3,[1 3])
  plot(data(1,:));
  hold on;
  plot(data(2,:));
@@ -76,9 +76,9 @@ xlabel('Time (seconds)')
 legend('x1','x2','x3')
 title('Simulated Signal','FontSize',15);
 
-
-subplot(2,2,3)
-mySpec(data(1,:),f0);
+% 
+% subplot(2,2,3)
+% mySpec(data(1,:),f0);
 
 %%% Fit standard AR to data ----------------------------------------------
 
@@ -95,45 +95,27 @@ splinetime  = toc;
 
 
 %%% Plot results ----------------------------------------------------------
+% 
+% subplot(2,2,4)
+% mySpec(yhat(1,:),f0);
+% title('Estimated signal spectrogram','FontSize',15);
 
-subplot(2,2,4)
-mySpec(yhat(1,:),f0);
-title('Estimated signal spectrogram','FontSize',15);
 
-figure;
-subplot(1,3,1)
+subplot(2,3,4)
 plotNetwork(adj_true)
 title('True Network')
 
-subplot(1,3,2)
+subplot(2,3,5)
 plotNetwork(adj_standard)
 title(strcat({'Standard, '},num2str(standardtime),{' s'}))
 
 
-subplot(1,3,3)
+subplot(2,3,6)
 plotNetwork(adj_mat)
 title('Spline Network')
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
 
-
-%figure; plotSignals(data)
-%figure; plotSignals(yhat)
-
- 
-for i = 1:3
-      figure;  
-    for k = 1:3
-   
-plot(squeeze(bhat(i,k,:)),'--r','LineWidth',1.5);
-hold on
-plot(cntrl_pts(2:end),squeeze(bhat(i,k,cntrl_pts(2:end))),'ro')
-plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
-    end
-
-end
-
-
 b=a;
-% goodness_of_fit_spectrum;
-% goodness_of_fit_bootstrap;
+goodness_of_fit_spectrum;
+goodness_of_fit_bootstrap;

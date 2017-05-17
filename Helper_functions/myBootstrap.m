@@ -89,11 +89,11 @@ ii = electrode;
             end  
        
        end          
-       figure;
-     for p = 1:20 %%% plot 20 surrogates
-        plot(real(b(p,:)));
-        hold on;
-     end
+% %       figure;
+%      for p = 1:20 %%% plot 20 surrogates
+%         plot(real(b(p,:)));
+%         hold on;
+%      end
 
     ind1 =round(nsurrogates*0.025);
     ind2 = round(nsurrogates*0.975);

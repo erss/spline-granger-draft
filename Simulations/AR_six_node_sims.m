@@ -74,6 +74,7 @@ cntrl_pts = make_knots(model_order,10);
 tic
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
 splinetime = toc;
+
 [ bhat, yhat ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
 
 
@@ -107,17 +108,17 @@ title('Spline Network')
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
  
-for i = 1:6
-    figure; 
-    for k = 1:6
-      
-plot(squeeze(bhat(i,k,:)),'--r','LineWidth',1.5);
-hold on;
-plot(cntrl_pts(2:end),squeeze(bhat(i,k,cntrl_pts(2:end))),'ro')
-plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
-    end
-
-end
+% for i = 1:6
+%     figure; 
+%     for k = 1:6
+%       
+% plot(squeeze(bhat(i,k,:)),'--r','LineWidth',1.5);
+% hold on;
+% plot(cntrl_pts(2:end),squeeze(bhat(i,k,cntrl_pts(2:end))),'ro')
+% plot(squeeze(a(i,k,:)),'k','LineWidth',1.5);
+%     end
+% 
+% end
 
 b=a;
 % 
