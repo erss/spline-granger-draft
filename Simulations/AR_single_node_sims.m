@@ -2,7 +2,18 @@
 clear all;
 
 noise_type = 'white';   % 'white' or 'pink'
-frequency_type = 'low'; % 'low' or 'high'
+frequency_type = 'high'; % 'low' or 'high'
+
+if strcmp(noise_type,'white')
+    if strcmp(frequency_type,'high') % ----high frequency
+        model_coefficients = [0.9 -0.8];
+      
+    elseif strcmp(frequency_type,'low') % ----low frequency
+          model_coefficients = 0.9;
+         % model_coefficients = [0.3 0.3];
+         % model_coefficients = [0.9 -0.1];
+    end
+end
 
 
 %%% Define model inputs ---------------------------------------------------
@@ -27,28 +38,11 @@ model_order = 20; % order used in model estimation
 %%%  Generate data ---------------------------------------------------
 if strcmp(noise_type,'white') % ------------ WHITE NOISE -------
 
-    if strcmp(frequency_type,'high') % ----high frequency
-        b = zeros(1,1,2);
-        b(1,1,:)= [0.9 -0.8];
-        nlags = size(b,3);
-    elseif strcmp(frequency_type,'low') % ----low frequency
-        % % Sim 1 
-        b = zeros(1,1,1);
-        b(1,1,:)= [0.9];
-        nlags = size(b,3);
+    nlags = size(model_coefficients,2);
+    b = zeros(1,1,nlags);
+    b(1,1,:)= model_coefficients;
       
-        % % Sim 2 
-        % b = zeros(1,1,2);
-        % b(1,1,:)= [0.3 0.3];
-        % nlags = size(b,3);
-        %  
-        % % Sim 3
-        % 
-        % b = zeros(1,1,2);
-        % b(1,1,:)= [0.9 -0.1];
-        % nlags = size(b,3);
 
-    end
     %%% Generate white noise data from above coefficients
     i=1;
     for k = nlags:length(data)-1;
@@ -57,6 +51,10 @@ if strcmp(noise_type,'white') % ------------ WHITE NOISE -------
        data(:,k+1) = data(:,k+1) + noise_process(i);
           i=i+1;
     end
+    
+    data = data(:,nlags+1:end);
+    [faxis,S] = myTheoreticalSpectrum(model_coefficients,noise_process,f0);
+    
 
 elseif strcmp(noise_type,'pink') % ------------ PINK NOISE -------
  alpha = 0.33;
@@ -64,8 +62,11 @@ elseif strcmp(noise_type,'pink') % ------------ PINK NOISE -------
 end
 
 %%%  Plot data ---------------------------------------------------
+
+
+
 subplot(3,2,[1 2])
- plot(data(1,:));
+ plot(taxis,data(1,:));
 
 ylabel('Signal')
 xlabel('Time (seconds)')
@@ -75,10 +76,10 @@ title('Simulated Signal','FontSize',15);
 subplot(3,2,3)
 mySpec(data(1,:),f0);
 
-% figure;
-% [faxis,S] = myTheoreticalSpectrum(squeeze(b),noise_process,f0);
-% plot(faxis,S,'.');
-
+if strcmp(noise_type,'white')
+    hold on
+    plot(faxis,S,'r','LineWidth',1.5);
+end
 %%% Fit spline to data ---------------------------------------------------
 
 cntrl_pts = make_knots(model_order,10);
@@ -88,28 +89,36 @@ cntrl_pts = make_knots(model_order,10);
 %%% Plot results ---------------------------------------------------------
 
 subplot(3,2,[5 6])
-plot(squeeze(bhat(1,1,:)),'LineWidth',1.5)
+plot(dt:dt:(model_order/f0),squeeze(bhat(1,1,:)),'LineWidth',1.5)
 hold on
-plot(cntrl_pts(2:end),squeeze(bhat(1,1,cntrl_pts(2:end))),'o')
+plot(cntrl_pts(2:end)./f0,squeeze(bhat(1,1,cntrl_pts(2:end))),'o')
 
 if strcmp(noise_type,'white')
-   plot(squeeze(real(b(1,1,:))),'*k');
+   plot(dt:dt:(nlags/f0),squeeze(real(b(1,1,:))),'.k','MarkerSize',30);
 end
 
 title('Estimated Coefficients','FontSize',15);
 
 subplot(3,2,4)
 mySpec(yhat,f0);
+
+if strcmp(noise_type,'white')
+    hold on
+    plot(faxis,S,'r','LineWidth',1.5);
+end
+
+
 title('Estimated signal spectrogram','FontSize',15);
 
 
 %%% Determine what AIC thinks is best order
 
-
-
 if strcmp(noise_type,'white')
-    a=b;
-  %  mvar_aic;
-    goodness_of_fit_spectrum;
+   % mvar_aic;
     goodness_of_fit_bootstrap;
 end
+
+goodness_of_fit_spectrum;
+
+
+

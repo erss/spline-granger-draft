@@ -60,16 +60,16 @@ for k = nlags:length(data)-1;
     data(:,k+1) = myPrediction(data(:,1:k),a);
     data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
 end
-
+data = data(:,nlags+1:end);
 % mvar_aic; run to see mvgc toolbox order result
 
 
 
 subplot(2,3,[1 3])
- plot(data(1,:));
+ plot(dt:dt:T,data(1,:));
  hold on;
- plot(data(2,:));
- plot(data(3,:));
+ plot(dt:dt:T,data(2,:));
+ plot(dt:dt:T,data(3,:));
 
 ylabel('Signal')
 xlabel('Time (seconds)')

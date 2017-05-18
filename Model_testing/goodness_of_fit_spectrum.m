@@ -7,41 +7,60 @@ else
     nrealizations = 10;  % number of realizations for each process
 end
 
+if ~exist('noise_type','var')
+  noise_type = 'white';
+end
+
 for electrode = 1:nelectrodes % run GOF on all electrodes
     
     % Simulate data using true coefficients 
     h_sum = 0;
     for i = 1:nrealizations
-        data_true = zeros(nelectrodes,N);
-        for k = nlags:length(data_true)-1;
-            data_true(:,k+1) = myPrediction(data_true(:,1:k),b);
-            data_true(:,k+1) = data_true(:,k+1) + noise.*randn(nelectrodes,1);
-        end
+        
+         if strcmp(noise_type,'white')
 
-        data_true= data_true(:,nlags+1:end);
+            data_true = zeros(nelectrodes,N);
+            for k = nlags:length(data_true)-1;
+                data_true(:,k+1) = myPrediction(data_true(:,1:k),b);
+                data_true(:,k+1) = data_true(:,k+1) + noise.*randn(nelectrodes,1);
+            end
+            data_true= data_true(:,nlags+1:end);
 
+             
+        elseif strcmp(noise_type,'pink')
+             alpha = 0.33;
+             data_true  = make_pink_noise(alpha,nobs,dt);
+
+         end
+        
          y = data_true(electrode,:);   
         [faxis, h] = mySpec( y, f0,0 );
         h_sum = h + h_sum;
     end
        h = h_sum/nrealizations;
-    %         y = data(electrode,:);   
-    %         [faxis, h] = mySpec( y, f0,0 );
 
     % Simulate data using estimated coefficients   
-       h_sum = 0;
-    for i = 1:nrealizations
-            data_hat = zeros(nelectrodes,N);
-        for k = model_order:length(data_hat)-1;
-            data_hat(:,k+1) = myPrediction(data_hat(:,1:k),bhat);
-            data_hat(:,k+1) = data_hat(:,k+1) + noise.*randn(nelectrodes,1);
+    
+ 
+              h_sum = 0;
+        for i = 1:nrealizations
+          
+            
+                data_hat = zeros(nelectrodes,N);
+                
+                for k = model_order:length(data_hat)-1;
+                    data_hat(:,k+1) = myPrediction(data_hat(:,1:k),bhat);
+                    data_hat(:,k+1) = data_hat(:,k+1) + noise.*randn(nelectrodes,1);
+                end
+                data_hat= data_hat(:,model_order+1:end);
+      
+                yhat = data_hat(electrode,:);   
+                [faxis_hat, h_hat] = mySpec( yhat, f0,0 ); % compute spectra
+                h_sum = h_hat + h_sum;
         end
-        data_hat= data_hat(:,nlags+1:end);
-        yhat = data_hat(electrode,:);   
-        [faxis_hat, h_hat] = mySpec( yhat, f0,0 ); % compute spectra
-        h_sum = h_hat + h_sum;
-    end
-    h_hat = h_sum/nrealizations;
+        h_hat = h_sum/nrealizations;
+  
+     
 
     % Plot spectra 
     y = data(electrode,:);           % signal 1 in 'true network'
