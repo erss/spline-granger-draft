@@ -1,8 +1,8 @@
 %%%%%%%% Single node network simulations ----------------------------------
 clear all;
 
-noise_type = 'pink';   % 'white' or 'pink'
-frequency_type = 'low'; % 'low' or 'high'
+noise_type = 'white';   % 'white' or 'pink'
+frequency_type = 'high'; % 'low' or 'high'
 
 
 nlags = 0;
@@ -120,7 +120,7 @@ title('Estimated signal spectrogram','FontSize',15);
 
 if strcmp(noise_type,'white')
    % mvar_aic;
-    goodness_of_fit_bootstrap;
+%    goodness_of_fit_bootstrap;
 end
 
 goodness_of_fit_spectrum;

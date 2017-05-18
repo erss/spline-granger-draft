@@ -121,11 +121,41 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     conf1 = ap*sqrt(8*pi*G/total_observations);
     UB = H1 + conf1;
     LB = H1 - conf1;
-    plot(X1,H1 + conf1, '--r');
-    plot(X1,H1 - conf1, '--r');
+    plot(X1,UB, '--r');
+    plot(X1,LB, '--r');
     axis tight
     
     %%% Compute amount of time in confidence bounds
     
     % percent_in_bounds = length(find(H>LB & H<UB))/length(UB)*100
+    q1 = [X' X1'];
+    Q = NaN(5,length(q1));
+    Q(1,:) = q1;
+    Q(2,:) = interp1q(X,H,Q(1,:)')';
+    Q(3,:) = interp1q(X1,LB,Q(1,:)')';
+    Q(4,:) = interp1q(X1,H1,Q(1,:)')';
+    Q(5,:) = interp1q(X1,UB,Q(1,:)')'';
+    
+    Q = sortrows(Q',1)';
+    Qp=Q';
+    Qp = Qp(~any(isnan(Qp),2),:)';
+    
+    percent_in_bounds = length(find(Qp(2,:)>Qp(3,:) & Qp(2,:)<Qp(5,:)));
+    percent_in_bounds = 100*percent_in_bounds/size(Qp,2)
+    
+%     figure;
+%     plot(X1,H1,'r','LineWidth',1.5);
+%     hold on;
+%     plot(X,H,'k','LineWidth',1.5);
+%     plot(X1,UB, '--r');
+%     plot(X1,LB, '--r');
+%     
+%     plot(Q(1,:),Q(2,:),'b')
+%     hold on
+%     plot(Q(1,:),Q(3,:),'--g')
+%     plot(Q(1,:),Q(4,:),'g')
+%     plot(Q(1,:),Q(5,:),'--g')
+    
+
+    
 end
