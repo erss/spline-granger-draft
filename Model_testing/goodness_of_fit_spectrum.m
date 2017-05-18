@@ -46,7 +46,7 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
         for i = 1:nrealizations
           
             
-                data_hat = zeros(nelectrodes,N+model_order);
+                data_hat = zeros(nelectrodes,N+model_order-nlags);
                 
                 for k = model_order:length(data_hat)-1;
                     data_hat(:,k+1) = myPrediction(data_hat(:,1:k),bhat);
@@ -108,8 +108,8 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
 
     % Compute confidence bounds for estimated signal (Priestley p 478)
 
-    a = 2.2414; % for 95% confidence bounds
-    N = size(data_true,2); %check! number of observations from which H is computed ? length of signal ?
+    ap = 2.2414; % for 95% confidence bounds
+    total_observations = size(data_true,2); %check! number of observations from which H is computed ? length of signal ?
 
     flag = 'biased'; % divide by 1/N
 
@@ -118,7 +118,7 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     G = sum(R(3:end-2).^2);
     G = G/(4*pi);
 
-    conf1 = a*sqrt(8*pi*G/N);
+    conf1 = ap*sqrt(8*pi*G/total_observations);
 
     plot(X1,H1 + conf1, '--r');
     plot(X1,H1 - conf1, '--r');
