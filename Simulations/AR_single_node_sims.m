@@ -2,17 +2,19 @@
 clear all;
 
 noise_type = 'white';   % 'white' or 'pink'
-frequency_type = 'high'; % 'low' or 'high'
+frequency_type = 'low'; % 'low' or 'high'
 
 
 nlags = 0;
+n=3;
 if strcmp(noise_type,'white')
+    n=2;
     if strcmp(frequency_type,'high') % ----high frequency
         model_coefficients = [0.9 -0.8];
         nlags = size(model_coefficients,2);
     elseif strcmp(frequency_type,'low') % ----low frequency
-          model_coefficients = 0.9;
-         % model_coefficients = [0.3 0.3];
+         % model_coefficients = 0.9;
+          model_coefficients = [0.3 0.3];
          % model_coefficients = [0.9 -0.1];
          nlags = size(model_coefficients,2);
     end
@@ -68,7 +70,7 @@ end
 
 
 
-subplot(3,2,[1 2])
+subplot(n,2,[1 2])
  plot(taxis,data(1,:));
 
 ylabel('Signal')
@@ -76,7 +78,7 @@ xlabel('Time (seconds)')
 legend('x1')
 title('Simulated Signal','FontSize',15);
 
-subplot(3,2,3)
+subplot(n,2,3)
 mySpec(data(1,:),f0);
 
 if strcmp(noise_type,'white')
@@ -94,7 +96,7 @@ cntrl_pts = make_knots(model_order,10);
 
 
 if strcmp(noise_type,'pink')
-    subplot(3,2,[5 6])
+    subplot(n,2,[5 6])
     plot(dt:dt:(model_order/f0),squeeze(bhat(1,1,:)),'LineWidth',1.5)
     hold on
     plot(cntrl_pts(2:end)./f0,squeeze(bhat(1,1,cntrl_pts(2:end))),'o')
@@ -102,7 +104,7 @@ if strcmp(noise_type,'pink')
 
 end
 
-subplot(3,2,4)
+subplot(n,2,4)
 mySpec(yhat,f0);
 
 if strcmp(noise_type,'white')

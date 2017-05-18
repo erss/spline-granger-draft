@@ -122,5 +122,6 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
 
     plot(X1,H1 + conf1, '--r');
     plot(X1,H1 - conf1, '--r');
+    axis tight
 
 end

@@ -14,15 +14,16 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     
         plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
            hold on
-        plot(cntrl_pts(2:end)./f0,squeeze(bhat(electrode,i,cntrl_pts(2:end))),'o')
-        plot(dt:dt:(model_order/f0),squeeze(real(bounds(1,j:j+model_order-1))),'--r')
-        plot(dt:dt:(model_order/f0),squeeze(real(bounds(2,j:j+model_order-1))),'--r')
+
         
          if nelectrodes == 1
             plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
         else
             plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',1.5);
-        end
+         end
+        plot(cntrl_pts(2:end)./f0,squeeze(bhat(electrode,i,cntrl_pts(2:end))),'o')
+        plot(dt:dt:(model_order/f0),squeeze(real(bounds(1,j:j+model_order-1))),'--r')
+        plot(dt:dt:(model_order/f0),squeeze(real(bounds(2,j:j+model_order-1))),'--r')
             str1 = strcat({'Influence of e'},num2str(i),{' on e'}, num2str(electrode));
         title(str1)
     xlabel('Lag (s)','FontSize',14);
@@ -31,7 +32,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     end
 
 
-    h = legend('Real AR Coefficients','Spline Estimated Coefficients');
+    h = legend('Spline Estimated Coefficients','True AR coefficients');
     set(h,'FontSize',14,'Location','SouthEast');
     suptitle('Estimated Coefficient Fits');
 
