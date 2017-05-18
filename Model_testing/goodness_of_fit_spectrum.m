@@ -119,9 +119,13 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     G = G/(4*pi);
 
     conf1 = ap*sqrt(8*pi*G/total_observations);
-
+    UB = H1 + conf1;
+    LB = H1 - conf1;
     plot(X1,H1 + conf1, '--r');
     plot(X1,H1 - conf1, '--r');
     axis tight
-
+    
+    %%% Compute amount of time in confidence bounds
+    
+    % percent_in_bounds = length(find(H>LB & H<UB))/length(UB)*100
 end

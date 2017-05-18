@@ -1,7 +1,7 @@
 %%%%%%%% Single node network simulations ----------------------------------
 clear all;
 
-noise_type = 'white';   % 'white' or 'pink'
+noise_type = 'pink';   % 'white' or 'pink'
 frequency_type = 'low'; % 'low' or 'high'
 
 
