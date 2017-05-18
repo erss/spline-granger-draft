@@ -4,14 +4,17 @@ clear all;
 noise_type = 'white';   % 'white' or 'pink'
 frequency_type = 'high'; % 'low' or 'high'
 
+
+nlags = 0;
 if strcmp(noise_type,'white')
     if strcmp(frequency_type,'high') % ----high frequency
         model_coefficients = [0.9 -0.8];
-      
+        nlags = size(model_coefficients,2);
     elseif strcmp(frequency_type,'low') % ----low frequency
           model_coefficients = 0.9;
          % model_coefficients = [0.3 0.3];
          % model_coefficients = [0.9 -0.1];
+         nlags = size(model_coefficients,2);
     end
 end
 
@@ -25,7 +28,7 @@ f0 = 200;  % sampling frequency (Hz)
 T = nobs/f0;      % total length of recording (seconds)
 dt = 1/f0; % seconds
 
-N = T*f0 +2;   % number of samples needed +2
+N = T*f0 +nlags;   % number of samples needed +2
 df = 1/T;   % frequency resolution
 fNQ = f0/2; % Nyquist frequency
 
@@ -38,7 +41,7 @@ model_order = 20; % order used in model estimation
 %%%  Generate data ---------------------------------------------------
 if strcmp(noise_type,'white') % ------------ WHITE NOISE -------
 
-    nlags = size(model_coefficients,2);
+    
     b = zeros(1,1,nlags);
     b(1,1,:)= model_coefficients;
       
@@ -88,16 +91,16 @@ cntrl_pts = make_knots(model_order,10);
 
 %%% Plot results ---------------------------------------------------------
 
-subplot(3,2,[5 6])
-plot(dt:dt:(model_order/f0),squeeze(bhat(1,1,:)),'LineWidth',1.5)
-hold on
-plot(cntrl_pts(2:end)./f0,squeeze(bhat(1,1,cntrl_pts(2:end))),'o')
 
-if strcmp(noise_type,'white')
-   plot(dt:dt:(nlags/f0),squeeze(real(b(1,1,:))),'.k','MarkerSize',30);
+
+if strcmp(noise_type,'pink')
+    subplot(3,2,[5 6])
+    plot(dt:dt:(model_order/f0),squeeze(bhat(1,1,:)),'LineWidth',1.5)
+    hold on
+    plot(cntrl_pts(2:end)./f0,squeeze(bhat(1,1,cntrl_pts(2:end))),'o')
+    title('Estimated Coefficients','FontSize',15);
+
 end
-
-title('Estimated Coefficients','FontSize',15);
 
 subplot(3,2,4)
 mySpec(yhat,f0);

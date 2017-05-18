@@ -46,13 +46,13 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
         for i = 1:nrealizations
           
             
-                data_hat = zeros(nelectrodes,N);
+                data_hat = zeros(nelectrodes,N+model_order);
                 
                 for k = model_order:length(data_hat)-1;
                     data_hat(:,k+1) = myPrediction(data_hat(:,1:k),bhat);
                     data_hat(:,k+1) = data_hat(:,k+1) + noise.*randn(nelectrodes,1);
                 end
-                data_hat= data_hat(:,model_order+1:end);
+               data_hat= data_hat(:,model_order+1:end);
       
                 yhat = data_hat(electrode,:);   
                 [faxis_hat, h_hat] = mySpec( yhat, f0,0 ); % compute spectra
