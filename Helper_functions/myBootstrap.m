@@ -26,8 +26,8 @@ b = zeros(nsurrogates,model_order*nelectrodes);
 c_pt_times = cntrl_pts;  % Define Control Point Locations
 
             
-s = 0.5;                                    % Define Tension Parameter
-
+%s = 0.5;                                    % Define Tension Parameter
+global s
 % Construct spline regressors for case nelectrodes = 1.
 c_pt_times_all = [c_pt_times(1)-2 c_pt_times c_pt_times(end)+2];
 Z = zeros(model_order,length(c_pt_times_all));

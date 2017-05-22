@@ -24,8 +24,8 @@ if nargin == 2
     cntrl_pts = unique([0:10:model_order model_order]) ;  % Define Control Point Locations
 end
             
-s = 0.5;                                    % Define Tension Parameter
-
+%s = 0.5;                                    % Define Tension Parameter
+global s;
 % Construct spline regressors.
 c_pt_times_all = [cntrl_pts(1)-2 cntrl_pts cntrl_pts(end)+2];
 Z = zeros(model_order,length(c_pt_times_all));
@@ -119,9 +119,9 @@ end
     m = nelectrodes^2; % number of total tests performed
     
     ivals = 1:m;
-    s = ivals*q/m;
+    sp = ivals*q/m;
     [pvals, index] = sort(adj_mat(:));
-    R = find(s>pvals'); % indices to reject null
+    R = find(sp>pvals'); % indices to reject null
     adj_mat = zeros(nelectrodes);
     adj_mat(index(R)) = 1; % reject H0 -> correlation
     

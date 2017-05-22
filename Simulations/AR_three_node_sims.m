@@ -1,6 +1,8 @@
 %%%%%%%% Three node network simulations -----------------------------------
 clear all;
 %%% Define model inputs ---------------------------------------------------
+global s;
+s = 0.5;
 
 nelectrodes = 3; % number of electrodes
 nlags = 40;  % true model order
@@ -113,4 +115,4 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
 b=a;
 goodness_of_fit_spectrum;
-goodness_of_fit_bootstrap;
+%goodness_of_fit_bootstrap;

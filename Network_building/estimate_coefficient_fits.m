@@ -25,8 +25,8 @@ function [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order, c
 %     c_pt_times = unique([0:10:model_order model_order]) ;  % Define Control Point Locations
 % end
             
-s = 0.5;                                    % Define Tension Parameter
-
+%s = 0.1; %0.5;                                    % Define Tension Parameter
+global s
 % Construct spline regressors.
 c_pt_times_all = [cntrl_pts(1)-2 cntrl_pts cntrl_pts(end)+2];
 Z = zeros(model_order,length(c_pt_times_all));

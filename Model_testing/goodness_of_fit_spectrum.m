@@ -1,6 +1,7 @@
 %%% Compare spectrum of true signal and of estimated signal
 %%%%%% NOTE highly dependent on noise used to generate model
 % Define model inputs
+
 if nelectrodes > 3
     nrealizations = 2;
 else
@@ -63,8 +64,8 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
      
 
     % Plot spectra 
-    y = data(electrode,:);           % signal 1 in 'true network'
-    yhat = data_hat(electrode,:);    % signal 1 in 'estimated network'
+    y = data(electrode,:);           % signal 'electrode' in 'true network'
+    yhat = data_hat(electrode,:);    % signal 'electrode' in 'estimated network'
 
     figure;
     subplot 221
@@ -101,11 +102,6 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     plot(X1,H1,'r','LineWidth',1.5);
     hold on
     plot(X,H,'k','LineWidth',1.5);
-
-
-    %legend('Estimated Signal','True Signal')
-    title('CDFs of Spectrum');
-
     % Compute confidence bounds for estimated signal (Priestley p 478)
 
     ap = 2.2414; % for 95% confidence bounds
@@ -126,8 +122,7 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     axis tight
     
     %%% Compute amount of time in confidence bounds
-    
-    % percent_in_bounds = length(find(H>LB & H<UB))/length(UB)*100
+
     q1 = [X' X1'];
     Q = NaN(5,length(q1));
     Q(1,:) = q1;
@@ -139,10 +134,24 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     Q = sortrows(Q',1)';
     Qp=Q';
     Qp = Qp(~any(isnan(Qp),2),:)';
-    
-    percent_in_bounds = length(find(Qp(2,:)>Qp(3,:) & Qp(2,:)<Qp(5,:)));
+    tol = 0;%0.05;
+    percent_in_bounds = length(find( Qp(2,:)>=Qp(3,:)-tol & Qp(2,:) <= Qp(5,:)+tol ));
     percent_in_bounds = 100*percent_in_bounds/size(Qp,2)
+    str1 = strcat({'CDFs of Averaged Spectrum, '},num2str(percent_in_bounds),{' % in bds '});
+    title(str1,'FontSize',15);
     
+    % pg 476
+    gr_statistic = max(sqrt(total_observations)*abs(Q(2,:)-Q(4,:)))
+    if (gr_statistic < ap)
+        fprintf('good fit')
+    else
+        fprintf('bad fit')
+    end
+    
+   % [ii iii] = max(sqrt(total_observations)*abs(Q(2,:)-Q(4,:)))
+   % plot(Q(1,iii),Q(2,iii),'o','MarkerSize',30) 
+   
+   
 %     figure;
 %     plot(X1,H1,'r','LineWidth',1.5);
 %     hold on;
@@ -156,6 +165,7 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
 %     plot(Q(1,:),Q(4,:),'g')
 %     plot(Q(1,:),Q(5,:),'--g')
     
-
+% figure;
+% myKS(h,h_hat)
     
 end

@@ -8,7 +8,7 @@ function myKS( y, yhat)
 xbd(1) = min([min(y),min(yhat)]);
 xbd(2) = max([max(y),max(yhat)]);
 
-xaxis = xbd(1):0.5:xbd(2);
+xaxis = xbd(1):(xbd(2)-xbd(1))/1000:xbd(2);
 N1 = length(y);
 N2 = length(yhat);
 for ii = 1:length(xaxis)

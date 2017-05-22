@@ -2,22 +2,26 @@
 clear all;
 
 noise_type = 'white';   % 'white' or 'pink'
-frequency_type = 'high'; % 'low' or 'high'
+frequency_type = 'low'; % 'low' or 'high'
+ 
+global s  % tension parameter
+s = 0.5;
 
-
-nlags = 0;
-n=3;
 if strcmp(noise_type,'white')
     n=2;
     if strcmp(frequency_type,'high') % ----high frequency
         model_coefficients = [0.9 -0.8];
         nlags = size(model_coefficients,2);
     elseif strcmp(frequency_type,'low') % ----low frequency
-         % model_coefficients = 0.9;
+        %  model_coefficients = 0.9;
           model_coefficients = [0.3 0.3];
          % model_coefficients = [0.9 -0.1];
          nlags = size(model_coefficients,2);
     end
+else
+    nlags = 0;
+    n=3;
+    
 end
 
 
@@ -120,7 +124,7 @@ title('Estimated signal spectrogram','FontSize',15);
 
 if strcmp(noise_type,'white')
    % mvar_aic;
-%    goodness_of_fit_bootstrap;
+    goodness_of_fit_bootstrap;
 end
 
 goodness_of_fit_spectrum;

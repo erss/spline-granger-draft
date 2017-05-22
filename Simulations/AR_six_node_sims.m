@@ -1,6 +1,9 @@
 %%%%%%%% Six node network simulations -----------------------------------
 clear all;
-%%% Define çmodel inputs ------------------------------------------------
+%%% Define model inputs ------------------------------------------------
+global s
+s = 0.1;
+
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
 model_order = 40; % order used in model estimation
