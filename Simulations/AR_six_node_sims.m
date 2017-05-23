@@ -98,5 +98,31 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
  
 %%% Goodness of fit -------------------------------------------------------
 b=a; 
+
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+  saveas(h(j), ['6N_'   num2str(i)], 'jpg');
+  j=j+1;
+end
+close all
+
 goodness_of_fit_spectrum;
+
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+  saveas(h(j), ['6N_e'   num2str(i) '_spectrum'], 'jpg');
+  j=j+1;
+end
+close all
+
 goodness_of_fit_bootstrap;
+
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+  saveas(h(j), ['6N_e'   num2str(i) '_bootstrap'], 'jpg');
+  j=j+1;
+end
+close all

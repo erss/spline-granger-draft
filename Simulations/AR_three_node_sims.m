@@ -1,5 +1,6 @@
 %%%%%%%% Three node network simulations -----------------------------------
 clear all;
+close all
 %%% Define model inputs ---------------------------------------------------
 global s;
 s = 0.5;
@@ -114,5 +115,33 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
 
 b=a;
+
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+  saveas(h(j), ['3N_'   num2str(i)], 'jpg');
+  j=j+1;
+end
+close all
+
 goodness_of_fit_spectrum;
-%goodness_of_fit_bootstrap;
+
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+  saveas(h(j), ['3N_e'   num2str(i) '_spectrum'], 'jpg');
+  j=j+1;
+end
+close all
+
+goodness_of_fit_bootstrap;
+
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+  saveas(h(j), ['3N_e'   num2str(i) '_bootstrap'], 'jpg');
+  j=j+1;
+end
+close all
+
+

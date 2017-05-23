@@ -5,7 +5,7 @@
 if nelectrodes > 3
     nrealizations = 2;
 else
-    nrealizations = 10;  % number of realizations for each process
+    nrealizations = 1;  % number of realizations for each process
 end
 
 if ~exist('noise_type','var')
@@ -147,7 +147,10 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     else
         fprintf('bad fit')
     end
-    
+    dim = [0.5 0.05 0.2 0.3];
+str = ['Test statistic: good fit if ' num2str(gr_statistic) '<' num2str(ap)];
+annotation('textbox',dim,'String',str,'FitBoxToText','on');
+
    % [ii iii] = max(sqrt(total_observations)*abs(Q(2,:)-Q(4,:)))
    % plot(Q(1,iii),Q(2,iii),'o','MarkerSize',30) 
    

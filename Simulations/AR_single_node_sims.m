@@ -1,6 +1,6 @@
 %%%%%%%% Single node network simulations ----------------------------------
 clear all;
-
+close all;
 noise_type = 'white';   % 'white' or 'pink'
 frequency_type = 'low'; % 'low' or 'high'
  
@@ -120,14 +120,29 @@ end
 title('Estimated signal spectrogram','FontSize',15);
 
 
+h = get(0,'children');
+for i=1:length(h)
+  saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i)], 'jpg');
+end
+close all
 %%% Determine what AIC thinks is best order
 
 if strcmp(noise_type,'white')
    % mvar_aic;
     goodness_of_fit_bootstrap;
+    h = get(0,'children');
+    for i=1:length(h)
+      saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_bootstrap'], 'jpg');
+    end
+    close all
 end
 
 goodness_of_fit_spectrum;
 
+h = get(0,'children');
+for i=1:length(h)
+  saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_spectrum'], 'jpg');
+end
+close all;
 
 
