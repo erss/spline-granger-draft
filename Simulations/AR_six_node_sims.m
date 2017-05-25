@@ -3,7 +3,8 @@ clear all;
 %%% Define model inputs ------------------------------------------------
 global s
 s = 0.1;
-
+global nsurrogates;
+nsurrogates = 5000;
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
 model_order = 40; % order used in model estimation
@@ -98,6 +99,20 @@ title(strcat({'Spline, '},num2str(splinetime),{' s'}))
  
 %%% Goodness of fit -------------------------------------------------------
 b=a; 
+
+
+Sampling_Frequency = f0;
+Noise_Variance = noise.^2;
+T_seconds = T;
+Model_Order = nlags;
+Estimated_Order = model_order;
+Tension_Parameter = s;
+Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,Estimated_Order,Tension_Parameter);
+figure;
+uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
+    'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
+
+
 
 h = get(0,'children');
 j=1;

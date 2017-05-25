@@ -1,4 +1,4 @@
-function [ b, bounds] = myBootstrap( data, adj_mat, model_order, electrode , nsurrogates,cntrl_pts )
+function [ UB, LB] = myBootstrap( data, adj_mat, model_order, electrode, cntrl_pts )
 % MYBOOTSTRAP creates surrogates for the coefficients estimates
 % when building AR models in the spline basis and computes 95% confidence
 % intervals.
@@ -12,9 +12,8 @@ function [ b, bounds] = myBootstrap( data, adj_mat, model_order, electrode , nsu
 %  nsurrogates     = number of surrogates
 % 
 % OUTPUTS:
-%  b              = contains surrogate for coefficients in each row.
 %  bounds         = contains upper and lower confidence bounds
-
+global nsurrogates;
 
    nelectrodes = size(data,1);            % number electrodes
    nobservations = length(data(1,model_order+1:end)); % number of observations
@@ -100,12 +99,14 @@ ii = electrode;
 
         ind1 =round(nsurrogates*0.025);
         ind2 = round(nsurrogates*0.975);
+         
+        sorted_b = sort(real(b));
+        bounds(1,:) = sorted_b(ind1,:);
+        bounds(2,:) = sorted_b(ind2,:);
 
-        for k = 1:size(b,2)
-            sorted_data = sort(real(b(:,k))); % sorts surrogate estimates for each lag
-            bounds(:,k) = [sorted_data(ind1); sorted_data(ind2) ]; % 95% interval
-        end
-    
+        UB = reshape(bounds(1,:),[model_order nelectrodes]);
+        LB = reshape(bounds(2,:),[model_order nelectrodes]);
+ 
     end
 
 end

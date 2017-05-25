@@ -3,9 +3,9 @@
 % Define model inputs
 
 if nelectrodes > 3
-    nrealizations = 2;
+    nrealizations = 10;
 else
-    nrealizations = 1;  % number of realizations for each process
+    nrealizations = 10;  % number of realizations for each process
 end
 
 if ~exist('noise_type','var')
@@ -120,7 +120,7 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     plot(X1,UB, '--r');
     plot(X1,LB, '--r');
     axis tight
-    
+    legend('Estimated Network','True Network')
     %%% Compute amount of time in confidence bounds
 
     q1 = [X' X1'];

@@ -4,7 +4,8 @@ close all
 %%% Define model inputs ---------------------------------------------------
 global s;
 s = 0.5;
-
+global nsurrogates;
+nsurrogates = 10000;
 nelectrodes = 3; % number of electrodes
 nlags = 40;  % true model order
 model_order = 100; % order used in model estimation
@@ -113,9 +114,19 @@ plotNetwork(adj_mat)
 title('Spline Network')
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
+Sampling_Frequency = f0;
+Noise_Variance = noise.^2;
+T_seconds = T;
+Model_Order = nlags;
+Estimated_Order = model_order;
+Tension_Parameter = s;
+Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,Estimated_Order,Tension_Parameter);
+figure;
+uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
+    'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
 
 b=a;
-
+%%
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
