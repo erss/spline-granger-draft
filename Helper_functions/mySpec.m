@@ -47,4 +47,3 @@ faxis = 0:df:fNQ;             % Frequency axis
 %     end
 
 end
-

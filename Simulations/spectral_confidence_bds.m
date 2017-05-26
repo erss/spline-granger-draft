@@ -17,6 +17,8 @@
 close all; clear all;
 
 % Define model parameters
+global s
+s = 0.5; 
 
 T = 5;         % total length of recording (seconds)
 dt = 0.001;    % seconds

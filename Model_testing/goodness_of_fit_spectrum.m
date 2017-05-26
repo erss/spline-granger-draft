@@ -141,7 +141,7 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     title(str1,'FontSize',15);
     
     % pg 476
-    gr_statistic = max(sqrt(total_observations)*abs(Q(2,:)-Q(4,:)))
+    gr_statistic = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)))
     if (gr_statistic < ap)
         fprintf('good fit')
     else
