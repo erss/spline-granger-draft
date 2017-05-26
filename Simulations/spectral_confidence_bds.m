@@ -60,7 +60,7 @@ for i = 1:nrealizations
     
     data= data(:,41:end);
    y = data(electrode,:);   
-    [faxis, h] = mySpec( y, f0,0 );
+    [faxis, h] = mySpec( y, f0,'noplot' );
     h_sum = h + h_sum;
 end
    h = h_sum/nrealizations;
@@ -92,7 +92,7 @@ for i = 1:nrealizations
     end
     data_hat= data_hat(:,nlags+1:end);
     yhat = data_hat(electrode,:);   
-    [faxis, h_hat] = mySpec( yhat, f0,0 ); % compute spectra
+    [faxis, h_hat] = mySpec( yhat, f0,'noplot' ); % compute spectra
     h_sum = h_hat + h_sum;
 end
 h_hat = h_sum/nrealizations;
@@ -132,7 +132,7 @@ for i = 1:nrealizations
     
     data_z= data_z(:,41:end);
     zhat = data_z(electrode,:);    
-    [faxis, h_z] = mySpec( zhat, f0,0 );
+    [faxis, h_z] = mySpec( zhat, f0,'noplot');
     h_sum = h_z + h_sum;
 end
 h_z = h_sum/nrealizations;

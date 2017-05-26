@@ -1,49 +1,59 @@
-function [faxis, Sxx] = mySpec( x, f0, plot_flag )
+function [faxis, Sxx] = mySpec( x, f0, plot_flag,taper )
 % MYSPEC computes the spectrum of a signal, x, at a sampling frequency, f0.
-%  Plots if PLOT_FLAG = 1, the default
+%  Plots if PLOT_FLAG = 'yesplot', the default, Uses tapers if taper
+%  ='tapers', doesn't if taper = 'notapers' (DEFAULT)
 
-if nargin == 2
-    plot_flag = 1;  % Default value 
+
+if ~exist('plot_flag','var') % default is to plot
+    taper = 'yesplot';
 end
-% 
-% NO TAPERS
-x = x - ones(size(x)).*mean(x);
-dt = 1/f0;
-T = length(x)/f0;  % total length of recording (seconds)
 
-df = 1/T;   % frequency resolution
-fNQ = f0/2; % Nyquist frequency
+if ~exist('taper','var') % default is to not use tapers
+    taper = 'notapers';
+end
 
-
-xf = fft(x);                  % Fourier transform of x                
-Sxx = (2*dt^2/T)*(xf.*conj(xf));  % Power spectrum
-Sxx = Sxx(1:length(x)/2+1);   % Remove negative frequencies 
-
-faxis = 0:df:fNQ;             % Frequency axis
-
-
-    if plot_flag == 1
-        plot(faxis,Sxx);     
+if strcmp(taper,'notapers') %%% -----NO TAPERS------------
+    x = x - ones(size(x)).*mean(x);
+    dt = 1/f0;
+    T = length(x)/f0;  % total length of recording (seconds)
+    
+    df = 1/T;   % frequency resolution
+    fNQ = f0/2; % Nyquist frequency
+    
+    
+    xf = fft(x);                  % Fourier transform of x
+    Sxx = (2*dt^2/T)*(xf.*conj(xf));  % Power spectrum
+    Sxx = Sxx(1:length(x)/2+1);   % Remove negative frequencies
+    
+    faxis = 0:df:fNQ;             % Frequency axis
+    
+    
+    if strcmp(plot_flag,'yesplot') % plots spectrum
+        plot((faxis),(Sxx));
+        %         hold on;
+        %         plot(faxis,0.0625./(faxis.^.33))
         xlim([0 f0/4]);
         xlabel('Frequency (Hz)','FontSize',15);
         ylabel('Power','FontSize',15);
         title('Spectrogram','FontSize',15);
     end
-
-
-%%% TAPER METHOD
-% x = x - mean(x);
-% dt = 1/f0;
-% TW = 5; % 50 ??
-% 
-% [Sxx, faxis] = pmtm(x,TW,length(x),f0);
-% 
-%     if plot_flag == 1
-%         plot(faxis,Sxx);     
-%         xlim([0 f0/4]);
-%         xlabel('Frequency (Hz)','FontSize',15);
-%         ylabel('Power','FontSize',15);
-%         title('Spectrogram','FontSize',15);
-%     end
-
+    
+    
+elseif strcmp(taper,'tapers') %%% ----USE TAPERS -----------
+    %%% TAPER METHOD
+    x = x - ones(size(x)).*mean(x);
+    dt = 1/f0;
+    TW = 5; % 50 ??
+    
+    [Sxx, faxis] = pmtm(x,TW,length(x),f0);
+    
+    if strcmp(plot_flag,'yesplot') % plots spectrum
+        plot(faxis,Sxx);
+        xlim([0 f0/4]);
+        xlabel('Frequency (Hz)','FontSize',15);
+        ylabel('Power','FontSize',15);
+        title('Spectrogram','FontSize',15);
+    end
 end
+end
+

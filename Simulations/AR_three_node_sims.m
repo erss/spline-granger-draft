@@ -126,7 +126,7 @@ uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
     'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
 
 b=a;
-%%
+
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1

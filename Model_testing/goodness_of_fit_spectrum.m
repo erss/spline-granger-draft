@@ -3,7 +3,7 @@
 % Define model inputs
 
 if nelectrodes > 3
-    nrealizations = 10;
+    nrealizations = 2;
 else
     nrealizations = 10;  % number of realizations for each process
 end
@@ -35,7 +35,7 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
          end
         
          y = data_true(electrode,:);   
-        [faxis, h] = mySpec( y, f0,0 );
+        [faxis, h] = mySpec( y, f0,'noplot','notapers' );
         h_sum = h + h_sum;
     end
        h = h_sum/nrealizations;
@@ -56,7 +56,7 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
                data_hat= data_hat(:,model_order+1:end);
       
                 yhat = data_hat(electrode,:);   
-                [faxis_hat, h_hat] = mySpec( yhat, f0,0 ); % compute spectra
+                [faxis_hat, h_hat] = mySpec( yhat, f0,'noplot' ,'notapers'); % compute spectra
                 h_sum = h_hat + h_sum;
         end
         h_hat = h_sum/nrealizations;

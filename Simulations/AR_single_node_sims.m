@@ -1,7 +1,7 @@
 %%%%%%%% Single node network simulations ----------------------------------
 clear all;
 close all;
-noise_type = 'white';   % 'white' or 'pink'
+noise_type = 'pink';   % 'white' or 'pink'
 frequency_type = 'low'; % 'low' or 'high'
  
 global s  % tension parameter
@@ -94,7 +94,7 @@ end
 title(str,'FontSize',15);
 
 subplot(n,2,3)
-mySpec(data(1,:),f0);
+mySpec(data(1,:),f0,'yesplot','tapers');
 
 if strcmp(noise_type,'white')
     hold on
@@ -120,7 +120,7 @@ if strcmp(noise_type,'pink')
 end
 
 subplot(n,2,4)
-mySpec(yhat,f0);
+mySpec(yhat,f0,'yesplot','tapers');
 
 if strcmp(noise_type,'white')
     hold on
