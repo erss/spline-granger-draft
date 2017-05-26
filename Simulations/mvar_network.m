@@ -1,3 +1,4 @@
+clear all;
 ntrials   = 1;     % number of trials
 nobs      = 1000;   % number of observations per trial
 
@@ -93,7 +94,7 @@ uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
     'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
 
 b=AT;
-%goodness_of_fit_spectrum;
+goodness_of_fit_spectrum;
 goodness_of_fit_bootstrap;
 
 
