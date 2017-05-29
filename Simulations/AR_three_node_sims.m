@@ -2,10 +2,13 @@
 clear all;
 close all
 %%% Define model inputs ---------------------------------------------------
-global s;
+
+global s;               % tension parameter
 s = 0.5;
-global nsurrogates;
+
+global nsurrogates;     % number of surrogates
 nsurrogates = 10000;
+
 nelectrodes = 3; % number of electrodes
 nlags = 40;  % true model order
 model_order = 100; % order used in model estimation
@@ -23,21 +26,21 @@ data = zeros(3,N);
 
 
 %%% SIM 1 ----------------------------------------------------------------
-a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   
-a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';   
-a3 = -.3*ones(size(a1));                   
+a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
+a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';
+a3 = -.3*ones(size(a1));
 
-a = zeros(3,3,40);                 % Model coefficients                 
-a(1,1,:) = a1;            
-a(1,2,:) = a2;                                               
+a = zeros(3,3,40);                 % Model coefficients
+a(1,1,:) = a1;
+a(1,2,:) = a2;
 a(2,2,:) = a2;
 a(3,3,:) = a3;
 nlags = length(a1);
 adj_true = [1 1 0; 0 1 0; 0 0 1];  % True network stucture
 
 %%% SIM 2 ----------------------------------------------------------------
-% a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   
-% a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';   
+% a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
+% a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';
 % a3 = -.3*ones(size(a1));
 % a = zeros(3,3,40);                         % Model coefficients
 % a(1,1,:) = a1;
@@ -48,7 +51,7 @@ adj_true = [1 1 0; 0 1 0; 0 0 1];  % True network stucture
 % adj_true = [1 1 0; 1 1 0; 0 0 1];          % True network structure
 
 %%% SIM 3----------------------------------------------------------------
-% a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';   
+% a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
 % a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';
 % a = zeros(3,3,40);
 % a(1,3,:) = a1;                             % Model coefficients
@@ -65,22 +68,19 @@ for k = nlags:length(data)-1;
     data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
 end
 data = data(:,nlags+1:end);
-% mvar_aic; run to see mvgc toolbox order result
-
-
 
 subplot(2,3,[1 3])
- plot(dt:dt:T,data(1,:));
- hold on;
- plot(dt:dt:T,data(2,:));
- plot(dt:dt:T,data(3,:));
+plot(dt:dt:T,data(1,:));
+hold on;
+plot(dt:dt:T,data(2,:));
+plot(dt:dt:T,data(3,:));
 
 ylabel('Signal')
 xlabel('Time (seconds)')
 legend('x1','x2','x3')
 title('Simulated Signal','FontSize',15);
 
-% 
+%
 % subplot(2,2,3)
 % mySpec(data(1,:),f0);
 
@@ -114,45 +114,54 @@ plotNetwork(adj_mat)
 title('Spline Network')
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
+
+mvar_aic; % run to see mvgc toolbox order result
 Sampling_Frequency = f0;
 Noise_Variance = noise.^2;
 T_seconds = T;
 Model_Order = nlags;
 Estimated_Order = model_order;
 Tension_Parameter = s;
-Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,Estimated_Order,Tension_Parameter);
+Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,...
+    Estimated_Order,Tension_Parameter,moAIC,moBIC);
+
 figure;
-uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
-    'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
+uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
+    'Units', 'Normalized', 'Position',[0,0,1,1])
 
+%%% Plot all results --------------------------------------------
+
+% Save all simulation and table plots ---------------------------
 b=a;
-
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-  saveas(h(j), ['3N_'   num2str(i)], 'jpg');
-  j=j+1;
+    saveas(h(j), ['3N_'   num2str(i)], 'jpg');
+    j=j+1;
 end
 close all
 
+% Spectral GoF --------------------------------------------------
 goodness_of_fit_spectrum;
-
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-  saveas(h(j), ['3N_e'   num2str(i) '_spectrum'], 'jpg');
-  j=j+1;
+    saveas(h(j), ['3N_e'   num2str(i) '_spectrum'], 'jpg');
+    j=j+1;
 end
 close all
 
+% Boostrap GoF --------------------------------------------------
 goodness_of_fit_bootstrap;
-
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-  saveas(h(j), ['3N_e'   num2str(i) '_bootstrap'], 'jpg');
-  j=j+1;
+    saveas(h(j), ['3N_e'   num2str(i) '_bootstrap'], 'jpg');
+    j=j+1;
 end
 close all
+
+% goodness_of_fit_bootstrap;
+% goodness_of_fit_spectrum;
 
 

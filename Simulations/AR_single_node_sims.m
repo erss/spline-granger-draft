@@ -1,13 +1,19 @@
 %%%%%%%% Single node network simulations ----------------------------------
 clear all;
 close all;
-noise_type = 'pink';   % 'white' or 'pink'
+
+
+%%% Define model inputs ---------------------------------------------------
+
+noise_type = 'white';   % 'white' or 'pink'
 frequency_type = 'low'; % 'low' or 'high'
  
 global s  % tension parameter
 s = 0.5;
-global nsurrogates;
+
+global nsurrogates; % number of surrogates for bootstrapping
 nsurrogates = 10000;
+
 if strcmp(noise_type,'white')
     n=2;
     if strcmp(frequency_type,'high') % ----high frequency
@@ -19,14 +25,14 @@ if strcmp(noise_type,'white')
          % model_coefficients = [0.9 -0.1];
          nlags = size(model_coefficients,2);
     end
-else
+else  % ---- pink noise
     nlags = 0;
+    a = 0;
     n=3;
     
 end
 
 
-%%% Define model inputs ---------------------------------------------------
 nobs = 1000;   % number of observations per trial
 sgnl = 1;
 nelectrodes = 1;
@@ -44,7 +50,8 @@ noise = 0.25;
 data = zeros(1,N);
 
 model_order = 20; % order used in model estimation
-adj_true = 1;
+adj_true = 1;     
+
 %%%  Generate data ---------------------------------------------------
 if strcmp(noise_type,'white') % ------------ WHITE NOISE -------
 
@@ -88,7 +95,7 @@ if (strcmp(noise_type,'white') && length(model_coefficients)==2)
 elseif (strcmp(noise_type,'white') && length(model_coefficients)==1)
     str = ['Simulated Signal, ' num2str(model_coefficients)];
 else
-    str = ['Simulated Signal']; % ------------ PINK NOISE -------
+    str = 'Simulated Signal'; % ------------ PINK NOISE -------
 end
 
 title(str,'FontSize',15);
@@ -130,6 +137,9 @@ end
 
 title('Estimated signal spectrogram','FontSize',15);
 
+%%%% Make table of all inputs ------------------------
+a=b;
+mvar_aic; % determine what AIC thinks is best order
 Sampling_Frequency = f0;
 Noise_Variance = noise.^2;
 T_seconds = T;
@@ -137,57 +147,50 @@ Model_Order = nlags;
 Estimated_Order = model_order;
 
 Tension_Parameter = s;
-Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,Estimated_Order,Tension_Parameter);
+Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,...
+    Estimated_Order,Tension_Parameter,moAIC,moBIC);
 figure;
-uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
-    'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
-%%
+uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
+    'Units', 'Normalized', 'Position',[0,0,1,1])
 
-h = get(0,'children');
+%%% Plot all results --------------------------------------------
+
+% Save all simulation and table plots ---------------------------
+h = get(0,'children');  
 for i=1:length(h)
-
     if strcmp(noise_type,'pink')
-      saveas(h(i), ['1N_' noise_type '_'   num2str(i)], 'jpg');
-
+        saveas(h(i), ['1N_' noise_type '_'   num2str(i)], 'jpg');
     else
-      saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i)], 'jpg');
+        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i)], 'jpg');
     end
 end
 close all
-%%% Determine what AIC thinks is best order
 
-if strcmp(noise_type,'white')
-   % mvar_aic;
-    goodness_of_fit_bootstrap;
-    h = get(0,'children');
-    for i=1:length(h)
-        
-        
-    if strcmp(noise_type,'pink')
-      saveas(h(i), ['1N_' noise_type '_'   num2str(i) '_bootstrap' ], 'jpg');
-
-    else
-      saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_bootstrap'], 'jpg');
-    end
-        
-        
-        
-    end
-    close all
-end
-
-goodness_of_fit_spectrum;
-
+% Boostrap GoF --------------------------------------------------
+goodness_of_fit_bootstrap;
 h = get(0,'children');
 for i=1:length(h)
     
-       if strcmp(noise_type,'pink')
-  saveas(h(i), ['1N_' noise_type '_'  num2str(i) '_spectrum'], 'jpg');
-
+    if strcmp(noise_type,'pink')
+        saveas(h(i), ['1N_' noise_type '_'   num2str(i) '_bootstrap' ], 'jpg');
     else
-  saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_spectrum'], 'jpg');
+        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_bootstrap'], 'jpg');
     end
-    
-    
+end
+close all
+
+% Spectral GoF -------------------------------------------------
+goodness_of_fit_spectrum;
+h = get(0,'children');
+for i=1:length(h)
+    if strcmp(noise_type,'pink')
+        saveas(h(i), ['1N_' noise_type '_'  num2str(i) '_spectrum'], 'jpg');
+    else
+        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_spectrum'], 'jpg');
+    end
 end
 close all;
+
+
+% goodness_of_fit_bootstrap;
+% goodness_of_fit_spectrum;

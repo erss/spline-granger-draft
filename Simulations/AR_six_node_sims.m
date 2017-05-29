@@ -45,7 +45,7 @@ nlags = length(a1);
 
 for k = nlags:length(data)-1;
     data(:,k+1) = myPrediction(data(:,1:k),a);
-  
+
     data(:,k+1) = data(:,k+1) + noise.*randn(size(data,1),1);
 
 end
@@ -96,10 +96,9 @@ plotNetwork(adj_mat)
 title('Spline Network')
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
- 
 %%% Goodness of fit -------------------------------------------------------
 b=a; 
-
+mvar_aic;
 
 Sampling_Frequency = f0;
 Noise_Variance = noise.^2;
@@ -107,37 +106,43 @@ T_seconds = T;
 Model_Order = nlags;
 Estimated_Order = model_order;
 Tension_Parameter = s;
-Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,Estimated_Order,Tension_Parameter);
+Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,...
+    Estimated_Order,Tension_Parameter,moAIC,moBIC);
+
 figure;
-uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
-    'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
+uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
+    'Units', 'Normalized', 'Position',[0,0,1,1])
 
 
-
+%%% Plot all results --------------------------------------------
+% Save all simulation and table plots ---------------------------
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-  saveas(h(j), ['6N_'   num2str(i)], 'jpg');
-  j=j+1;
+    saveas(h(j), ['6N_'   num2str(i)], 'jpg');
+    j=j+1;
 end
 close all
 
+% Spectral GoF --------------------------------------------------
 goodness_of_fit_spectrum;
-
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-  saveas(h(j), ['6N_e'   num2str(i) '_spectrum'], 'jpg');
-  j=j+1;
+    saveas(h(j), ['6N_e'   num2str(i) '_spectrum'], 'jpg');
+    j=j+1;
 end
 close all
 
+% Boostrap GoF --------------------------------------------------
 goodness_of_fit_bootstrap;
-
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-  saveas(h(j), ['6N_e'   num2str(i) '_bootstrap'], 'jpg');
-  j=j+1;
+    saveas(h(j), ['6N_e'   num2str(i) '_bootstrap'], 'jpg');
+    j=j+1;
 end
 close all
+
+% goodness_of_fit_bootstrap;
+% goodness_of_fit_spectrum;

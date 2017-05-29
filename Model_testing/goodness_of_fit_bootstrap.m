@@ -21,11 +21,13 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
                hold on
 
 
-             if nelectrodes == 1
+             if nelectrodes == 1 && strcmp(noise_type,'white')
                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
-            else
+             elseif nelectrodes > 1 && strcmp(noise_type,'white')
                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',1.5);
              end
+             
+             
             plot(cntrl_pts(2:end)./f0,squeeze(bhat(electrode,i,cntrl_pts(2:end))),'o')
 
             plot(dt:dt:(model_order/f0),real(LB(:,i)),'--r','LineWidth',1)
