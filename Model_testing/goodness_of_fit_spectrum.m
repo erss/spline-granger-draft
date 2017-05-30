@@ -17,9 +17,9 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     % Simulate data using true coefficients 
     h_sum = 0;
     for i = 1:nrealizations
-        
+        data_true = data;
          if strcmp(noise_type,'white')
-
+           
             data_true = zeros(nelectrodes,N);
             for k = nlags:length(data_true)-1;
                 data_true(:,k+1) = myPrediction(data_true(:,1:k),b);
@@ -143,9 +143,10 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     % pg 476
     gr_statistic = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)))
     if (gr_statistic < ap)
-        fprintf('good fit')
+        fprintf('good fit %d\n')        
+
     else
-        fprintf('bad fit')
+        fprintf('bad fit %d\n')
     end
     dim = [0.5 0.05 0.2 0.3];
 str = ['Test statistic: good fit if ' num2str(gr_statistic) '<' num2str(ap)];

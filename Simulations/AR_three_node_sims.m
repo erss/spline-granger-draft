@@ -24,42 +24,41 @@ taxis = dt:dt:T; % time axis
 noise = 0.25;
 data = zeros(3,N);
 
+sim = 1; % sim = 1,2 or 3
 
-%%% SIM 1 ----------------------------------------------------------------
-a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
-a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';
-a3 = -.3*ones(size(a1));
-
-a = zeros(3,3,40);                 % Model coefficients
-a(1,1,:) = a1;
-a(1,2,:) = a2;
-a(2,2,:) = a2;
-a(3,3,:) = a3;
-nlags = length(a1);
-adj_true = [1 1 0; 0 1 0; 0 0 1];  % True network stucture
-
-%%% SIM 2 ----------------------------------------------------------------
-% a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
-% a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';
-% a3 = -.3*ones(size(a1));
-% a = zeros(3,3,40);                         % Model coefficients
-% a(1,1,:) = a1;
-% a(1,2,:) = a2;
-% a(2,1,:) = a1;
-% a(2,2,:) = a2;
-% a(3,3,:) = a3;
-% adj_true = [1 1 0; 1 1 0; 0 0 1];          % True network structure
-
-%%% SIM 3----------------------------------------------------------------
-% a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
-% a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';
-% a = zeros(3,3,40);
-% a(1,3,:) = a1;                             % Model coefficients
-% a(2,3,:) = a1;
-% a(3,3,:) = a2;
-% adj_true = [0 0 1; 0 0 1; 0 0 1];          % True network structure
-
-
+if sim==1 %-------------- SIM 1 --------------------------------------
+    a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
+    a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';
+    a3 = -.3*ones(size(a1));
+    
+    a = zeros(3,3,40);                 % Model coefficients
+    a(1,1,:) = a1;
+    a(1,2,:) = a2;
+    a(2,2,:) = a2;
+    a(3,3,:) = a3;
+    nlags = length(a1);
+    adj_true = [1 1 0; 0 1 0; 0 0 1];  % True network stucture
+elseif sim==2 %-------------- SIM 2 --------------------------------------
+    a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
+    a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';
+    a3 = -.3*ones(size(a1));
+    a = zeros(3,3,40);                         % Model coefficients
+    a(1,1,:) = a1;
+    a(1,2,:) = a2;
+    a(2,1,:) = a1;
+    a(2,2,:) = a2;
+    a(3,3,:) = a3;
+    adj_true = [1 1 0; 1 1 0; 0 0 1];          % True network structure
+elseif sim==3 %-------------- SIM 3 --------------------------------------
+    a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
+    a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';
+    a = zeros(3,3,40);
+    a(1,3,:) = a1;                             % Model coefficients
+    a(2,3,:) = a1;
+    a(3,3,:) = a2;
+    adj_true = [0 0 1; 0 0 1; 0 0 1];          % True network structure
+    
+end
 
 
 %%% Simulate data ------------------------------------------
@@ -129,39 +128,40 @@ figure;
 uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
     'Units', 'Normalized', 'Position',[0,0,1,1])
 
-%%% Plot all results --------------------------------------------
-
-% Save all simulation and table plots ---------------------------
-b=a;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['3N_'   num2str(i)], 'jpg');
-    j=j+1;
-end
-close all
-
-% Spectral GoF --------------------------------------------------
-goodness_of_fit_spectrum;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['3N_e'   num2str(i) '_spectrum'], 'jpg');
-    j=j+1;
-end
-close all
-
-% Boostrap GoF --------------------------------------------------
-goodness_of_fit_bootstrap;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['3N_e'   num2str(i) '_bootstrap'], 'jpg');
-    j=j+1;
-end
-close all
-
-% goodness_of_fit_bootstrap;
+% %%% Plot all results --------------------------------------------
+% 
+% % Save all simulation and table plots ---------------------------
+% b=a;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['3N_sim'  num2str(sim) '_summaryplot' num2str(i)], 'jpg');
+%     j=j+1;
+% end
+% close all
+% 
+% % Spectral GoF --------------------------------------------------
 % goodness_of_fit_spectrum;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_spectrum'], 'jpg');
+%     j=j+1;
+% end
+% close all
+% 
+% % Boostrap GoF --------------------------------------------------
+% goodness_of_fit_bootstrap;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_bootstrap'], 'jpg');
+%     j=j+1;
+% end
+% close all
+
+b=a;
+goodness_of_fit_bootstrap;
+goodness_of_fit_spectrum;
 
 

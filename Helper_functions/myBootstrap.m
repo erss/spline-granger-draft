@@ -103,10 +103,14 @@ ii = electrode;
         sorted_b = sort(real(b));
         bounds(1,:) = sorted_b(ind1,:);
         bounds(2,:) = sorted_b(ind2,:);
-
+        
+        max_imaginary_ub = max(imag(bounds(1,:)));
+        max_imaginary_lb = max(imag(bounds(2,:)));
+        fprintf('max imag ub = %d\n',max_imaginary_ub)
+        fprintf('max imag lb = %d\n',max_imaginary_lb)
         UB = reshape(bounds(1,:),[model_order nelectrodes]);
         LB = reshape(bounds(2,:),[model_order nelectrodes]);
- 
+        
     end
 
 end

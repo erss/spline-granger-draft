@@ -6,13 +6,14 @@ close all;
 %%% Define model inputs ---------------------------------------------------
 
 noise_type = 'white';   % 'white' or 'pink'
-frequency_type = 'low'; % 'low' or 'high'
+frequency_type = 'high'; % 'low' or 'high'
  
 global s  % tension parameter
 s = 0.5;
 
 global nsurrogates; % number of surrogates for bootstrapping
 nsurrogates = 10000;
+
 
 if strcmp(noise_type,'white')
     n=2;
@@ -28,6 +29,7 @@ if strcmp(noise_type,'white')
 else  % ---- pink noise
     nlags = 0;
     a = 0;
+    b = 0;
     n=3;
     
 end
@@ -156,41 +158,41 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 %%% Plot all results --------------------------------------------
 
 % Save all simulation and table plots ---------------------------
-h = get(0,'children');  
-for i=1:length(h)
-    if strcmp(noise_type,'pink')
-        saveas(h(i), ['1N_' noise_type '_'   num2str(i)], 'jpg');
-    else
-        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i)], 'jpg');
-    end
-end
-close all
-
-% Boostrap GoF --------------------------------------------------
-goodness_of_fit_bootstrap;
-h = get(0,'children');
-for i=1:length(h)
-    
-    if strcmp(noise_type,'pink')
-        saveas(h(i), ['1N_' noise_type '_'   num2str(i) '_bootstrap' ], 'jpg');
-    else
-        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_bootstrap'], 'jpg');
-    end
-end
-close all
-
-% Spectral GoF -------------------------------------------------
-goodness_of_fit_spectrum;
-h = get(0,'children');
-for i=1:length(h)
-    if strcmp(noise_type,'pink')
-        saveas(h(i), ['1N_' noise_type '_'  num2str(i) '_spectrum'], 'jpg');
-    else
-        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_spectrum'], 'jpg');
-    end
-end
-close all;
-
-
+% h = get(0,'children');  
+% for i=1:length(h)
+%     if strcmp(noise_type,'pink')
+%         saveas(h(i), ['1N_' noise_type '_'   num2str(i)], 'jpg');
+%     else
+%         saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i)], 'jpg');
+%     end
+% end
+% close all
+% 
+% % Boostrap GoF --------------------------------------------------
 % goodness_of_fit_bootstrap;
+% h = get(0,'children');
+% for i=1:length(h)
+%     
+%     if strcmp(noise_type,'pink')
+%         saveas(h(i), ['1N_' noise_type '_'   num2str(i) '_bootstrap' ], 'jpg');
+%     else
+%         saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_bootstrap'], 'jpg');
+%     end
+% end
+% close all
+% 
+% % Spectral GoF -------------------------------------------------
 % goodness_of_fit_spectrum;
+% h = get(0,'children');
+% for i=1:length(h)
+%     if strcmp(noise_type,'pink')
+%         saveas(h(i), ['1N_' noise_type '_'  num2str(i) '_spectrum'], 'jpg');
+%     else
+%         saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_spectrum'], 'jpg');
+%     end
+% end
+% close all;
+
+
+ goodness_of_fit_bootstrap;
+ goodness_of_fit_spectrum;

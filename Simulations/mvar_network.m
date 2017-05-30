@@ -94,8 +94,38 @@ uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
     'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
 
 b=AT;
+%%% Plot all results --------------------------------------------
+
+% Save all simulation and table plots ---------------------------
+
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['9N_'  num2str(i) '_summaryplot' num2str(i)], 'jpg');
+    j=j+1;
+end
+close all
+
+% Spectral GoF --------------------------------------------------
 goodness_of_fit_spectrum;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['9N_MVAR_e' num2str(i) '_spectrum'], 'jpg');
+    j=j+1;
+end
+close all
+
+% Boostrap GoF --------------------------------------------------
 goodness_of_fit_bootstrap;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['9N_MVAR_e' num2str(i) '_bootstrap'], 'jpg');
+    j=j+1;
+end
+close all
+
 
 
 

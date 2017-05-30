@@ -1,9 +1,16 @@
 %%%% goodness_of_fit_bootstrap_coefficients
+if ~exist('noise_type','var')
+  noise_type = 'white';
+end
 
 for electrode = 1:nelectrodes % plot fit for every electrode in network
-
+ 
+    if sum(adj_mat(electrode,:))==0
+       UB = zeros(model_order,nelectrodes);
+       LB = zeros(model_order,nelectrodes);
+    else
     [UB,LB]= myBootstrap(data,adj_mat,model_order,electrode,cntrl_pts);
-
+    end;
 
     figure;
   

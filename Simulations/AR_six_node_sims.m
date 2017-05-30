@@ -3,8 +3,10 @@ clear all;
 %%% Define model inputs ------------------------------------------------
 global s
 s = 0.1;
+
 global nsurrogates;
 nsurrogates = 5000;
+
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
 model_order = 40; % order used in model estimation
@@ -111,38 +113,38 @@ Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,...
 
 figure;
 uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
-    'Units', 'Normalized', 'Position',[0,0,1,1])
+    'Units', 'Normalized', 'Position',[0,0,1,1]);
 
 
 %%% Plot all results --------------------------------------------
 % Save all simulation and table plots ---------------------------
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['6N_'   num2str(i)], 'jpg');
-    j=j+1;
-end
-close all
-
-% Spectral GoF --------------------------------------------------
-goodness_of_fit_spectrum;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['6N_e'   num2str(i) '_spectrum'], 'jpg');
-    j=j+1;
-end
-close all
-
-% Boostrap GoF --------------------------------------------------
-goodness_of_fit_bootstrap;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['6N_e'   num2str(i) '_bootstrap'], 'jpg');
-    j=j+1;
-end
-close all
-
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['6N_summaryplot'   num2str(i)], 'jpg');
+%     j=j+1;
+% end
+% close all
+% 
+% % Spectral GoF --------------------------------------------------
+% goodness_of_fit_spectrum;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['6N_e'   num2str(i) '_spectrum'], 'jpg');
+%     j=j+1;
+% end
+% close all
+% 
+% % Boostrap GoF --------------------------------------------------
 % goodness_of_fit_bootstrap;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['6N_e'   num2str(i) '_bootstrap'], 'jpg');
+%     j=j+1;
+% end
+% close all
+
+ goodness_of_fit_bootstrap;
 % goodness_of_fit_spectrum;
