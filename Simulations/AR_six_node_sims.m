@@ -22,8 +22,11 @@ nelectrodes = 6;
 data = zeros(6,N);
 a1 = 0.07*[0.1*hann(20)', -0.5*ones(20,1)']';
 a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';    
-a3 = -0.3*ones(size(a1));                    
-a4 = 0.02*[hann(30)', -0.2*ones(1,10)]';
+%a3 = -0.3*ones(size(a1));
+a3 = -.3*sin(1:40)./(1:40); 
+%a3 = -.3*sin(.5:.5:20)./(.5:.5:20);
+a4 = 0.02*[hann(30)', -1*ones(1,10)]';
+%a4 = 0.02*[hann(30)', -0.2*ones(1,10)]';
 a5 = 0.1*[-0.8*ones(1,30), -0.8*hann(10)']';
 a6 = 0.25*[-0.6*ones(20,1)', -0.2*hann(20)']'; 
 
@@ -64,7 +67,7 @@ ylabel('Signal')
 xlabel('Time (seconds)')
 
 title('Simulated Signal','FontSize',15);
-
+%%
 
 
 %%% Fit standard AR to data ----------------------------------------------
@@ -147,4 +150,4 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 % close all
 
  goodness_of_fit_bootstrap;
-% goodness_of_fit_spectrum;
+ goodness_of_fit_spectrum;

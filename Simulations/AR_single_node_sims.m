@@ -6,7 +6,7 @@ close all;
 %%% Define model inputs ---------------------------------------------------
 
 noise_type = 'white';   % 'white' or 'pink'
-frequency_type = 'high'; % 'low' or 'high'
+frequency_type = 'low'; % 'low' or 'high'
  
 global s  % tension parameter
 s = 0.5;
@@ -111,10 +111,11 @@ if strcmp(noise_type,'white')
 end
 %%% Fit spline to data ---------------------------------------------------
 
-cntrl_pts = make_knots(model_order,10);
-[ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
-[bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order,cntrl_pts );
-
+%cntrl_pts = [make_knots(model_order,10) 23 27];
+cntrl_pts = [make_knots(model_order,10)];
+[ adj_mat] = build_ar_splines( data, cntrl_pts(end), cntrl_pts );
+[bhat, yhat] = estimate_coefficient_fits( data, adj_mat,  cntrl_pts(end),cntrl_pts );
+%model_order = cntrl_pts(end);
 %%% Plot results ---------------------------------------------------------
 
 
@@ -145,11 +146,11 @@ mvar_aic; % determine what AIC thinks is best order
 Sampling_Frequency = f0;
 Noise_Variance = noise.^2;
 T_seconds = T;
-Model_Order = nlags;
+True_Model_Order = nlags;
 Estimated_Order = model_order;
 
 Tension_Parameter = s;
-Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,...
+Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,True_Model_Order,...
     Estimated_Order,Tension_Parameter,moAIC,moBIC);
 figure;
 uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...

@@ -24,13 +24,13 @@ taxis = dt:dt:T; % time axis
 noise = 0.25;
 data = zeros(3,N);
 
-sim = 1; % sim = 1,2 or 3
+sim = 2; % sim = 1,2 or 3
 
 if sim==1 %-------------- SIM 1 --------------------------------------
     a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
     a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';
-    a3 = -.3*ones(size(a1));
-    
+    %a3 = -.3*ones(size(a1));
+    a3 = -.3*sin(1:40)./(1:40);
     a = zeros(3,3,40);                 % Model coefficients
     a(1,1,:) = a1;
     a(1,2,:) = a2;
@@ -41,7 +41,7 @@ if sim==1 %-------------- SIM 1 --------------------------------------
 elseif sim==2 %-------------- SIM 2 --------------------------------------
     a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
     a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';
-    a3 = -.3*ones(size(a1));
+    a3 = -.3*sin(1:40)./(1:40);   
     a = zeros(3,3,40);                         % Model coefficients
     a(1,1,:) = a1;
     a(1,2,:) = a2;
@@ -79,7 +79,7 @@ xlabel('Time (seconds)')
 legend('x1','x2','x3')
 title('Simulated Signal','FontSize',15);
 
-%
+
 % subplot(2,2,3)
 % mySpec(data(1,:),f0);
 
