@@ -24,7 +24,7 @@ taxis = dt:dt:T; % time axis
 noise = 0.25;
 data = zeros(3,N);
 
-sim = 1; % sim = 1,2 or 3
+sim = 3; % sim = 1,2 or 3
 
 if sim==1 %-------------- SIM 1 --------------------------------------
     a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
@@ -126,43 +126,53 @@ Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,...
 
 figure;
 uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
-    'Units', 'Normalized', 'Position',[0,0,1,1])
+    'Units', 'Normalized', 'Position',[0,0,1,1]);
 
-% %%% Plot all results --------------------------------------------
-% 
-% % Save all simulation and table plots ---------------------------
-% b=a;
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['3N_sim'  num2str(sim) '_summaryplot' num2str(i)], 'jpg');
-%     j=j+1;
-% end
-% close all
-% 
-% % Spectral GoF --------------------------------------------------
-% goodness_of_fit_spectrum;
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_spectrum'], 'jpg');
-%     j=j+1;
-% end
-% close all
-% 
-% % Boostrap GoF --------------------------------------------------
-% goodness_of_fit_bootstrap;
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_bootstrap'], 'jpg');
-%     j=j+1;
-% end
-% close all
+%%% Plot all results --------------------------------------------
 
+% Save all simulation and table plots ---------------------------
 b=a;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['3N_sim'  num2str(sim) '_summaryplot' num2str(i)], 'jpg');
+    j=j+1;
+end
+close all
+
+% Spectral GoF --------------------------------------------------
+goodness_of_fit_spectrum;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_spectrum'], 'jpg');
+    j=j+1;
+end
+close all
+
+% Boostrap GoF --------------------------------------------------
+goodness_of_fit_bootstrap;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_bootstrap'], 'jpg');
+    j=j+1;
+end
+close all
+% Residuals GoF --------------------------------------------------
 goodness_of_fit_residuals;
-%goodness_of_fit_bootstrap;
-%goodness_of_fit_spectrum;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_residuals'], 'jpg');
+    j=j+1;
+end
+close all
+
+
+% b=a;
+% goodness_of_fit_residuals;
+% goodness_of_fit_bootstrap;
+% goodness_of_fit_spectrum;
 
 

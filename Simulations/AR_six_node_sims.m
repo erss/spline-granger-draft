@@ -7,7 +7,7 @@ s = 0.1;
 global nsurrogates;
 nsurrogates = 5000;
 
-data_type='real';
+data_type='simulation';
 
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
@@ -121,33 +121,45 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 
 %%% Plot all results --------------------------------------------
 % Save all simulation and table plots ---------------------------
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['6N_summaryplot'   num2str(i)], 'jpg');
-%     j=j+1;
-% end
-% close all
-% 
-% % Spectral GoF --------------------------------------------------
-% goodness_of_fit_spectrum;
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['6N_e'   num2str(i) '_spectrum'], 'jpg');
-%     j=j+1;
-% end
-% close all
-% 
-% % Boostrap GoF --------------------------------------------------
-% goodness_of_fit_bootstrap;
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['6N_e'   num2str(i) '_bootstrap'], 'jpg');
-%     j=j+1;
-% end
-% close all
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['6N_summaryplot'   num2str(i)], 'jpg');
+    j=j+1;
+end
+close all
+
+% Spectral GoF --------------------------------------------------
+goodness_of_fit_spectrum;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['6N_e'   num2str(i) '_spectrum'], 'jpg');
+    j=j+1;
+end
+close all
+
+% Boostrap GoF --------------------------------------------------
+goodness_of_fit_bootstrap;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['6N_e'   num2str(i) '_bootstrap'], 'jpg');
+    j=j+1;
+end
+close all
+% Residuals GoF --------------------------------------------------
 goodness_of_fit_residuals;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['6N_e'   num2str(i) '_residuals'], 'jpg');
+    j=j+1;
+end
+close all
+
+
+
+ %goodness_of_fit_residuals;
  %goodness_of_fit_bootstrap;
  %goodness_of_fit_spectrum;

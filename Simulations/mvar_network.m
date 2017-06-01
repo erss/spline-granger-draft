@@ -54,10 +54,12 @@ s = 0.5;
 global nsurrogates;
 nsurrogates = 100;
 f0=fs;
+
 noise=1;
 N=size(data,2);
 T= N/f0;
 dt=1/f0;
+taxis = dt:dt:T; % time axis
 nlags = 3;
 nelectrodes = size(data,1);
 %%% Fit spline to data ---------------------------------------------------
@@ -66,7 +68,7 @@ cntrl_pts = make_knots(model_order,10);
 tic
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
 splinetime  = toc;
-[ bhat, yhat ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
+[ bhat, yestimate ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
 
 
 tic
@@ -116,35 +118,45 @@ b=AT;
 
 % Save all simulation and table plots ---------------------------
 
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['9N_'  num2str(i) '_summaryplot' num2str(i)], 'jpg');
-%     j=j+1;
-% end
-% close all
-% 
-% % Spectral GoF --------------------------------------------------
-% goodness_of_fit_spectrum;
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['9N_MVAR_e' num2str(i) '_spectrum'], 'jpg');
-%     j=j+1;
-% end
-% close all
-% 
-% % Boostrap GoF --------------------------------------------------
-% goodness_of_fit_bootstrap;
-% h = get(0,'children');
-% j=1;
-% for i=length(h):-1:1
-%     saveas(h(j), ['9N_MVAR_e' num2str(i) '_bootstrap'], 'jpg');
-%     j=j+1;
-% end
-% close all
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['9N_'  num2str(i) '_summaryplot' num2str(i)], 'jpg');
+    j=j+1;
+end
+close all
 
-
-goodness_of_fit_bootstrap;
+% Spectral GoF --------------------------------------------------
 goodness_of_fit_spectrum;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['9N_MVAR_e' num2str(i) '_spectrum'], 'jpg');
+    j=j+1;
+end
+close all
+
+% Boostrap GoF --------------------------------------------------
+goodness_of_fit_bootstrap;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['9N_MVAR_e' num2str(i) '_bootstrap'], 'jpg');
+    j=j+1;
+end
+close all
+% Residuals GoF --------------------------------------------------
+goodness_of_fit_residuals;
+h = get(0,'children');
+j=1;
+for i=length(h):-1:1
+    saveas(h(j), ['9N_MVAR_e' num2str(i) '_residuals'], 'jpg');
+    j=j+1;
+end
+close all
+
+
+% goodness_of_fit_residuals;
+% goodness_of_fit_bootstrap;
+% goodness_of_fit_spectrum;
 
