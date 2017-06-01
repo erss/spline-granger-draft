@@ -3,6 +3,14 @@ if ~exist('noise_type','var')
   noise_type = 'white';
 end
 
+if ~exist('data_type','var')
+  data_type = 'simulation';
+end
+
+if ~exist('data_type','var')
+  data_type = 'simulation';
+end
+
 for electrode = 1:nelectrodes % plot fit for every electrode in network
  
     if sum(adj_mat(electrode,:))==0
@@ -28,9 +36,9 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
                hold on
 
 
-             if nelectrodes == 1 && strcmp(noise_type,'white')
+             if nelectrodes == 1 && strcmp(noise_type,'white') && strcmp(data_type,'simulation') 
                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
-             elseif nelectrodes > 1 && strcmp(noise_type,'white')
+             elseif nelectrodes > 1 && strcmp(noise_type,'white') && strcmp(data_type,'simulation') 
                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',1.5);
              end
              

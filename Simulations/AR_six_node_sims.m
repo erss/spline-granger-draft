@@ -7,6 +7,8 @@ s = 0.1;
 global nsurrogates;
 nsurrogates = 5000;
 
+data_type='real';
+
 T = 5;      % total length of recording (seconds)
 dt = 0.001; % seconds
 model_order = 40; % order used in model estimation
@@ -67,8 +69,6 @@ ylabel('Signal')
 xlabel('Time (seconds)')
 
 title('Simulated Signal','FontSize',15);
-%%
-
 
 %%% Fit standard AR to data ----------------------------------------------
 tic
@@ -82,7 +82,7 @@ tic
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
 splinetime = toc;
 
-[ bhat, yhat ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
+[ bhat, yestimate ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
 
 
 %%% Plot results ----------------------------------------------------------
@@ -148,6 +148,6 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 %     j=j+1;
 % end
 % close all
-
- goodness_of_fit_bootstrap;
- goodness_of_fit_spectrum;
+goodness_of_fit_residuals;
+ %goodness_of_fit_bootstrap;
+ %goodness_of_fit_spectrum;

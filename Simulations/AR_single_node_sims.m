@@ -114,7 +114,7 @@ end
 %cntrl_pts = [make_knots(model_order,10) 23 27];
 cntrl_pts = [make_knots(model_order,10)];
 [ adj_mat] = build_ar_splines( data, cntrl_pts(end), cntrl_pts );
-[bhat, yhat] = estimate_coefficient_fits( data, adj_mat,  cntrl_pts(end),cntrl_pts );
+[bhat, yestimate] = estimate_coefficient_fits( data, adj_mat,  cntrl_pts(end),cntrl_pts );
 %model_order = cntrl_pts(end);
 %%% Plot results ---------------------------------------------------------
 
@@ -130,7 +130,7 @@ if strcmp(noise_type,'pink')
 end
 
 subplot(n,2,4)
-mySpec(yhat,f0,'yesplot','tapers');
+mySpec(yestimate,f0,'yesplot','tapers');
 
 if strcmp(noise_type,'white')
     hold on
@@ -193,7 +193,7 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 %     end
 % end
 % close all;
+goodness_of_fit_residuals;
 
-
- goodness_of_fit_bootstrap;
- goodness_of_fit_spectrum;
+% goodness_of_fit_bootstrap;
+ %goodness_of_fit_spectrum;

@@ -24,7 +24,7 @@ taxis = dt:dt:T; % time axis
 noise = 0.25;
 data = zeros(3,N);
 
-sim = 2; % sim = 1,2 or 3
+sim = 1; % sim = 1,2 or 3
 
 if sim==1 %-------------- SIM 1 --------------------------------------
     a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
@@ -94,7 +94,7 @@ cntrl_pts = make_knots(model_order,10);
 tic
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
 splinetime  = toc;
-[ bhat, yhat ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
+[ bhat, yestimate ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
 
 
 %%% Plot results ----------------------------------------------------------
@@ -161,7 +161,8 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 % close all
 
 b=a;
-goodness_of_fit_bootstrap;
-goodness_of_fit_spectrum;
+goodness_of_fit_residuals;
+%goodness_of_fit_bootstrap;
+%goodness_of_fit_spectrum;
 
 

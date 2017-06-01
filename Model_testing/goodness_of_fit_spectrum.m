@@ -12,34 +12,42 @@ if ~exist('noise_type','var')
   noise_type = 'white';
 end
 
+if ~exist('data_type','var')
+  data_type = 'simulation';
+end
+
 for electrode = 1:nelectrodes % run GOF on all electrodes
-    
+    if strcmp(data_type,'real')
+       
+        data_true=data;
+        [faxis, h] = mySpec(data(electrode,:),f0,'noplot');
+    else
     % Simulate data using true coefficients 
-    h_sum = 0;
-    for i = 1:nrealizations
-        data_true = data;
-         if strcmp(noise_type,'white')
-           
-            data_true = zeros(nelectrodes,N);
-            for k = nlags:length(data_true)-1;
-                data_true(:,k+1) = myPrediction(data_true(:,1:k),b);
-                data_true(:,k+1) = data_true(:,k+1) + noise.*randn(nelectrodes,1);
-            end
-            data_true= data_true(:,nlags+1:end);
+        h_sum = 0;
+        for i = 1:nrealizations
+            data_true = data;
+             if strcmp(noise_type,'white')
 
-             
-        elseif strcmp(noise_type,'pink')
-             alpha = 0.33;
-             data_true  = make_pink_noise(alpha,nobs,dt);
+                data_true = zeros(nelectrodes,N);
+                for k = nlags:length(data_true)-1;
+                    data_true(:,k+1) = myPrediction(data_true(:,1:k),b);
+                    data_true(:,k+1) = data_true(:,k+1) + noise.*randn(nelectrodes,1);
+                end
+                data_true= data_true(:,nlags+1:end);
 
-         end
-        
-         y = data_true(electrode,:);   
-        [faxis, h] = mySpec( y, f0,'noplot','notapers' );
-        h_sum = h + h_sum;
+
+            elseif strcmp(noise_type,'pink')
+                 alpha = 0.33;
+                 data_true  = make_pink_noise(alpha,nobs,dt);
+
+             end
+
+             y = data_true(electrode,:);   
+            [faxis, h] = mySpec( y, f0,'noplot','notapers' );
+            h_sum = h + h_sum;
+        end
+           h = h_sum/nrealizations;
     end
-       h = h_sum/nrealizations;
-
     % Simulate data using estimated coefficients   
     
  
@@ -137,8 +145,8 @@ for electrode = 1:nelectrodes % run GOF on all electrodes
     tol = 0;%0.05;
     percent_in_bounds = length(find( Qp(2,:)>=Qp(3,:)-tol & Qp(2,:) <= Qp(5,:)+tol ));
     percent_in_bounds = 100*percent_in_bounds/size(Qp,2)
-    str1 = strcat({'CDFs of Averaged Spectrum, '},num2str(percent_in_bounds),{' % in bds '});
-    title(str1,'FontSize',15);
+    %str1 = strcat({'CDFs of Averaged Spectrum, '},num2str(percent_in_bounds),{' % in bds '});
+    title('CDFs of Averaged Spectrum','FontSize',15);
     
     % pg 476
     gr_statistic = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)))
