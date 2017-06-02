@@ -7,6 +7,9 @@ s = 0.1;
 global nsurrogates;
 nsurrogates = 5000;
 
+global SPLINEPATH
+SPLINEPATH = '/Users/erss/Documents/MATLAB/ar_model/images';
+
 data_type='simulation';
 
 T = 5;      % total length of recording (seconds)
@@ -124,7 +127,7 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-    saveas(h(j), ['6N_summaryplot'   num2str(i)], 'jpg');
+    saveas(h(j), [SPLINEPATH '/6N_summaryplot'   num2str(i)], 'jpg');
     j=j+1;
 end
 close all
@@ -134,7 +137,7 @@ goodness_of_fit_spectrum;
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-    saveas(h(j), ['6N_e'   num2str(i) '_spectrum'], 'jpg');
+    saveas(h(j), [SPLINEPATH '/6N_e'   num2str(i) '_spectrum'], 'jpg');
     j=j+1;
 end
 close all
@@ -144,7 +147,7 @@ goodness_of_fit_bootstrap;
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-    saveas(h(j), ['6N_e'   num2str(i) '_bootstrap'], 'jpg');
+    saveas(h(j), [SPLINEPATH '/6N_e'   num2str(i) '_bootstrap'], 'jpg');
     j=j+1;
 end
 close all
@@ -153,7 +156,7 @@ goodness_of_fit_residuals;
 h = get(0,'children');
 j=1;
 for i=length(h):-1:1
-    saveas(h(j), ['6N_e'   num2str(i) '_residuals'], 'jpg');
+    saveas(h(j), [SPLINEPATH /'6N_e'   num2str(i) '_residuals'], 'jpg');
     j=j+1;
 end
 close all
