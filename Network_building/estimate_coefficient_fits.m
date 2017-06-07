@@ -5,7 +5,7 @@ function [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order, c
 %  data           = A matrix of electode data with dimensions electrodes x
 %                    time
 %  adj_mat        = network configuration
-%  model_order         = The number of lags used as used for predictor variables
+%  model_order     = The number of lags used as used for predictor variables
 %  c_pt_times     = The number of lags used as used for predictor variables
 % 
 % OUTPUTS:

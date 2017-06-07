@@ -24,13 +24,13 @@ taxis = dt:dt:T; % time axis
 noise = 0.25;
 data = zeros(3,N);
 
-sim = 3; % sim = 1,2 or 3
+sim = 1; % sim = 1,2 or 3
 
 if sim==1 %-------------- SIM 1 --------------------------------------
     a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
     a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';
     %a3 = -.3*ones(size(a1));
-    a3 = -.3*sin(1:40)./(1:40);
+    a3 = .3*sin(1:40)./(1:40);
     a = zeros(3,3,40);                 % Model coefficients
     a(1,1,:) = a1;
     a(1,2,:) = a2;
@@ -113,7 +113,7 @@ plotNetwork(adj_mat)
 title('Spline Network')
 title(strcat({'Spline, '},num2str(splinetime),{' s'}))
 
-
+X = data;
 mvar_aic; % run to see mvgc toolbox order result
 Sampling_Frequency = f0;
 Noise_Variance = noise.^2;
@@ -131,48 +131,49 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 %%% Plot all results --------------------------------------------
 
 % Save all simulation and table plots ---------------------------
-b=a;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['3N_sim'  num2str(sim) '_summaryplot' num2str(i)], 'jpg');
-    j=j+1;
-end
-close all
-
-% Spectral GoF --------------------------------------------------
-goodness_of_fit_spectrum;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_spectrum'], 'jpg');
-    j=j+1;
-end
-close all
-
-% Boostrap GoF --------------------------------------------------
-goodness_of_fit_bootstrap;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_bootstrap'], 'jpg');
-    j=j+1;
-end
-close all
-% Residuals GoF --------------------------------------------------
-goodness_of_fit_residuals;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_residuals'], 'jpg');
-    j=j+1;
-end
-close all
-
-
 % b=a;
-% goodness_of_fit_residuals;
-% goodness_of_fit_bootstrap;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['3N_sim'  num2str(sim) '_summaryplot' num2str(i)], 'jpg');
+%     j=j+1;
+% end
+% close all
+% 
+% % Spectral GoF --------------------------------------------------
 % goodness_of_fit_spectrum;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_spectrum'], 'jpg');
+%     j=j+1;
+% end
+% close all
+% 
+% % Boostrap GoF --------------------------------------------------
+% goodness_of_fit_bootstrap;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_bootstrap'], 'jpg');
+%     j=j+1;
+% end
+% close all
+% % Residuals GoF --------------------------------------------------
+% goodness_of_fit_residuals;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['3N_sim' num2str(sim) '_e' num2str(i) '_residuals'], 'jpg');
+%     j=j+1;
+% end
+% close all
+
+
+b=a;
+
+goodness_of_fit_residuals;
+goodness_of_fit_bootstrap;
+goodness_of_fit_spectrum;
 
 

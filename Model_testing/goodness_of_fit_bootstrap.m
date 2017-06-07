@@ -31,13 +31,14 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
         
    
         if (adj_mat(electrode,i) || adj_true(electrode,i))
-            subplot(1,nconnections,k)
+            subplot(nconnections,1,k)
             plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
                hold on
 
 
              if nelectrodes == 1 && strcmp(noise_type,'white') && strcmp(data_type,'simulation') 
-                plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
+                %plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
+                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',1.5);
              elseif nelectrodes > 1 && strcmp(noise_type,'white') && strcmp(data_type,'simulation') 
                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',1.5);
              end
@@ -61,12 +62,12 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
         end
 
     end
-
-
-    h = legend('Spline Estimated Coefficients','True AR coefficients');
-    set(h,'FontSize',14,'Location','SouthEast');
-    suptitle('Estimated Coefficient Fits');
-
+    
+    if ~strcmp(data_type,'real')
+        h = legend('Spline Estimated Coefficients','True AR coefficients');
+        set(h,'FontSize',14,'Location','SouthEast');
+        suptitle('Estimated Coefficient Fits');
+    end
 
 end
 

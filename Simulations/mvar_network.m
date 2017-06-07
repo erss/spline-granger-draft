@@ -1,4 +1,5 @@
 clear all;
+close all;
 ntrials   = 1;     % number of trials
 nobs      = 1000;   % number of observations per trial
 
@@ -34,7 +35,8 @@ rng_seed(seed);
 
 AT = var9_test; %var5_test;
 nvars = size(AT,1); % number of variables
-
+a = AT;
+amo=3;
 % Residuals covariance matrix.
 
 SIGT = eye(nvars);
@@ -69,91 +71,98 @@ tic
 [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts );
 splinetime  = toc;
 [ bhat, yestimate ] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts);
-
-
+%mvar_aic;
+%%
 tic
 [ adj_standard] = build_ar( data, model_order);
 standardtime = toc;
 %%% Plot results ----------------------------------------------------------
-subplot(2,3,[1 3])
-for i = 1:9
-   plot(data(i,:));
- hold on; 
-end
+% subplot(2,3,[1 3])
+% for i = 1:9
+%    plot(taxis,data(i,:));
+%  hold on; 
+% end
 
 ylabel('Signal')
 xlabel('Time (seconds)')
 
 title('Simulated Signal','FontSize',15);
+b=AT;
+b(b~=0)=1;
+b =sum(b,3);
+b(b~=0)=1;
 adj_true = sum(AT,3);
 adj_true(adj_true~=0) = 1;
 
-subplot(2,3,4)
-imagesc(sum(AT,3))
-title('True Network')
+subplot(1,3,1)
+plotNetwork(b)
+axis square
+title('True Network','FontSize',15)
 
-subplot(2,3,5)
+subplot(1,3,2)
 plotNetwork(adj_standard)
-title(strcat({'Standard, '},num2str(standardtime),{' s'}))
+axis square
 
-subplot(2,3,6)
+title(strcat({'Standard MVGC, '},num2str(standardtime),{' s'}),'FontSize',15)
+
+subplot(1,3,3)
 plotNetwork(adj_mat)
-title('Spline')
-title(strcat({'Spline, '},num2str(splinetime),{' s'}))
+axis square
+title(strcat({'Spline MVGC, '},num2str(splinetime),{' s'}),'FontSize',15)
 
-Sampling_Frequency = f0;
-Noise_Variance = noise.^2;
-T_seconds = T;
-Model_Order = nlags;
-Estimated_Order = model_order;
-Tension_Parameter = s;
-Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,...
-    Estimated_Order,Tension_Parameter);
-figure;
-uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
-    'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
-
-b=AT;
+% Sampling_Frequency = f0;
+% Noise_Variance = noise.^2;
+% T_seconds = T;
+% Model_Order = nlags;
+% Estimated_Order = model_order;
+% Tension_Parameter = s;
+% Tp = table(Sampling_Frequency,Noise_Variance,T_seconds,Model_Order,...
+%     Estimated_Order,Tension_Parameter);
+% figure;
+% uitable('Data',Tp{:,:},'ColumnName',Tp.Properties.VariableNames,...
+%     'RowName',Tp.Properties.RowNames,'Units', 'Normalized', 'Position',[0, 0, 1, 1]);
+% 
+% b=AT;
 %%% Plot all results --------------------------------------------
 
 % Save all simulation and table plots ---------------------------
-
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['9N_'  num2str(i) '_summaryplot' num2str(i)], 'jpg');
-    j=j+1;
-end
-close all
-
-% Spectral GoF --------------------------------------------------
-goodness_of_fit_spectrum;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['9N_MVAR_e' num2str(i) '_spectrum'], 'jpg');
-    j=j+1;
-end
-close all
-
-% Boostrap GoF --------------------------------------------------
-goodness_of_fit_bootstrap;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['9N_MVAR_e' num2str(i) '_bootstrap'], 'jpg');
-    j=j+1;
-end
-close all
-% Residuals GoF --------------------------------------------------
-goodness_of_fit_residuals;
-h = get(0,'children');
-j=1;
-for i=length(h):-1:1
-    saveas(h(j), ['9N_MVAR_e' num2str(i) '_residuals'], 'jpg');
-    j=j+1;
-end
-close all
+% 
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['9N_'  num2str(i) '_summaryplot' num2str(i)], 'jpg');
+%     j=j+1;
+% end
+% close all
+% 
+% % Spectral GoF --------------------------------------------------
+% goodness_of_fit_spectrum;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['9N_MVAR_e' num2str(i) '_spectrum'], 'jpg');
+%     j=j+1;
+% end
+% close all
+% 
+% % Boostrap GoF --------------------------------------------------
+% goodness_of_fit_bootstrap;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['9N_MVAR_e' num2str(i) '_bootstrap'], 'jpg');
+%     j=j+1;
+% end
+% close all
+% % Residuals GoF --------------------------------------------------
+% goodness_of_fit_residuals;
+% h = get(0,'children');
+% j=1;
+% for i=length(h):-1:1
+%     saveas(h(j), ['9N_MVAR_e' num2str(i) '_residuals'], 'jpg');
+%     j=j+1;
+% end
+% close all
 
 
 % goodness_of_fit_residuals;

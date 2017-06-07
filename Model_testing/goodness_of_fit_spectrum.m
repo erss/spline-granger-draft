@@ -15,7 +15,7 @@ end
 if ~exist('data_type','var')
   data_type = 'simulation';
 end
-
+X=[];
 for electrode = 1:nelectrodes % run GOF on all electrodes
     if strcmp(data_type,'real')
        

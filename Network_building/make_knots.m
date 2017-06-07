@@ -13,7 +13,7 @@ function [ cntrl_pts ] = make_knots( nlags, number_knots )
 % 
 % cntrl_pts = sort(unique(cntrl_pts));
 
-closeness = 5;
+closeness = 2;
 cntrl_pts = [0 1:closeness-1 nlags];
 
 remaining_number_knots = number_knots - length(cntrl_pts);
@@ -23,6 +23,10 @@ linear_spacing = floor(distance/remaining_number_knots);
 cntrl_pts = [cntrl_pts (closeness:linear_spacing:nlags)];
 
 cntrl_pts = sort(unique(cntrl_pts),'ascend');
+
+if cntrl_pts(end)-cntrl_pts(end-1) < 10
+    cntrl_pts(end-1) = [];
+end
 
 end
 

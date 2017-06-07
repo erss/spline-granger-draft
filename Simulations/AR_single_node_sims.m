@@ -1,4 +1,4 @@
-%%%%%%%% Single node network simulations ----------------------------------
+%%%%%%%% Single node network high v low ----------------------------------
 clear all;
 close all;
 
