@@ -5,22 +5,22 @@ close all;
 
 %%% Define model inputs ---------------------------------------------------
 
-noise_type = 'pink';   % 'white' or 'pink'
+noise_type = 'white';   % 'white' or 'pink'
 frequency_type = 'high'; % 'low' or 'high'
  
 global s  % tension parameter
 s = 0.5;
 
 global nsurrogates; % number of surrogates for bootstrapping
-nsurrogates = 10000;
+nsurrogates = 100;
 
 
 if strcmp(noise_type,'white')
     n=2;
-    if strcmp(frequency_type,'high') % ----high frequency
+    if strcmp(frequency_type,'high') % ----high frequency------------------
         model_coefficients = [0.9 -0.8];
         nlags = size(model_coefficients,2);
-    elseif strcmp(frequency_type,'low') % ----low frequency
+    elseif strcmp(frequency_type,'low') % ----low frequency----------------
         %  model_coefficients = 0.9;
           model_coefficients = [0.3 0.3];
          % model_coefficients = [0.9 -0.1];
@@ -30,7 +30,7 @@ else  % ---- pink noise
     nlags = 0;
     a = 0;
     b = 0;
-    n=3;
+    n =3;
     
 end
 
@@ -48,7 +48,7 @@ df = 1/T;   % frequency resolution
 fNQ = f0/2; % Nyquist frequency
 
 taxis = dt:dt:T; % time axis
-noise = 0.25;
+noise = 3;
 data = zeros(1,N);
 
 model_order = 20; % order used in model estimation
@@ -64,7 +64,7 @@ if strcmp(noise_type,'white') % ------------ WHITE NOISE -------
 
     %%% Generate white noise data from above coefficients
     i=1;
-    for k = nlags:length(data)-1;
+    for k = nlags:length(data)-1
        data(:,k+1) = myPrediction(data(:,1:k),b);
        noise_process(i) = noise.*randn(size(data,1),1);
        data(:,k+1) = data(:,k+1) + noise_process(i);
@@ -102,20 +102,21 @@ end
 
 title(str,'FontSize',15);
 
-subplot(n,2,3)
+ax1 =subplot(n,2,3)
 mySpec(data(1,:),f0,'yesplot','tapers');
 
 if strcmp(noise_type,'white')
     hold on
-    plot(faxis,S,'r','LineWidth',1.5);
+    plot(faxis,(S),'r','LineWidth',1.5);
 end
 %%% Fit spline to data ---------------------------------------------------
 
-%cntrl_pts = [make_knots(model_order,10) 23 27];
-cntrl_pts = [make_knots(model_order,10)];
+cntrl_pts = make_knots(model_order,floor(model_order/3));
 [ adj_mat] = build_ar_splines( data, cntrl_pts(end), cntrl_pts );
+[ adj_standard] = build_ar( data, model_order );
 [bhat, yestimate] = estimate_coefficient_fits( data, adj_mat,  cntrl_pts(end),cntrl_pts );
-%model_order = cntrl_pts(end);
+[b_est_stand, y_est_stand] = estimate_standard( data, adj_standard, model_order );
+
 %%% Plot results ---------------------------------------------------------
 
 
@@ -129,20 +130,24 @@ if strcmp(noise_type,'pink')
 
 end
 
-subplot(n,2,4)
+ax2 = subplot(n,2,4);
 mySpec(yestimate,f0,'yesplot','tapers');
 
 if strcmp(noise_type,'white')
     hold on
-    plot(faxis,S,'r','LineWidth',1.5);
+    plot(faxis,(S),'r','LineWidth',1.5);
 end
 
 
+linkaxes([ax1,ax2],'y')
 title('Estimated signal spectrogram','FontSize',15);
 
 %%%% Make table of all inputs ------------------------
 a=b;
-mvar_aic; % determine what AIC thinks is best order
+%X=data;
+%mvar_aic; % determine what AIC thinks is best order
+moAIC = NaN;
+moBIC = NaN;
 Sampling_Frequency = f0;
 Noise_Variance = noise.^2;
 T_seconds = T;
@@ -168,47 +173,47 @@ for i=1:length(h)
     end
 end
 close all
+% 
+% % Boostrap GoF --------------------------------------------------
+% goodness_of_fit_bootstrap;
+% h = get(0,'children');
+% for i=1:length(h)
+%     
+%     if strcmp(noise_type,'pink')
+%         saveas(h(i), ['1N_' noise_type '_'   num2str(i) '_bootstrap' ], 'jpg');
+%     else
+%         saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_bootstrap'], 'jpg');
+%     end
+% end
+% close all
+% % 
+% % % Spectral GoF -------------------------------------------------
+% goodness_of_fit_spectrum;
+% h = get(0,'children');
+% for i=1:length(h)
+%     if strcmp(noise_type,'pink')
+%         saveas(h(i), ['1N_' noise_type '_'  num2str(i) '_spectrum'], 'jpg');
+%     else
+%         saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_spectrum'], 'jpg');
+%     end
+% end
+% close all;
+% % % Residuals GoF -------------------------------------------------
+% goodness_of_fit_residuals;
+% h = get(0,'children');
+% for i=1:length(h)
+%     if strcmp(noise_type,'pink')
+%         saveas(h(i), ['1N_' noise_type '_'  num2str(i) '_residuals'], 'jpg');
+%     else
+%         saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_residuals'], 'jpg');
+%     end
+% end
+% close all;
 
-% Boostrap GoF --------------------------------------------------
-goodness_of_fit_bootstrap;
-h = get(0,'children');
-for i=1:length(h)
-    
-    if strcmp(noise_type,'pink')
-        saveas(h(i), ['1N_' noise_type '_'   num2str(i) '_bootstrap' ], 'jpg');
-    else
-        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_bootstrap'], 'jpg');
-    end
-end
-close all
-
-% Spectral GoF -------------------------------------------------
-goodness_of_fit_spectrum;
-h = get(0,'children');
-for i=1:length(h)
-    if strcmp(noise_type,'pink')
-        saveas(h(i), ['1N_' noise_type '_'  num2str(i) '_spectrum'], 'jpg');
-    else
-        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_spectrum'], 'jpg');
-    end
-end
-close all;
-% Residuals GoF -------------------------------------------------
-goodness_of_fit_residuals;
-h = get(0,'children');
-for i=1:length(h)
-    if strcmp(noise_type,'pink')
-        saveas(h(i), ['1N_' noise_type '_'  num2str(i) '_residuals'], 'jpg');
-    else
-        saveas(h(i), ['1N_' noise_type '_' frequency_type '_'  num2str(i) '_residuals'], 'jpg');
-    end
-end
-close all;
-
-
-
-
-
+% 
+% 
+% 
+% 
 % goodness_of_fit_residuals;
 % goodness_of_fit_bootstrap;
 % goodness_of_fit_spectrum;

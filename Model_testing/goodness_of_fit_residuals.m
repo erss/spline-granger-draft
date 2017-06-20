@@ -33,6 +33,4 @@ end
 [dw pval] = whiteness(data,residuals)
 % A standard rule of thumb is that |dw < 1| or |dw > 3| indicates a high
 % chance of residuals serial correlation; this implies poor VAR model fit.
-if nelectrodes > 1
- sig = significance(pval,0.05,'FDR')
-end
+sig = significance(pval,0.05,'FDR')

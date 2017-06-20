@@ -10,6 +10,9 @@ end
 if ~exist('data_type','var')
   data_type = 'simulation';
 end
+if ~exist('b_est_stand','var')
+  b_est_stand = NaN(size(b));
+end
 
 for electrode = 1:nelectrodes % plot fit for every electrode in network
  
@@ -18,7 +21,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
        LB = zeros(model_order,nelectrodes);
     else
     [UB,LB]= myBootstrap(data,adj_mat,model_order,electrode,cntrl_pts);
-    end;
+    end
 
     figure;
   
@@ -34,6 +37,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
             subplot(nconnections,1,k)
             plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
                hold on
+            plot(dt:dt:(model_order/f0),squeeze(real(b_est_stand(electrode,i,:))),'g','LineWidth',1.5)
 
 
              if nelectrodes == 1 && strcmp(noise_type,'white') && strcmp(data_type,'simulation') 

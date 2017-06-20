@@ -48,7 +48,9 @@ elseif strcmp(taper,'tapers') %%% ----USE TAPERS -----------
     [Sxx, faxis] = pmtm(x,TW,length(x),f0);
     
     if strcmp(plot_flag,'yesplot') % plots spectrum
-        plot(faxis,10*log(Sxx),'k','LineWidth',1.5);
+       % plot(faxis,10*log(Sxx),'k','LineWidth',1.5);
+       plot(faxis,Sxx,'k','LineWidth',1.5);
+
         xlim([0 f0/4]);
         xlabel('Frequency (Hz)','FontSize',15);
         ylabel('Power (dB)','FontSize',15);

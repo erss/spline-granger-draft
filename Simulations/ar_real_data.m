@@ -17,15 +17,15 @@ ntwk = [2 6 18 22 42 46 90 82 77 ];
 data_sz= data(ntwk,sz);
 data_presz= data(ntwk,pre_sz);
 
+%y=fft(data(9,:));
 
-
-X = data_presz;
-mvar_aic;  
-% moAIC = 6; moBIC =3 (10 seconds) %%% for 10 node network
-% moAIC = 3; moBIC =2 (2.5 seconds)
-
-X = data_sz;
-mvar_aic;
+% X = data_presz;
+% mvar_aic;  
+% % moAIC = 6; moBIC =3 (10 seconds) %%% for 10 node network
+% % moAIC = 3; moBIC =2 (2.5 seconds)
+% 
+% X = data_sz;
+% mvar_aic;
 % moAIC = 10; moBIC =4 (10 seconds)
 % moAIC = 4; moBIC =3 (2.5 seconds)
 
@@ -65,10 +65,10 @@ nsurrogates = 100;
 
 nlags = 20;
 ctpts = make_knots(nlags,floor(nlags/3)); %0:5:nlags;
-
+%%
 %%%% --------------- PRE SEIZURE ------------------------------------
-X = data_presz;
-mvar_aic; 
+% X = data_presz;
+% mvar_aic; 
 morder=20;
 tic
 [ adj_standard ] = build_ar( data_presz, morder); % Build network using splines
@@ -122,16 +122,19 @@ b= zeros(nelectrodes,nelectrodes,model_order);
 % close all
 
 
-
+%%
 %%%% --------------- SEIZURE ------------------------------------
-X = data_sz;
-mvar_aic; 
-morder=20;
-tic
-[ adj_standard ] = build_ar( data_sz, morder); % Build network using splines
-standard_time  = toc;
-fprintf('\nMVGC time = %d\n',standard_time);
-fprintf('using model order = %d\n',morder);
+% X = data_sz;
+% mvar_aic; 
+morder=50;
+% tic
+% [ adj_standard ] = build_ar( data_sz, morder); % Build network using splines
+% standard_time  = toc;
+% fprintf('\nMVGC time = %d\n',standard_time);
+% fprintf('using model order = %d\n',morder);
+nlags = 50; 
+% ctpts = [0 5 10 15 20 23 25 26 27 28 29 30 31 32 33 34 35 36 38 40 42 45 47 49 50];
+ctpts =   [0 2 4 10 15 20 25 30 33 35 35 40 50];
 tic
 [ adj_spline ] = build_ar_splines( data_sz, nlags,ctpts); % Build network using splines
 spline_time  = toc;
@@ -140,10 +143,10 @@ fprintf('using model order = %d\n',nlags);
 
 figure();
 subplot 221
-plotNetwork(adj_standard) 
-title(strcat({'Standard, '},num2str(standard_time),{' s'}))
-subplot 222
-plotGraph(adj_standard)
+%plotNetwork(adj_standard) 
+%title(strcat({'Standard, '},num2str(standard_time),{' s'}))
+% subplot 222
+% plotGraph(adj_standard)
 subplot 223
 plotNetwork(adj_spline)  % plot network
 title(strcat({'Spline, '},num2str(spline_time),{' s'}))
@@ -166,7 +169,7 @@ data = data_sz;
 adj_true = adj_spline;
 b= zeros(nelectrodes,nelectrodes,model_order);
 % 
- goodness_of_fit_residuals;
+% goodness_of_fit_residuals;
  goodness_of_fit_bootstrap;
 % 
 % 

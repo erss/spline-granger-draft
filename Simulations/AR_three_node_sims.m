@@ -88,6 +88,8 @@ title('Simulated Signal','FontSize',15);
 tic
 [ adj_standard] = build_ar( data, model_order);
 standardtime  = toc;
+[ b_est_stand, ~] = estimate_standard( data, adj_standard, model_order);
+
 %%% Fit spline to data ---------------------------------------------------
 
 cntrl_pts = make_knots(model_order,10);
@@ -130,8 +132,8 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 
 %%% Plot all results --------------------------------------------
 
-% Save all simulation and table plots ---------------------------
-% b=a;
+% % Save all simulation and table plots ---------------------------
+%  b=a;
 % h = get(0,'children');
 % j=1;
 % for i=length(h):-1:1
@@ -172,8 +174,8 @@ uitable('Data',Tp{:,:}','RowName',Tp.Properties.VariableNames,...
 
 b=a;
 
-goodness_of_fit_residuals;
-goodness_of_fit_bootstrap;
-goodness_of_fit_spectrum;
+% goodness_of_fit_residuals;
+% goodness_of_fit_bootstrap;
+% goodness_of_fit_spectrum;
 
 

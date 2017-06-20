@@ -76,6 +76,8 @@ splinetime  = toc;
 tic
 [ adj_standard] = build_ar( data, model_order);
 standardtime = toc;
+[ b_est_stand, ~ ] = estimate_standard( data, adj_mat, model_order);
+
 %%% Plot results ----------------------------------------------------------
 % subplot(2,3,[1 3])
 % for i = 1:9
@@ -94,11 +96,12 @@ b(b~=0)=1;
 adj_true = sum(AT,3);
 adj_true(adj_true~=0) = 1;
 
+
 subplot(1,3,1)
 plotNetwork(b)
 axis square
 title('True Network','FontSize',15)
-
+b=AT;
 subplot(1,3,2)
 plotNetwork(adj_standard)
 axis square
