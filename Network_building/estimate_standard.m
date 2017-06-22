@@ -1,4 +1,4 @@
-function [bhat, yhat] = estimate_standard( data, adj_mat, model_order )
+function [bhat, yhat] = estimate_standard(model, adj_mat )
 % ESTIMATE_COEFFICIENT_FITS builds network model from MVAR spline modeling 
 %
 % INPUTS:
@@ -13,6 +13,8 @@ function [bhat, yhat] = estimate_standard( data, adj_mat, model_order )
 %  yhat    = signal estimates
 
 
+data = model.data;
+model_order = model.estimated_model_order;
 %% Initialize variables & outputs
     nelectrodes = size(data,1);            % number electrodes
     nobservations = length(data(1,model_order+1:end)); % number of observations

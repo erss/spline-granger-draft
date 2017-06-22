@@ -1,4 +1,4 @@
-function [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order, cntrl_pts )
+function [bhat, yhat] = estimate_coefficient_fits( model, adj_mat)
 % ESTIMATE_COEFFICIENT_FITS builds network model from MVAR spline modeling 
 %
 % INPUTS:
@@ -11,7 +11,10 @@ function [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order, c
 % OUTPUTS:
 %  bhat   = coefficient estimates
 %  yhat    = signal estimates
-
+s = model.s;
+data= model.data;
+model_order = model.estimated_model_order;
+cntrl_pts  = model.cntrl_pts;
 
 %% Initialize variables & outputs
     nelectrodes = size(data,1);            % number electrodes
@@ -25,8 +28,6 @@ function [bhat, yhat] = estimate_coefficient_fits( data, adj_mat, model_order, c
 %     c_pt_times = unique([0:10:model_order model_order]) ;  % Define Control Point Locations
 % end
             
-%s = 0.1; %0.5;                                    % Define Tension Parameter
-global s
 % Construct spline regressors.
 c_pt_times_all = [cntrl_pts(1)-2 cntrl_pts cntrl_pts(end)+2];
 Z = zeros(model_order,length(c_pt_times_all));
