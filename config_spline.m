@@ -1,14 +1,14 @@
 %%% Model type
-model_true.noise_type = 'pink'; % 'white', 'real'
+model_true.noise_type = 'white'; % 'white', 'real'
 
 %%% Simulation parameters
 
 model_true.sampling_frequency = 500;
-model_true.T = 2; 
+model_true.T = 2;   % time in seconds of window
 model_true.noise = 0.25;
 
 if strcmp(model_true.noise_type,'white')
-    model_true.true_coefficients = three_node_sim_1; 
+    model_true.true_coefficients = three_node_sim_1; %%%% MODIFY COEFFICIENTS HERE!
     model_true.model_coefficients = model_true.true_coefficients;
 end
 %%% Define model inputs for spline Granger & standard Granger
