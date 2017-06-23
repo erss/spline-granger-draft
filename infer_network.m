@@ -1,9 +1,16 @@
 %%% True network ---------------------------------------------------------
-adj_true = model_true.true_coefficients;
-adj_true(adj_true~=0)=1;
-adj_true=sum(adj_true,3);
-adj_true(adj_true~=0)=1;
-model_true.network = adj_true;
+
+if strcmp(model_true.noise_type,'white')
+    adj_true = model_true.true_coefficients;
+    adj_true(adj_true~=0)=1;
+    adj_true=sum(adj_true,3);
+    adj_true(adj_true~=0)=1;
+    model_true.network = adj_true;
+else
+    nelectrodes = size(model_true.data,1);
+    adj_true = ones(nelectrodes,nelectrodes);
+    model_true.network = adj_true;
+end
 
 %%% Fit standard AR to data ----------------------------------------------
 

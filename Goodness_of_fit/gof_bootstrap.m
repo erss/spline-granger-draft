@@ -6,7 +6,6 @@ function gof_bootstrap( model1,model2,model3)
 % model3 = standard
 %%%% goodness_of_fit_bootstrap_coefficients
 
-data_type = model1.data_type;
 noise_type = model1.noise_type;
 
 
@@ -16,13 +15,15 @@ model_order = model1.estimated_model_order;
 
 adj_true= model1.network;
 adj_mat = model2.network;
-
+if strcmp(noise_type,'white')
 b = model1.true_coefficients;
+nlags = size(b,3);  % true model order
+end
 bhat = model2.model_coefficients;
 b_est_stand = model3.model_coefficients;
 
 f0 = model1.sampling_frequency;
-nlags = size(b,3);  % true model order
+
 
 dt = 1/f0; % seconds
 cntrl_pts = model1.cntrl_pts;
@@ -53,11 +54,11 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
             plot(dt:dt:(model_order/f0),squeeze(real(b_est_stand(electrode,i,:))),'g','LineWidth',1.5)
 
 
-             if nelectrodes == 1 && strcmp(noise_type,'white') && strcmp(data_type,'simulation') 
-                %plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
-                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',1.5);
-             elseif nelectrodes > 1 && strcmp(noise_type,'white') && strcmp(data_type,'simulation') 
-                plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',1.5);
+             if nelectrodes == 1 && strcmp(noise_type,'white') 
+                  plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
+                % plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
+             elseif nelectrodes > 1 && strcmp(noise_type,'white') 
+                plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
              end
              
              
@@ -80,8 +81,8 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
 
     end
     
-    if ~strcmp(data_type,'real')
-        h = legend('Spline Estimated Coefficients','True AR coefficients');
+    if ~strcmp(noise_type,'real')
+        h = legend('Spline Estimated Coefficients','Standard Estimated coefficients');
         set(h,'FontSize',14,'Location','SouthEast');
         suptitle('Estimated Coefficient Fits');
     end
