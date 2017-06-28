@@ -1,4 +1,4 @@
-function [ adj_mat] = build_ar( data, model_order )
+function [ adj_mat] = build_ar( model )
 % BUILD_AR builds network model from MVAR modeling
 %
 % INPUTS:
@@ -8,8 +8,13 @@ function [ adj_mat] = build_ar( data, model_order )
 % 
 % OUTPUTS:
 %  adj_mat = adjacencey matrix for corresponding network
+warning off
 
-    nobservations = length(data(1,model_order+1:end)); %  the number of 
+data = model.data;
+model_order = model.estimated_model_order;
+q = model.q;
+
+nobservations = length(data(1,model_order+1:end)); %  the number of 
                                                  % observations used for response variables
 
 
@@ -116,7 +121,7 @@ end
     adj_mat = fpdf(F,model_order,nobservations-nelectrodes*model_order-1);
     
     
-    q = 0.01; % max number acceptable proportion of false discoveries 
+   % q = 0.1; % max number acceptable proportion of false discoveries 
     m = nelectrodes^2; % number of total tests performed
     
     ivals = 1:m;

@@ -1,4 +1,4 @@
-function [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts )
+function [ adj_mat] = build_ar_splines( model )
 % BUILD_AR_SPLINES builds network model from MVAR modeling and uses
 % regression splines to reduce dimensionality.
 %
@@ -12,6 +12,12 @@ function [ adj_mat] = build_ar_splines( data, model_order, cntrl_pts )
 %  adj_mat = adjacencey matrix for corresponding network
 
 warning off
+
+data = model.data;
+model_order = model.estimated_model_order;
+cntrl_pts = model.cntrl_pts;
+q = model.q;
+s = model.s;
 %% Initialize variables & outputs
     nelectrodes = size(data,1);            % number electrodes
     adj_mat = zeros(nelectrodes);
@@ -19,13 +25,7 @@ warning off
                                            %    predictor variables
     nobservations = length(data(1,model_order+1:end)); % number of observations
 %% Define control points and build predictors
-
-if nargin == 2
-    cntrl_pts = unique([0:10:model_order model_order]) ;  % Define Control Point Locations
-end
             
-%s = 0.5;                                    % Define Tension Parameter
-global s;
 % Construct spline regressors.
 c_pt_times_all = [cntrl_pts(1)-2 cntrl_pts cntrl_pts(end)+2];
 Z = zeros(model_order,length(c_pt_times_all));
@@ -115,7 +115,7 @@ end
     
     adj_mat = fpdf(F,num_c_pts,nobservations-nelectrodes*num_c_pts);
     
-    q = 0.01; % max number acceptable proportion of false discoveries 
+    %q = 0.1; % max number acceptable proportion of false discoveries 
     m = nelectrodes^2; % number of total tests performed
     
     ivals = 1:m;

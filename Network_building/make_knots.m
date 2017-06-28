@@ -12,19 +12,23 @@ function [ cntrl_pts ] = make_knots( nlags, number_knots )
 %     end
 % 
 % cntrl_pts = sort(unique(cntrl_pts));
+if nlags < 30
+    closeness = 2;
+else
+    closeness = 5;
+end
 
-closeness = 2;
 cntrl_pts = [0 1:closeness-1 nlags];
 
 remaining_number_knots = number_knots - length(cntrl_pts);
 distance = nlags - closeness - 2;
 linear_spacing = floor(distance/remaining_number_knots);
-
+if ~isnan(linear_spacing )
 cntrl_pts = [cntrl_pts (closeness:linear_spacing:nlags)];
-
+end
 cntrl_pts = sort(unique(cntrl_pts),'ascend');
 
-if cntrl_pts(end)-cntrl_pts(end-1) < 10
+if (cntrl_pts(end)-cntrl_pts(end-1) < 10 && nlags >= 20)
     cntrl_pts(end-1) = [];
 end
 
