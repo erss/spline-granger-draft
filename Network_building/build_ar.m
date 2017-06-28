@@ -109,7 +109,6 @@ end
           % Compute F statistic
           F(electrode,ii) = ((rss0 - rss)/model_order)/(rss/(nobservations-nelectrodes*model_order-1));
            
-          
         end
         
     end
@@ -117,17 +116,19 @@ end
     
     % Hypothesis test
     
-    
-    adj_mat = fpdf(F,model_order,nobservations-nelectrodes*model_order-1);
+  % F(1:size(F,1)+1:end) = NaN;
+    adj_mat = fpdf(F,model_order,nobservations-nelectrodes*model_order);
     
     
    % q = 0.1; % max number acceptable proportion of false discoveries 
-    m = nelectrodes^2; % number of total tests performed
+    m = nelectrodes^2;
+  % m = nelectrodes^2 - nelectrodes; % number of total tests performed
     
     ivals = 1:m;
-    s = ivals*q/m;
+    sp = ivals*q/m;
     [pvals, index] = sort(adj_mat(:));
-    R = find(s>pvals'); % indices to reject null
+ %   pvals(isnan(pvals)) = [];
+    R = find(sp>pvals'); % indices to reject null
     
     adj_mat = zeros(nelectrodes);
     adj_mat(index(R)) = 1; % reject H0 -> correlation

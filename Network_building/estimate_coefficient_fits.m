@@ -22,6 +22,7 @@ cntrl_pts  = model.cntrl_pts;
     bhat = zeros(nelectrodes,nelectrodes,model_order);
     yhat = zeros(nelectrodes,size(data,2));
     yhat = yhat(:,model_order+1:end);
+    
 %% Define control points and build predictors
 
 % if nargin == 3
@@ -76,8 +77,12 @@ for electrode = 1:nelectrodes
 
         end
        % 
+%        indx = adj_mat(electrode,:);
+%        indx(electrode)=2;
+%        indx(indx==0) = [];
+%        ii = find(indx==2);
         Xfull = X * Z0;  % regressors for y_hat = X0*Z0*a0
-        [alpha,~,~] = glmfit(Xfull,y,'normal','constant','off');
+        [alpha,~,stats] = glmfit(Xfull,y,'normal','constant','off');
 
         yhat(electrode,:) = glmval(alpha,Xfull,'identity','constant','off'); % Get signal estimate.
         b = Z0*alpha;  
@@ -88,12 +93,23 @@ for electrode = 1:nelectrodes
                 bhat(electrode,p,:) = b(j:j+model_order-1);
                 j= j+model_order;
             end    
-         end
+          end
+          
+%           cov = diag(stats.covb);
+%          mat = [1:length(cov)];
+%          mat = reshape(mat,[length(c_pt_times_all) model_size]);
+%          mat = mat(:,ii);
+%          cov = cov(mat);
+%          cov = cov(3);
+          
     end
+%     master_check{electrode} = stats.covb;
+%     covariance_b(electrode) = cov;
+%     design_matrix = Xfull;
+
 
 end
 
     
-  
 end
 

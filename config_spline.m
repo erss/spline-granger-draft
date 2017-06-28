@@ -1,5 +1,5 @@
 %%% Model type ------------------------------------------------------------
-model_true.noise_type = 'white'; % 'white', 'real'
+model_true.noise_type = 'white'; % 'white', 'pink', 'real'
 
 %%% Simulation parameters -------------------------------------------------
 
@@ -14,7 +14,7 @@ end
 %%% Define model inputs for spline Granger & standard Granger -------------
 
 model_true.s = 0.5;                     % tension parameter for spline
-model_true.estimated_model_order = 50;  % model_order used to estimate
+model_true.estimated_model_order = 30;  % model_order used to estimate
 
 number_of_knots       = floor(model_true.estimated_model_order/3);
 model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
@@ -23,6 +23,6 @@ model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_kno
 
 model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
 model_true.nsurrogates = 100;   % number of surrogates used for bootstrapping
-model_true.nrealizations = 100; % number of realizations used for spectral testing
+model_true.nrealizations = 20; % number of realizations used for spectral testing
 
 

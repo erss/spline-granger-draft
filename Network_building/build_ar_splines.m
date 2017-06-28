@@ -112,15 +112,16 @@ end
     
     % Hypothesis test
     
-    
+   %  F(1:size(F,1)+1:end) = NaN;
     adj_mat = fpdf(F,num_c_pts,nobservations-nelectrodes*num_c_pts);
     
     %q = 0.1; % max number acceptable proportion of false discoveries 
-    m = nelectrodes^2; % number of total tests performed
-    
+  %  m = nelectrodes^2 - nelectrodes; % number of total tests performed
+     m = nelectrodes^2;
     ivals = 1:m;
     sp = ivals*q/m;
     [pvals, index] = sort(adj_mat(:));
+  %   pvals(isnan(pvals)) = [];
     R = find(sp>pvals'); % indices to reject null
     adj_mat = zeros(nelectrodes);
     adj_mat(index(R)) = 1; % reject H0 -> correlation

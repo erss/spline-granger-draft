@@ -10,7 +10,7 @@ yestimate = model.signal_estimate;
 dt = 1/model.sampling_frequency;
 T = model.T;
 taxis = dt:dt:T';
-%datap = data(:,1:end-model_order);
+
 
 residuals = zeros(nelectrodes,length(datap));
 
@@ -39,10 +39,10 @@ for electrode = 1:nelectrodes
     suptitle(num2str(electrode))
 end
 
-[dw pval] = whiteness(data,residuals)
-% A standard rule of thumb is that |dw < 1| or |dw > 3| indicates a high
-% chance of residuals serial correlation; this implies poor VAR model fit.
-sig = significance(pval,0.05,'FDR')
+% [dw pval] = whiteness(data,residuals)
+% % A standard rule of thumb is that |dw < 1| or |dw > 3| indicates a high
+% % chance of residuals serial correlation; this implies poor VAR model fit.
+% sig = significance(pval,0.05,'FDR')
 
 
 end

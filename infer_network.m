@@ -5,7 +5,13 @@ if strcmp(model_true.noise_type,'white')
     adj_true(adj_true~=0)=1;
     adj_true=sum(adj_true,3);
     adj_true(adj_true~=0)=1;
+    
+    
+  %   adj_true(1:size(adj_true,1)+1:end) =0;
+    
     model_true.network = adj_true;
+    
+
 else
     nelectrodes = size(model_true.data,1);
     adj_true = ones(nelectrodes,nelectrodes);
@@ -40,4 +46,5 @@ model_spline.computation_time = splinetime;
 model_spline.signal_estimate = yhat;
 model_spline.network = adj_spline;
 model_spline.jaccard_similarity = 1- jdist(model_true.network,model_spline.network);
-
+model_spline.covb = covariance_b;
+model_spline.design_matrix = dm;
