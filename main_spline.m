@@ -21,11 +21,6 @@ plot_data;
 % gof_residuals(model_spline);
 % gof_spectrum(model_true,model_spline,model_standard);
 
-%%% Goodness of Fit & Plots
-gof_bootstrap(model_true,model_spline,model_standard);
-gof_residuals(model_spline);
-gof_spectrum(model_true,model_spline,model_standard);
-
 %%% Compute g.o.f with Bartlett test.
 Ij_low = [0,4; 4,8;  8,12; 12,20; 20,30; 30,50];
 [result] = gof_bartlett(model_spline, Ij_low);
