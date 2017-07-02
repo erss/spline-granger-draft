@@ -46,5 +46,5 @@ model_spline.computation_time = splinetime;
 model_spline.signal_estimate = yhat;
 model_spline.network = adj_spline;
 model_spline.jaccard_similarity = 1- jdist(model_true.network,model_spline.network);
-model_spline.covb = covariance_b;
-model_spline.design_matrix = dm;
+% model_spline.covb = covariance_b;
+% model_spline.design_matrix = dm;
