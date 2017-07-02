@@ -16,17 +16,20 @@ plot_data;
 % for i =1:3; figure; mySpec(model_true.data(i,:),f0,'yesplot','tapers'); end
 
 %% Goodness of Fit & Plots
-%[ cons ] = gof_consistency( model_spline)
-[ sse ] = gof_sse( model_spline)
-% model_spline.model_coefficients=single_node_low_freq;
-% model_spline.estimated_model_order = 2;
-% [ cons ] = gof_consistency( model_spline)
+
+[ cons1 ] = gof_consistency( model_spline)  %%% compute consistency of inferred network
+ model_spline.model_coefficients=single_node_low_freq; %%% change coefficients
+ model_spline.estimated_model_order = 2; %%% computre consistency of 'incorrect' network
+[ cons2 ] = gof_consistency( model_spline)
+
+%[ sse ] = gof_sse( model_spline)
+
 % gof_derbin_h( model_true, model_spline)
 % gof_bootstrap(model_true,model_spline,model_standard);
 % gof_residuals(model_spline);
 % gof_spectrum(model_true,model_spline,model_standard);
 
-%%% Compute g.o.f with Bartlett test.
+%% Compute g.o.f with Bartlett test.
 Ij_low = [0,4; 4,8;  8,12; 12,20; 20,30; 30,50];
 [result] = gof_bartlett(model_spline, Ij_low);
       plot_gof_bartlett(result,       Ij_low);
