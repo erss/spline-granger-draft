@@ -1,4 +1,4 @@
-function [ frac tp tn] = network_accuracy( A,B )
+function [ frac, tp, tn, fn, fp] = network_accuracy( A,B )
 % FINDS PROPORTION OF CORRECTLY IDENTIFIED EDGES AND NON-EDGES
 
 diff = A-B;
@@ -12,9 +12,11 @@ nonedges = find(A==0);
 
 Be = B(edges);
 tp = sum(Be == 1);
+fn = sum(Be == 0);
 
 Bne = B(nonedges);
 tn = sum(Bne == 0);
+fp = sum(Bne == 1);
 
 end
 

@@ -83,8 +83,8 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     
     if ~strcmp(noise_type,'real')
         h = legend('Spline Estimated','Standard Estimated','True ');
-        set(h,'FontSize',14,'Location','SouthEast');
-        suptitle('Estimated Coefficient Fits');
+        set(h,'FontSize',10,'Location','SouthEast');
+  %      suptitle('Estimated Coefficient Fits');
     end
 
 end

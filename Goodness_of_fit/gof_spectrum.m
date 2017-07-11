@@ -140,8 +140,8 @@ for electrode = 1:nelectrodes
     axis tight
     
     
-    legend('Spline Network','True Network','Standard Network')
-    
+    h=legend('True Network','Spline Network','Standard Network');
+    set(h,'FontSize',10,'Location','SouthEast');
     %%% Compute amount of time in confidence bounds
 
     q1 = [X' X1'];

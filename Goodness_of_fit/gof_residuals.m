@@ -1,4 +1,4 @@
-function notwhite = gof_residuals( model)
+function [notwhite dw] = gof_residuals( model)
 %UNTITLED8 Summary of this function goes here
 %   Detailed explanation goes here
 %%%% goodness_of_fit_residuals
@@ -31,12 +31,12 @@ for electrode = 1:nelectrodes
     subplot 312
     plot(taxis(model_order+1:end),residuals(electrode,:),'.');
   % plot(residuals(electrode,:),'.');
-    title('Residuals')
+ %   title('Residuals')
     xlabel('Time(s)');
     subplot 313
     autocorr(residuals(electrode,:));
     
-    suptitle(num2str(electrode))
+ %   suptitle(num2str(electrode))
 end
 
  [dw pval] = whiteness(data,residuals);

@@ -1,4 +1,4 @@
-function [faxis, Sxx] = mySpec( x, f0, plot_flag,taper )
+function [faxis, Sxx] = mySpec( x, f0, plot_flag,taper,color )
 % MYSPEC computes the spectrum of a signal, x, at a sampling frequency, f0.
 %  Plots if PLOT_FLAG = 'yesplot', the default, Uses tapers if taper
 %  ='tapers', doesn't if taper = 'notapers' (DEFAULT)
@@ -10,6 +10,11 @@ end
 
 if ~exist('taper','var') % default is to not use tapers
     taper = 'notapers';
+end
+
+
+if ~exist('color','var') % default is black
+    color = 'k';
 end
 
 if strcmp(taper,'notapers') %%% -----NO TAPERS------------
@@ -49,7 +54,7 @@ elseif strcmp(taper,'tapers') %%% ----USE TAPERS -----------
     
     if strcmp(plot_flag,'yesplot') % plots spectrum
        % plot(faxis,10*log(Sxx),'k','LineWidth',1.5);
-       plot(faxis,Sxx,'k','LineWidth',1.5);
+       plot(faxis,Sxx,'col',color,'LineWidth',1.5);
 
         xlim([0 f0/4]);
         xlabel('Frequency (Hz)','FontSize',15);

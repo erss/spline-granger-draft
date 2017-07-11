@@ -5,10 +5,12 @@ model_true.noise_type = 'white'; % 'white', 'pink', 'real'
 
 model_true.sampling_frequency = 500;
 model_true.T = 2;   % time in seconds of window
-model_true.noise = 0.25; 
+model_true.noise = 0.25;
+taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):model_true.T;
+model_true.taxis = taxis;
 
 if strcmp(model_true.noise_type,'white')
-    model_true.true_coefficients =nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
+    model_true.true_coefficients = nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
     model_true.model_coefficients = model_true.true_coefficients;
 end
 %%% Define model inputs for spline Granger & standard Granger -------------
