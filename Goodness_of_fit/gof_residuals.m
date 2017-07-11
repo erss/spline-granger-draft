@@ -1,4 +1,4 @@
-function gof_residuals( model)
+function notwhite = gof_residuals( model)
 %UNTITLED8 Summary of this function goes here
 %   Detailed explanation goes here
 %%%% goodness_of_fit_residuals
@@ -39,10 +39,16 @@ for electrode = 1:nelectrodes
     suptitle(num2str(electrode))
 end
 
-% [dw pval] = whiteness(data,residuals)
+ [dw pval] = whiteness(data,residuals);
 % % A standard rule of thumb is that |dw < 1| or |dw > 3| indicates a high
 % % chance of residuals serial correlation; this implies poor VAR model fit.
-% sig = significance(pval,0.05,'FDR')
+ sig = significance(pval,0.05,'FDR')
+notwhite = find(sig);
+if isempty(notwhite)
+    fprintf('all residuals are white by Durbin-Watson test at significance %g\n',0.05);
+else
+    fprintf(2,'WARNING: autocorrelated residuals at significance %g for variable(s): %s\n',0.05,num2str(notwhite));
+end
 
 
 end

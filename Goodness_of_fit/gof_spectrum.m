@@ -1,4 +1,4 @@
-function [ output_args ] = gof_spectrum( model1,model2,model3 )
+function [ gr_spline, gr_stand] = gof_spectrum( model1,model2,model3 )
 %UNTITLED9 Summary of this function goes here
 %   Detailed explanation goes here
 %%% Compare spectrum of true signal and of estimated signal
@@ -88,25 +88,90 @@ for electrode = 1:nelectrodes
     spline_H0 = sort(spline_H,1);
     standard_H0 = sort(standard_H,1);
 
-    lb = round(0.025*nrealizations);
-    if lb == 0
-       lb = 1; 
-    end
-    ub = round(0.975*nrealizations);
+%     lb = round(0.025*nrealizations);
+%     if lb == 0
+%        lb = 1; 
+%     end
+%     ub = round(0.975*nrealizations);
     
-    figure;
-    plot(X,H,'k','LineWidth',2);
+   % h=figure;
+   h= plot(X,H,'k','LineWidth',2);
     hold on;
     plot(X1,H1,'r','LineWidth',2)
     plot(X2,H2,'g','LineWidth',2)
     
-%    plot(X,true_H0(lb,:),'--k','LineWidth',2);
-    plot(X1,spline_H0(lb,:),'--r','LineWidth',2)
-    plot(X2,standard_H0(lb,:),'--g','LineWidth',2)
-%    plot(X,true_H0(ub,:),'--k','LineWidth',2);
-    plot(X1,spline_H0(ub,:),'--r','LineWidth',2)
-    plot(X2,standard_H0(ub,:),'--g','LineWidth',2)
+% %    plot(X,true_H0(lb,:),'--k','LineWidth',2);
+%     plot(X1,spline_H0(lb,:),'--r','LineWidth',2)
+%     plot(X2,standard_H0(lb,:),'--g','LineWidth',2)
+% %    plot(X,true_H0(ub,:),'--k','LineWidth',2);
+%     plot(X1,spline_H0(ub,:),'--r','LineWidth',2)
+%     plot(X2,standard_H0(ub,:),'--g','LineWidth',2)
+    ap = 2.2414; % for 95% confidence bounds
+    total_observations = size(model1.data,2); %check! number of observations from which H is computed ? length of signal ?
+
+    flag = 'biased'; % divide by 1/N
+
+    R = xcov(trials_spline(:,:,1),flag); % autocovariance of estimated signal
+
+    G = sum(R(970:end-30).^2);
+    G = G/(4*pi);
+
+    conf1 = ap*sqrt(8*pi*G/total_observations);
+    UB = H1 + conf1;
+    LB = H1 - conf1;
     
+  
+    plot(X1,UB, '--r');
+    plot(X1,LB, '--r');
+    axis tight
+    
+    
+    
+    R = xcov(trials_standard(:,:,1),flag); % autocovariance of estimated signal
+
+    G = sum(sum(R(970:end)).^2);
+    G = G/(4*pi);
+
+    conf2 = ap*sqrt(8*pi*G/total_observations);
+    UB = H2 + conf2;
+    LB = H2 - conf2;
+    plot(X2,UB, '--g');
+    plot(X2,LB, '--g');
+    axis tight
+    
+    
+    legend('Spline Network','True Network','Standard Network')
+    
+    %%% Compute amount of time in confidence bounds
+
+    q1 = [X' X1'];
+    Q = NaN(5,length(q1));
+    Q(1,:) = q1;
+    Q(2,:) = interp1q(X,H,Q(1,:)')';
+    Q(3,:) = interp1q(X1,LB,Q(1,:)')';
+    Q(4,:) = interp1q(X1,H1,Q(1,:)')';
+    Q(5,:) = interp1q(X1,UB,Q(1,:)')'';
+    
+    Q = sortrows(Q',1)';
+    Qp=Q';
+    Qp = Qp(~any(isnan(Qp),2),:)';
+    % pg 476
+    gr_spline = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)));
+    
+    
+    q1 = [X' X2'];
+    Q = NaN(5,length(q1));
+    Q(1,:) = q1;
+    Q(2,:) = interp1q(X,H,Q(1,:)')';
+    Q(3,:) = interp1q(X2,LB,Q(1,:)')';
+    Q(4,:) = interp1q(X2,H1,Q(1,:)')';
+    Q(5,:) = interp1q(X2,UB,Q(1,:)')'';
+    
+    Q = sortrows(Q',1)';
+    Qp=Q';
+    Qp = Qp(~any(isnan(Qp),2),:)';
+    % pg 476
+    gr_stand = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)));
 end
 
 end

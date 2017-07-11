@@ -37,7 +37,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     [UB,LB]= myBootstrap(model2,electrode);
     end
 
-    figure;
+%    figure;
   
       k=1;
     for i = 1:nelectrodes
@@ -48,16 +48,16 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
         
    
         if (adj_mat(electrode,i) || adj_true(electrode,i))
-            subplot(nconnections,1,k)
+     %       subplot(nconnections,1,k)
             plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
                hold on
             plot(dt:dt:(model_order/f0),squeeze(real(b_est_stand(electrode,i,:))),'g','LineWidth',1.5)
 
 
-             if nelectrodes == 1 && strcmp(noise_type,'white') 
+             if nlags <= 5  && strcmp(noise_type,'white') 
                   plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
                 % plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
-             elseif nelectrodes > 1 && strcmp(noise_type,'white') 
+             else %if nelectrodes > 1 && strcmp(noise_type,'white') 
                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
              end
              
@@ -70,8 +70,8 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
             
             
             
-            str1 = strcat({'Influence of e'},num2str(i),{' on e'}, num2str(electrode));
-            title(str1)
+     %       str1 = strcat({'Influence of e'},num2str(i),{' on e'}, num2str(electrode));
+     %       title(str1)
             xlabel('Lag (s)','FontSize',14);
             ylabel('Magnitude','FontSize',14);
 
@@ -82,7 +82,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     end
     
     if ~strcmp(noise_type,'real')
-        h = legend('Spline Estimated Coefficients','Standard Estimated coefficients');
+        h = legend('Spline Estimated','Standard Estimated','True ');
         set(h,'FontSize',14,'Location','SouthEast');
         suptitle('Estimated Coefficient Fits');
     end

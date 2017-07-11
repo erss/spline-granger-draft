@@ -32,6 +32,8 @@ model_standard.computation_time = standardtime;
 model_standard.signal_estimate = yhat;
 model_standard.network = adj_standard;
 model_standard.jaccard_similarity = 1- jdist(model_true.network,model_standard.network);
+model_standard.accuracy = network_accuracy(model_true.network,model_standard.network);
+network_accuracy(adj_true,adj_standard);
 
 %%% Fit spline to data ---------------------------------------------------
 tic
@@ -46,5 +48,6 @@ model_spline.computation_time = splinetime;
 model_spline.signal_estimate = yhat;
 model_spline.network = adj_spline;
 model_spline.jaccard_similarity = 1- jdist(model_true.network,model_spline.network);
+model_spline.accuracy = network_accuracy(model_true.network,model_spline.network);
 % model_spline.covb = covariance_b;
 % model_spline.design_matrix = dm;
