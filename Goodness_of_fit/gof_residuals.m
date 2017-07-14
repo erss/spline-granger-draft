@@ -1,4 +1,4 @@
-function [notwhite dw] = gof_residuals( model)
+function [notwhite, dw] = gof_residuals( model)
 %UNTITLED8 Summary of this function goes here
 %   Detailed explanation goes here
 %%%% goodness_of_fit_residuals
@@ -15,7 +15,7 @@ taxis = dt:dt:T';
 residuals = zeros(nelectrodes,length(datap));
 
 for electrode = 1:nelectrodes
-    figure;
+ %  h= figure;
     true_signal =  datap(electrode,:);
     est_signal = yestimate(electrode,:);
     subplot 311

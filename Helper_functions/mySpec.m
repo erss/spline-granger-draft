@@ -57,9 +57,9 @@ elseif strcmp(taper,'tapers') %%% ----USE TAPERS -----------
        plot(faxis,Sxx,'col',color,'LineWidth',1.5);
 
         xlim([0 f0/4]);
-        xlabel('Frequency (Hz)','FontSize',15);
-        ylabel('Power (dB)','FontSize',15);
-        title('Spectrogram','FontSize',15);
+        xlabel('Frequency (Hz)','FontSize',14);
+        ylabel('Power (dB)','FontSize',14);
+        title('Spectrogram','FontSize',14);
     end
 end
 end

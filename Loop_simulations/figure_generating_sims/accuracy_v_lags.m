@@ -2,7 +2,7 @@
 
 %% Define loop parameters
 ntrials = 2;
-model_order_vals = [20 30 40];%[5:5:50];%[4 10 15 20 25 30 35 40 45 50 70 100];
+model_order_vals = [1:3]; %[5:5:50];%[4 10 15 20 25 30 35 40 45 50 70 100];
 
 %% Declare results
 

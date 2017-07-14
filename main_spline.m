@@ -7,19 +7,19 @@ config_spline;
 
 %%% Simulate data
 simulate_network;
-mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','tapers'); 
+% mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','tapers'); 
 %%
 %%% Fit Networks
 infer_network;
 
 %%%% Plot stuff
-plot_data;
+%plot_data;
 %%%%
 
 %%
-gof_bootstrap(model_true,model_spline,model_standard);
-gof_residuals(model_spline)
-gof_spectrum(model_true,model_spline,model_standard);
+% gof_bootstrap(model_true,model_spline,model_standard);
+% gof_residuals(model_spline)
+% gof_spectrum(model_true,model_spline,model_standard);
 % figure; plotchannels(model_true.data');
  %for i =1:5; figure; mySpec(model_true.data(i,:),f0,'yesplot','tapers'); end
 

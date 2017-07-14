@@ -10,15 +10,15 @@ taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):mode
 model_true.taxis = taxis;
 
 if strcmp(model_true.noise_type,'white')
-    model_true.true_coefficients = nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
-    model_true.model_coefficients = model_true.true_coefficients;
+    model_true.true_coefficients = single_node_order20;%nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
+    model_true.model_coefficients = model_true.true_coefficients;    
 end
 %%% Define model inputs for spline Granger & standard Granger -------------
 
 model_true.s = 0.5;                     % tension parameter for spline
 model_true.estimated_model_order = 30;  % model_order used to estimate
 
-number_of_knots       = floor(model_true.estimated_model_order/3);
+number_of_knots      = floor(model_true.estimated_model_order/3);
 model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
 
 %%% Define network testing parameters -------------------------------------

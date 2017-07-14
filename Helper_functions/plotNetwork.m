@@ -1,10 +1,11 @@
 function plotNetwork( adj)
-imagesc(adj); colormap(flipud(gray))
-
+imagesc(adj,'AlphaData',0.85); colormap(flipud(gray))
 
 NumTicks = size(adj,2)+1;
 L = get(gca,'XLim');
 set(gca,'XTick',linspace(L(1),L(2),NumTicks))
+grid on
+set(gca,'XTick',linspace(L(1)-0.5,L(2)-0.5,NumTicks))
 names = 1:NumTicks-1;
 
 stringy = {' '};
@@ -17,10 +18,10 @@ set(gca,'XTickLabel',stringy)
 L = get(gca,'YLim');
 set(gca,'YTick',linspace(L(1),L(2),NumTicks))
 set(gca,'YTickLabel',stringy)
-ylabel('electrode - target', 'FontSize',14);
-xlabel('electrode - source', 'FontSize',14);
+ylabel('node - target', 'FontSize',14);
+xlabel('node - source', 'FontSize',14);
 axis square
-grid on
+
 
 end
 

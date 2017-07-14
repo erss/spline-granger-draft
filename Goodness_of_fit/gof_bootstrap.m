@@ -49,30 +49,38 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
    
         if (adj_mat(electrode,i) || adj_true(electrode,i))
      %       subplot(nconnections,1,k)
-            plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
+          %  plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
+          plot(squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
                hold on
-            plot(dt:dt:(model_order/f0),squeeze(real(b_est_stand(electrode,i,:))),'g','LineWidth',1.5)
+           % plot(dt:dt:(model_order/f0),squeeze(real(b_est_stand(electrode,i,:))),'g','LineWidth',1.5)
+           plot(squeeze(real(b_est_stand(electrode,i,:))),'g','LineWidth',1.5)
 
 
              if nlags <= 5  && strcmp(noise_type,'white') 
-                  plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
+                 % plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
+                    plot(squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
                 % plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
              else %if nelectrodes > 1 && strcmp(noise_type,'white') 
-                plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
+                %plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
+             plot(squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
+
              end
              
              
-            plot(cntrl_pts(2:end)./f0,squeeze(bhat(electrode,i,cntrl_pts(2:end))),'o')
+%             plot(cntrl_pts(2:end)./f0,squeeze(bhat(electrode,i,cntrl_pts(2:end))),'o')
+% 
+%             plot(dt:dt:(model_order/f0),real(LB(:,i)),'--r','LineWidth',1)
+%             plot(dt:dt:(model_order/f0),real(UB(:,i)),'--r','LineWidth',1)
+plot(squeeze(bhat(electrode,i,cntrl_pts(2:end))),'o')
 
-            plot(dt:dt:(model_order/f0),real(LB(:,i)),'--r','LineWidth',1)
-            plot(dt:dt:(model_order/f0),real(UB(:,i)),'--r','LineWidth',1)
-
+            plot(real(LB(:,i)),'--r','LineWidth',1)
+            plot(real(UB(:,i)),'--r','LineWidth',1)
             
             
             
      %       str1 = strcat({'Influence of e'},num2str(i),{' on e'}, num2str(electrode));
      %       title(str1)
-            xlabel('Lag (s)','FontSize',14);
+            xlabel('Lag Index','FontSize',14);
             ylabel('Magnitude','FontSize',14);
 
             k= k +1;
@@ -83,7 +91,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     
     if ~strcmp(noise_type,'real')
         h = legend('Spline Estimated','Standard Estimated','True ');
-        set(h,'FontSize',10,'Location','SouthEast');
+        set(h,'FontSize',10,'Location','NorthEast');
   %      suptitle('Estimated Coefficient Fits');
     end
 

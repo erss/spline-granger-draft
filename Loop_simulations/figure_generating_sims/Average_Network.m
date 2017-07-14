@@ -1,8 +1,11 @@
 %%%% 
 ntrials=20;
-
 config_spline;
-
+model_true.true_coefficients = nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
+model_true.model_coefficients = model_true.true_coefficients;
+    
+    
+%%
 nelectrodes = size(model_true.model_coefficients,1);
 
 trials_spline = zeros(nelectrodes,nelectrodes,ntrials);
@@ -50,7 +53,19 @@ plotNetwork(std_network)
 title('Standard Deviation');
 colorbar
 caxis([0 1])
+%%
+figure;
+strength = reshape(bb,[1 81]);
+averages = reshape(avg_network,[1 81]);
+stds = reshape(std_network,[1 81]);
 
+plot(strength,averages,'.','MarkerSize',25);
+hold on;
+plot(strength,stds,'.','MarkerSize',25);
+h=legend('Average','Standard Deviation');
+set(h,'FontSize',20)
+xlabel('Strength of Influence','FontSize',20);
+%%
 % bb= sum(b,3);
 % bb(bb~=0) = 1;
 % figure;
@@ -71,51 +86,42 @@ for i = 1:ntrials
 end
 
 %%
-mnstandard = mean(standardtime);
-mnspline = mean(splinetime);
-
-semstandard = std(standardtime)/sqrt(ntrials);
-semspline = std(splinetime)/sqrt(ntrials);
-
+Labels = {'Standard', 'Spline'};
 figure;
 subplot 121
-bar([mean(standardtime),mean(splinetime)],'FaceAlpha',0.2)
-hold on;
-plot([1 1], [mnstandard-2*semstandard, mnstandard+2*semstandard],'k','LineWidth',2);
-plot([2 2], [mnspline-2*semspline, mnspline+2*semspline],'k','LineWidth',2);
-hold off;
-colormap(gray)
-Labels = {'Standard', 'Spline'};
-set(gca, 'XTick', 1:2, 'XTickLabel', Labels);
-ylabel('Computation time (seconds)')
-
-
-
-mnstandard = mean(accstand);
-mnspline = mean(accspline);
-
-semstandard = std(accstand)/sqrt(ntrials);
-semspline = std(accspline)/sqrt(ntrials);
+barplot(Labels, standardtime,splinetime)
+ylabel('Computation time (s)','FontSize',15)
 subplot 122
-bar([mean(accstand),mean(accspline),],'FaceAlpha',0.2)
-hold on;
-plot([1 1], [mnstandard-2*semstandard, mnstandard+2*semstandard],'k','LineWidth',2);
-plot([2 2], [mnspline-2*semspline, mnspline+2*semspline],'k','LineWidth',2);
-hold off;
-colormap(gray)
-Labels = {'Standard', 'Spline'};
-set(gca, 'XTick', 1:2, 'XTickLabel', Labels);
-ylabel('Accuracy')
+barplot(Labels,accstand,accspline)
+ylabel('Accuracy','FontSize',15)
   
 
 figure;
 subplot 211
+
 plotchannels(model_true.taxis,model_true.data')
-list=prism(9);
+
+ylabel('Signal','FontSize',15);
+xlabel('Time (s)','FontSize',15);
+
+title('Nine Node Network Simulation','FontSize',15);
+
 subplot 212
+
+list=lines(9);
 for i =1:9
-    mySpec(model_true.data(i,:),model_true.sampling_frequency,'yesplot','tapers',list(i,:));
+    mySpec(model_true.data(i,:),model_true.sampling_frequency,'yesplot','notapers',list(i,:));
     hold on;
-    
+  
 end
+%     h = get(0,'children');
+%     for i=1:length(h)
+% 
+%             saveas(h(i), ['avgntwk'  num2str(i)], 'fig');
+%              saveas(h(i), ['avgntwk'  num2str(i)], 'jpg');
+%        
+%         
+%     end
+%     close all;
+    
 

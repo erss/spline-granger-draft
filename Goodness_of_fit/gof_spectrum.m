@@ -94,8 +94,8 @@ for electrode = 1:nelectrodes
 %     end
 %     ub = round(0.975*nrealizations);
     
-   % h=figure;
-   h= plot(X,H,'k','LineWidth',2);
+
+   plot(X,H,'k','LineWidth',2);
     hold on;
     plot(X1,H1,'r','LineWidth',2)
     plot(X2,H2,'g','LineWidth',2)

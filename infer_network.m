@@ -33,7 +33,7 @@ model_standard.signal_estimate = yhat;
 model_standard.network = adj_standard;
 model_standard.jaccard_similarity = 1- jdist(model_true.network,model_standard.network);
 model_standard.accuracy = network_accuracy(model_true.network,model_standard.network);
-network_accuracy(adj_true,adj_standard);
+
 
 %%% Fit spline to data ---------------------------------------------------
 tic
