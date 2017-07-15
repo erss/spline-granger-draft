@@ -34,13 +34,13 @@ if strcmp(taper,'notapers') %%% -----NO TAPERS------------
     
     
     if strcmp(plot_flag,'yesplot') % plots spectrum
-        plot((faxis),(Sxx));
+        plot((faxis),10*log(Sxx),'col',color);
         %         hold on;
         %         plot(faxis,0.0625./(faxis.^.33))
         xlim([0 f0/4]);
-        xlabel('Frequency (Hz)','FontSize',15);
-        ylabel('Power','FontSize',15);
-        title('Spectrogram','FontSize',15);
+        xlabel('Frequency (Hz)','FontSize',16);
+        ylabel('Power (dB)','FontSize',16);
+        title('Spectrogram','FontSize',16);
     end
     
     
@@ -54,7 +54,7 @@ elseif strcmp(taper,'tapers') %%% ----USE TAPERS -----------
     
     if strcmp(plot_flag,'yesplot') % plots spectrum
        % plot(faxis,10*log(Sxx),'k','LineWidth',1.5);
-       plot(faxis,Sxx,'col',color,'LineWidth',1.5);
+       plot(faxis,10*log(Sxx),'col',color,'LineWidth',1.5);
 
         xlim([0 f0/4]);
         xlabel('Frequency (Hz)','FontSize',14);
