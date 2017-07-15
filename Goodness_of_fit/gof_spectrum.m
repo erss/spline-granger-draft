@@ -141,7 +141,7 @@ for electrode = 1:nelectrodes
     
     
     h=legend('True Network','Spline Network','Standard Network');
-    set(h,'FontSize',10,'Location','SouthEast');
+    set(h,'FontSize',15,'Location','SouthEast');
     %%% Compute amount of time in confidence bounds
 
     q1 = [X' X1'];

@@ -1,5 +1,5 @@
 %%%% 
-ntrials=20;
+ntrials=1;
 config_spline;
 model_true.true_coefficients = nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
 model_true.model_coefficients = model_true.true_coefficients;
@@ -37,18 +37,25 @@ std_network = std(trials_spline,0,3);
 b = model_true.model_coefficients;
  
 figure;
-subplot 131
+subplot 221
 [bb, ii] = max(abs(b),[],3);
 plotNetwork(bb)
 title('Coefficient Strength')
 colorbar
 caxis([0 1])
-subplot 132
+
+subplot 222
+plotNetwork(adj_spline)
+title('Spline Network')
+colorbar
+caxis([0 1])
+
+subplot 223
 plotNetwork(avg_network);
 title('Averaged Network');
 colorbar
 caxis([0 1])
-subplot 133
+subplot 224
 plotNetwork(std_network)
 title('Standard Deviation');
 colorbar

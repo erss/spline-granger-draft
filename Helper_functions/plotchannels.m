@@ -36,10 +36,10 @@ else
     xlim([t(1) t(end)]);
     xlabel(xstr);
     ylim([-0.5, size(data, 2) + 1.5]);
-    ylabel('channel index ');
-    set(gca, 'YTick', 1 : size(data, 2));
+    %ylabel('channel index ');
+    %set(gca, 'YTick', 1 : size(data, 2));
     if nargin > 2
-        set(gca, 'YTickLabel', varargin{3});
+      %  set(gca, 'YTickLabel', varargin{3});
         if isempty(varargin{3})
             ylabel('');
         end
@@ -56,5 +56,10 @@ d = FACTOR * nanmean(max(data, [], 1) - min(data, [], 1));
 % d = (max(data(:)) - min(data(:))) / 4; % bad for noisy channels
 data = bsxfun(@plus, data / d, 1 : size(data, 2));
 plot(t, data', varargin{4:end});
+%%%%%%%% erss
+set(gca,'YTickLabel',[]);
+set(gca,'XTickLabel',[]);
+set(gca,'XTick',[]);
+set(gca,'YTick',[]);
 
 end
