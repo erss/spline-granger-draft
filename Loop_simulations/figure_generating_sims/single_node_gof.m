@@ -93,7 +93,7 @@ for kk = 1:2
     figure;
     subplot 131
 barplot(Labels,ct_standard,ct_spline)
-    ylabel('Computation time (s)','FontSize',14)
+    ylabel('Computation time (s)','FontSize',20)
     axis tight
     subplot 132
     barplot(Labels,ts_stand,ts_spline)
@@ -101,16 +101,16 @@ barplot(Labels,ct_standard,ct_spline)
    %  xlim=get(gca,'xlim');
    xlim=[.5 2.5];
     hold on
-    plot(xlim,[2.2414 2.2414],'--r','LineWidth',2)
-    ylabel('Grenander & Rosenblatt Statistic','FontSize',14)
+    plot(xlim,[2.2414 2.2414],'--r','LineWidth',2.5)
+    ylabel('Grenander & Rosenblatt Statistic','FontSize',20)
     axis tight
     subplot 133
     barplot(Labels,dwstandard,dwspline)
    % xlim=get(gca,'xlim');
     hold on
-    plot(xlim,[1 1],'--r','LineWidth',2)
-    plot(xlim,[3 3],'--r','LineWidth',2)
-    ylabel('Durbin-Watson Statistic','FontSize',14)
+    plot(xlim,[1 1],'--r','LineWidth',2.5)
+    plot(xlim,[3 3],'--r','LineWidth',2.5)
+    ylabel('Durbin-Watson Statistic','FontSize',20)
     axis tight
     
     h = get(0,'children');

@@ -1,5 +1,5 @@
 %%%% 
-ntrials=1;
+ntrials=50;
 config_spline;
 model_true.true_coefficients = nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
 model_true.model_coefficients = model_true.true_coefficients;
@@ -40,38 +40,38 @@ figure;
 subplot 221
 [bb, ii] = max(abs(b),[],3);
 plotNetwork(bb)
-title('Coefficient Strength')
+title('Coefficient Strength','FontSize',20)
 colorbar
 caxis([0 1])
 
 subplot 222
 plotNetwork(adj_spline)
-title('Spline Network')
+title('Spline Network','FontSize',20)
 colorbar
 caxis([0 1])
 
 subplot 223
 plotNetwork(avg_network);
-title('Averaged Network');
+title('Averaged Network','FontSize',20);
 colorbar
 caxis([0 1])
 subplot 224
 plotNetwork(std_network)
-title('Standard Deviation');
+title('Standard Deviation','FontSize',20);
 colorbar
 caxis([0 1])
 %%
-figure;
-strength = reshape(bb,[1 81]);
-averages = reshape(avg_network,[1 81]);
-stds = reshape(std_network,[1 81]);
-
-plot(strength,averages,'.','MarkerSize',25);
-hold on;
-plot(strength,stds,'.','MarkerSize',25);
-h=legend('Average','Standard Deviation');
-set(h,'FontSize',20)
-xlabel('Strength of Influence','FontSize',20);
+% figure;
+% strength = reshape(bb,[1 81]);
+% averages = reshape(avg_network,[1 81]);
+% stds = reshape(std_network,[1 81]);
+% 
+% plot(strength,averages,'.','MarkerSize',25);
+% hold on;
+% plot(strength,stds,'.','MarkerSize',25);
+% h=legend('Average','Standard Deviation');
+% set(h,'FontSize',20)
+% xlabel('Strength of Influence','FontSize',20);
 %%
 % bb= sum(b,3);
 % bb(bb~=0) = 1;
@@ -97,21 +97,22 @@ Labels = {'Standard', 'Spline'};
 figure;
 subplot 121
 barplot(Labels, standardtime,splinetime)
-ylabel('Computation time (s)','FontSize',15)
+axis tight
+ylabel('Computation time (s)','FontSize',18)
 subplot 122
 barplot(Labels,accstand,accspline)
-ylabel('Accuracy','FontSize',15)
-  
+ylabel('Accuracy','FontSize',18)
+  axis tight
 
 figure;
 subplot 211
 
 plotchannels(model_true.taxis,model_true.data')
 
-ylabel('Signal','FontSize',15);
-xlabel('Time (s)','FontSize',15);
+ylabel('Signal','FontSize',18);
+xlabel('Time (s)','FontSize',18);
 
-title('Nine Node Network Simulation','FontSize',15);
+title('Nine Node Network Simulation','FontSize',20);
 
 subplot 212
 
@@ -121,14 +122,14 @@ for i =1:9
     hold on;
   
 end
-%     h = get(0,'children');
-%     for i=1:length(h)
-% 
-%             saveas(h(i), ['avgntwk'  num2str(i)], 'fig');
-%              saveas(h(i), ['avgntwk'  num2str(i)], 'jpg');
-%        
-%         
-%     end
-%     close all;
+    h = get(0,'children');
+    for i=1:length(h)
+
+            saveas(h(i), ['avgntwk'  num2str(i)], 'fig');
+             saveas(h(i), ['avgntwk'  num2str(i)], 'jpg');
+       
+        
+    end
+    close all;
     
 

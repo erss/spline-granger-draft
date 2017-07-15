@@ -18,8 +18,8 @@ set(gca,'XTickLabel',stringy)
 L = get(gca,'YLim');
 set(gca,'YTick',linspace(L(1),L(2),NumTicks))
 set(gca,'YTickLabel',stringy)
-ylabel('node - target', 'FontSize',14);
-xlabel('node - source', 'FontSize',14);
+ylabel('node - target', 'FontSize',18);
+xlabel('node - source', 'FontSize',18);
 axis square
 
 
