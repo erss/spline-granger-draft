@@ -61,5 +61,8 @@ set(gca,'YTickLabel',[]);
 set(gca,'XTickLabel',[]);
 set(gca,'XTick',[]);
 set(gca,'YTick',[]);
+ hold on;
+     plot([0,.2], [min(data(:,1)), min(data(:,1))], 'k', 'LineWidth', 2.5);
+
 
 end

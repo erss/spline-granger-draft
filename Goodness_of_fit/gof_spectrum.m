@@ -133,10 +133,10 @@ for electrode = 1:nelectrodes
     G = G/(4*pi);
 
     conf2 = ap*sqrt(8*pi*G/total_observations);
-    UB = H2 + conf2;
-    LB = H2 - conf2;
-    plot(X2,UB, '--g');
-    plot(X2,LB, '--g');
+    UB2 = H2 + conf2;
+    LB2 = H2 - conf2;
+    plot(X2,UB2, '--g');
+    plot(X2,LB2, '--g');
     axis tight
     
     
@@ -163,9 +163,9 @@ for electrode = 1:nelectrodes
     Q = NaN(5,length(q1));
     Q(1,:) = q1;
     Q(2,:) = interp1q(X,H,Q(1,:)')';
-    Q(3,:) = interp1q(X2,LB,Q(1,:)')';
+    Q(3,:) = interp1q(X2,LB2,Q(1,:)')';
     Q(4,:) = interp1q(X2,H1,Q(1,:)')';
-    Q(5,:) = interp1q(X2,UB,Q(1,:)')'';
+    Q(5,:) = interp1q(X2,UB2,Q(1,:)')'';
     
     Q = sortrows(Q',1)';
     Qp=Q';

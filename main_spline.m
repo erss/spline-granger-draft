@@ -13,7 +13,7 @@ simulate_network;
 infer_network;
 
 %%%% Plot stuff
-%plot_data;
+plot_data;
 %%%%
 
 %%

@@ -15,7 +15,7 @@ taxis = dt:dt:T';
 residuals = zeros(nelectrodes,length(datap));
 
 for electrode = 1:nelectrodes
- %  h= figure;
+   h= figure;
     true_signal =  datap(electrode,:);
     est_signal = yestimate(electrode,:);
     subplot 311
@@ -30,13 +30,13 @@ for electrode = 1:nelectrodes
     residuals(electrode,:) = true_signal-est_signal;
     subplot 312
     plot(taxis(model_order+1:end),residuals(electrode,:),'.');
-  % plot(residuals(electrode,:),'.');
- %   title('Residuals')
+   plot(residuals(electrode,:),'.');
+    title('Residuals')
     xlabel('Time(s)');
     subplot 313
     autocorr(residuals(electrode,:));
     
- %   suptitle(num2str(electrode))
+    suptitle(num2str(electrode))
 end
 
  [dw pval] = whiteness(data,residuals);

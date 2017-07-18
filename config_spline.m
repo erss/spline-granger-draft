@@ -10,8 +10,11 @@ taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):mode
 model_true.taxis = taxis;
 
 if strcmp(model_true.noise_type,'white')
-    model_true.true_coefficients = single_node_order20;%nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
-    model_true.model_coefficients = model_true.true_coefficients;    
+    model_true.true_coefficients = nine_node_order20_rdi;%single_node_order20;% %%%% MODIFY COEFFICIENTS HERE!
+    model_true.model_coefficients = model_true.true_coefficients;   
+elseif strcmp(model_true.noise_type,'real')
+    model_true.sztype = 'presz'; % presz
+    model_true.ntwk = [2 7 18 22 42 46 90 80 77 ];     % badchannels = [1,9,21,32,83, 8,31];
 end
 %%% Define model inputs for spline Granger & standard Granger -------------
 

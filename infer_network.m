@@ -31,9 +31,11 @@ model_standard.model_coefficients = bhat;
 model_standard.computation_time = standardtime;
 model_standard.signal_estimate = yhat;
 model_standard.network = adj_standard;
+
+if strcmp(model_true.noise_type,'white')
 model_standard.jaccard_similarity = 1- jdist(model_true.network,model_standard.network);
 model_standard.accuracy = network_accuracy(model_true.network,model_standard.network);
-
+end
 
 %%% Fit spline to data ---------------------------------------------------
 tic
@@ -47,7 +49,18 @@ model_spline.model_coefficients = bhat;
 model_spline.computation_time = splinetime;
 model_spline.signal_estimate = yhat;
 model_spline.network = adj_spline;
+
+if strcmp(model_true.noise_type,'white')
 model_spline.jaccard_similarity = 1- jdist(model_true.network,model_spline.network);
 model_spline.accuracy = network_accuracy(model_true.network,model_spline.network);
+end
+
+if ~strcmp(model_true.noise_type,'white')
+    model_spline.jaccard_similarity = 1- jdist(model_standard.network,model_spline.network);
+    model_spline.accuracy = network_accuracy(model_standard.network,model_spline.network);
+    
+    model_standard.jaccard_similarity = 1- jdist(model_standard.network,model_spline.network);
+    model_standard.accuracy = network_accuracy(model_standard.network,model_spline.network);
+end
 % model_spline.covb = covariance_b;
 % model_spline.design_matrix = dm;

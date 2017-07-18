@@ -34,7 +34,7 @@ if strcmp(taper,'notapers') %%% -----NO TAPERS------------
     
     
     if strcmp(plot_flag,'yesplot') % plots spectrum
-        plot((faxis),10*log(Sxx),'col',color);
+        plot((faxis),10*log(Sxx),'col',color,'LineWidth',2);
         %         hold on;
         %         plot(faxis,0.0625./(faxis.^.33))
         xlim([0 f0/4]);
@@ -48,13 +48,13 @@ elseif strcmp(taper,'tapers') %%% ----USE TAPERS -----------
     %%% TAPER METHOD
     x = x - ones(size(x)).*mean(x);
     dt = 1/f0;
-    TW = 5; % 50 ??
+    TW = 4; % 50 ?? time-bandwidth product"
     
     [Sxx, faxis] = pmtm(x,TW,length(x),f0);
     
     if strcmp(plot_flag,'yesplot') % plots spectrum
        % plot(faxis,10*log(Sxx),'k','LineWidth',1.5);
-       plot(faxis,10*log(Sxx),'col',color,'LineWidth',1.5);
+       plot(faxis,10*log(Sxx),'col',color,'LineWidth',1);
 
         xlim([0 f0/4]);
         xlabel('Frequency (Hz)','FontSize',14);

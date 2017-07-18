@@ -1,6 +1,6 @@
-
-ntrials = 2;
-model_order_vals = [4 20 30 50];%[4 10 15 20 25 30 35 40 45 50 70 100];
+clear all; close all;
+ntrials = 1;
+model_order_vals =[4 10 15 20 25 30 50];
 jdist_results_spline = zeros(ntrials,length(model_order_vals));
 time_results_spline = zeros(ntrials,length(model_order_vals));
 

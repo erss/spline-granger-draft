@@ -37,7 +37,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     [UB,LB]= myBootstrap(model2,electrode);
     end
 
-%    figure;
+%   figure;
   
       k=1;
     for i = 1:nelectrodes
@@ -48,7 +48,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
         
    
         if (adj_mat(electrode,i) || adj_true(electrode,i))
-     %       subplot(nconnections,1,k)
+       %     subplot(nconnections,1,k)
             plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
          % plot(squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
                hold on
@@ -56,11 +56,11 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
           % plot(squeeze(real(b_est_stand(electrode,i,:))),'g','LineWidth',1.5)
 
 
-             if nlags <= 5  && strcmp(noise_type,'white') 
+             if strcmp(noise_type,'white') && nlags <= 5  
                  plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
                  %   plot(squeeze(real(b(electrode,i,:))),'.k','MarkerSize',30);
                 % plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
-             else %if nelectrodes > 1 && strcmp(noise_type,'white') 
+             elseif strcmp(noise_type,'white')  %if nelectrodes > 1 && strcmp(noise_type,'white') 
                 plot(dt:dt:(nlags/f0),squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
             % plot(squeeze(real(b(electrode,i,:))),'k','LineWidth',2);
 
@@ -92,8 +92,14 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     if ~strcmp(noise_type,'real')
         h = legend('Spline Estimated','Standard Estimated','True ');
         set(h,'FontSize',15,'Location','NorthEast');
-  %      suptitle('Estimated Coefficient Fits');
+    %    suptitle('Estimated Coefficient Fits');
     end
+       if strcmp(noise_type,'real')
+        h = legend('Spline Estimated','Standard Estimated');
+        set(h,'FontSize',15,'Location','NorthEast');
+       % suptitle('Estimated Coefficient Fits');
+    end
+    
 
 end
 
