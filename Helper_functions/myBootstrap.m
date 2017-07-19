@@ -103,6 +103,9 @@ ii = electrode;
         ind1 =round(nsurrogates*0.025);
         ind2 = round(nsurrogates*0.975);
          
+        if ind1==0
+            ind1=1;
+        end
         sorted_b = sort(real(b));
         bounds(1,:) = sorted_b(ind1,:);
         bounds(2,:) = sorted_b(ind2,:);

@@ -14,36 +14,39 @@ subplot 221
 
 plot(model_true.taxis,model_true.data,'k','LineWidth',2)
      hold on;
-     plot([0,.2], [min(model_true.data(1,:)), min(model_true.data(1,:))], 'r', 'LineWidth', 2);
+     plot([0,.2], [min(model_true.data(1,:)), min(model_true.data(1,:))], 'k', 'LineWidth', 2);
 set(gca,'YTickLabel',[]);
 set(gca,'XTickLabel',[]);
 set(gca,'XTick',[]);
 set(gca,'YTick',[]);
+
+title('Single Electrode Recording','FontSize',20);
 box off
 
 
 ylabel('Signal','FontSize',18);
 xlabel('Time (s)','FontSize',18);
 
-title('Single Electrode Recording','FontSize',20);
 %title(num2str(i),'FontSize',20);
 
 subplot 222
 
 list=lines(size(model_true.data,1));
 mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','notapers','k');
-title('Spectrogram','FontSize',20);
 box off
 ylim([-60 90])
 a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
+title('Spectrogram','FontSize',20);
+
 % 
  subplot(2,2,[3 4])
  gof_bootstrap(model_true,model_spline,model_standard);
-title('Estimated Coefficient Fits','FontSize',20);
 box off
 a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
+title('Estimated Coefficient Fits','FontSize',20);
+
 
 %title(strcat({'Spline, '},num2str(model_spline.computation_time),{' s'},' Overlap, ',num2str(model_spline.accuracy)))
 h = get(0,'children');

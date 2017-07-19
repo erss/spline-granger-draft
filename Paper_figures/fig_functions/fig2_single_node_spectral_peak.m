@@ -1,7 +1,7 @@
 %%%%% single node analysis
 %%% set model coefficitens to single_node_order20 & single_node_low_freq
 clear all;
-ntrials = 100;
+ntrials = 2;
 ct_spline = zeros(1,ntrials);
 ct_standard = zeros(1,ntrials);
 ts_spline = zeros(1,ntrials);
@@ -13,6 +13,7 @@ fails_st =[];
 
 for i = 1:ntrials
     config_spline;
+    model_true.noise_type = 'white';
     model_true.true_coefficients = single_node_order20; %%%% MODIFY COEFFICIENTS HERE!
     
     
@@ -49,6 +50,11 @@ title('Simulated Signal','FontSize',20);
 xlabel('Time (s)','FontSize',18);
 a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
+box off
+set(gca,'YTickLabel',[]);
+set(gca,'XTickLabel',[]);
+set(gca,'XTick',[]);
+set(gca,'YTick',[]);
 
 %%% Plot spectrogram
 subplot(2,2,2)
@@ -59,7 +65,7 @@ a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
 title('Spectrogram','FontSize',20);
 ylabel('Power (dB)','FontSize',18)
-xlabel('Frequecy (Hz)','FontSize',18)
+xlabel('Frequency (Hz)','FontSize',18)
 %%% Plot coefficients
 subplot(2,2,[3 4])
 gof_bootstrap(model_true,model_spline,model_standard);

@@ -1,6 +1,7 @@
 %%%%
 ntrials=100;
 config_spline;
+model_true.noise_type = 'white';
 model_true.true_coefficients = nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
 model_true.model_coefficients = model_true.true_coefficients;
 
@@ -63,14 +64,22 @@ plotNetwork(std_network)
 title('Standard Deviation','FontSize',20);
 colorbar
 caxis([0 1])
-
+%%
 adj_true = model_true.true_coefficients;
 adj_true(adj_true~=0)=1;
 adj_true=sum(adj_true,3);
 adj_true(adj_true~=0)=1;
+
+adj_thresh = bb;
+adj_thresh(adj_thresh >= 0.1)= 1;
+adj_thresh(adj_thresh < 0.1)= 0;
+
 for i = 1:ntrials
     accspline(i) = network_accuracy(adj_true,trials_spline(:,:,i));
     accstand(i) = network_accuracy(adj_true,trials_stand(:,:,i));
+    
+    threshspline(i) = network_accuracy(adj_thresh,trials_spline(:,:,i));
+    threshstand(i) = network_accuracy(adj_thresh,trials_stand(:,:,i));
     
 end
 
@@ -78,19 +87,24 @@ end
 Labels = {'Standard', 'Spline'};
 figure;
 %%% computational time bar plot
-subplot 121
+subplot 131
 barplot(Labels, standardtime,splinetime)
 set(gca,'xlim',[0.5 2.5])
 ylabel('Computation time (s)','FontSize',18)
 
 %%% accuracy bar plot
-subplot 122
+subplot 132
 barplot(Labels,accstand,accspline)
 ylabel('Accuracy','FontSize',18)
 set(gca,'xlim',[0.5 2.5])
 ylim([0 1])
 
-
+%%% threshold accuracy bar plot
+subplot 133
+barplot(Labels,threshstand,threshspline)
+ylabel('Accuracy (Threshold)','FontSize',18)
+set(gca,'xlim',[0.5 2.5])
+ylim([0 1])
 %%% Figure 3
 figure;
 
@@ -117,6 +131,7 @@ xlabel('Frequecy (Hz)','FontSize',18)
 box off
 a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
+
 
 h = get(0,'children');
 for i=1:length(h)
