@@ -20,12 +20,12 @@ elseif strcmp(model_true.noise_type,'real')
     nwk(badchannels) = [];
     
     model_true.ntwk = nwk;
-    %[2 7 18 22 42 46 90 80 77 ];     
+    model_true.ntwk = [2 7 18 22 42 46 90 80 77 ];     
 end
 %%% Define model inputs for spline Granger & standard Granger -------------
 
 model_true.s = 0.5;                     % tension parameter for spline
-model_true.estimated_model_order = 30;  % model_order used to estimate
+model_true.estimated_model_order = 35;  % model_order used to estimate
 
 number_of_knots      = floor(model_true.estimated_model_order/3);
 model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
