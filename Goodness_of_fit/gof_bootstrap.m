@@ -37,7 +37,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
     [UB,LB]= myBootstrap(model2,electrode);
     end
 
-%   figure;
+ %  figure;
   
       k=1;
     for i = 1:nelectrodes
@@ -48,7 +48,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
         
    
         if (adj_mat(electrode,i) || adj_true(electrode,i))
-       %     subplot(nconnections,1,k)
+       %    subplot(nconnections,1,k)
             plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
          % plot(squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
                hold on
@@ -67,7 +67,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
              end
              
              
-            plot(cntrl_pts(2:end)./f0,squeeze(bhat(electrode,i,cntrl_pts(2:end))),'o')
+            plot(cntrl_pts(2:end)./f0,squeeze(bhat(electrode,i,cntrl_pts(2:end))),'ro','MarkerFaceColor','r')
 
             plot(dt:dt:(model_order/f0),real(LB(:,i)),'--r','LineWidth',1)
             plot(dt:dt:(model_order/f0),real(UB(:,i)),'--r','LineWidth',1)

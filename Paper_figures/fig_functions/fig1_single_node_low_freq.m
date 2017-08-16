@@ -102,7 +102,7 @@ xlabel('Lag (s)','FontSize',18);
 ylabel('Autocorrelation','FontSize',18);
 set(gca,'XTickLabel',[0 model_true.taxis(1:19)],'FontSize',16)
 box off
-
+%%
 %%%% Fig 2
 Labels = {'Standard', 'Spline'};
 figure;

@@ -40,7 +40,7 @@ plot_data;
 %[ sse ] = gof_sse( model_spline)
 
 % gof_derbin_h( model_true, model_spline)
-% gof_bootstrap(model_true,model_spline,model_standard);
+ gof_bootstrap(model_true,model_spline,model_standard);
 % gof_residuals(model_spline);
 % gof_spectrum(model_true,model_spline,model_standard);
 

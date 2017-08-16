@@ -3,7 +3,7 @@
 %% Define loop parameters
 ntrials = 100;
 model_order_vals = [5:5:50];%[4 10 15 20 25 30 35 40 45 50 70 100];
-    T = [1 2 4];
+    T = [2 4 8];
     time_results_spline = zeros(ntrials,length(model_order_vals),length(T));
     time_results_standard = zeros(ntrials,length(model_order_vals),length(T));
     
@@ -105,8 +105,8 @@ end
 
 %% Plot on top 
 figure;
- s1 = {'--og','--*g','--sg'}
-  s2 = {'--or','--*r','--sr'}
+ s1 = {'--og','--*g','--sg'};
+  s2 = {'--or','--*r','--sr'};
   
 subplot 211
 t=1;
@@ -145,19 +145,19 @@ t = 1;
     [mn, sem] = confidencebds(accuracy_stand(:,:,t));
     A=shadedErrorBar(model_order_vals,mn, 2*sem, s1(t) , 1);
     hold on;
-    [mn, sem] = confidencebds(accuracy_spline(:,:,time));
+    [mn, sem] = confidencebds(accuracy_spline(:,:,t));
     B=shadedErrorBar(model_order_vals,mn, 2*sem , s2(t) , 1);
 t = 2;
     [mn, sem] = confidencebds(accuracy_stand(:,:,t));
     A2=shadedErrorBar(model_order_vals,mn, 2*sem, s1(t) , 1);
     hold on;
-    [mn, sem] = confidencebds(accuracy_spline(:,:,time));
+    [mn, sem] = confidencebds(accuracy_spline(:,:,t));
     B2=shadedErrorBar(model_order_vals,mn, 2*sem , s2(t) , 1);
 t = 3;
     [mn, sem] = confidencebds(accuracy_stand(:,:,t));
     A3=shadedErrorBar(model_order_vals,mn, 2*sem, s1(t) , 1);
     hold on;
-    [mn, sem] = confidencebds(accuracy_spline(:,:,time));
+    [mn, sem] = confidencebds(accuracy_spline(:,:,t));
     B3=shadedErrorBar(model_order_vals,mn, 2*sem , s2(t) , 1);
     title('Accuracy vs Lags','FontSize',20)
     xlabel('Lag','FontSize',18)

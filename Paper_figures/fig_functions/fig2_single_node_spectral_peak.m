@@ -1,7 +1,7 @@
 %%%%% single node analysis
 %%% set model coefficitens to single_node_order20 & single_node_low_freq
 clear all;
-ntrials = 2;
+ntrials = 1;
 ct_spline = zeros(1,ntrials);
 ct_standard = zeros(1,ntrials);
 ts_spline = zeros(1,ntrials);
@@ -37,7 +37,7 @@ for i = 1:ntrials
 
 end
 
-%%% Fig 1
+%% Fig 1
 figure;
 
 %%% Plot signal trace
@@ -58,6 +58,7 @@ set(gca,'YTick',[]);
 
 %%% Plot spectrogram
 subplot(2,2,2)
+
 mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','tapers');
 box off
 axis tight
@@ -75,50 +76,52 @@ ylabel('Magnitude','FontSize',18)
 xlabel('Lag (s)','FontSize',18)
 a = get(gca,'XTickLabel');
 set(gca,'XTickLabel',a,'fontsize',16)
+plot([0 0.06],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
 
-
-%%%% Fig 2
-Labels = {'Standard', 'Spline'};
-figure;
-
-%%%%% Plot bar Comp Times
-subplot 131
-barplot(Labels,ct_standard,ct_spline)
-ylabel('Computation time (s)','FontSize',20)
-set(gca,'xlim',[0.5 2.5])
-box off
-a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
-
-%%% Plot bar GR test stat
-subplot 132
-barplot(Labels,ts_stand,ts_spline);
-xlim=[.5 2.5];
-hold on
-plot(xlim,[2.2414 2.2414],'--r','LineWidth',2.5)
-ylabel('Grenander & Rosenblatt Statistic','FontSize',20)
-axis tight
-box off
-a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
-
-%%% Plot bar DW stat
-subplot 133
-barplot(Labels,dwstandard,dwspline)
-hold on
-plot(xlim,[1 1],'--r','LineWidth',2.5)
-plot(xlim,[3 3],'--r','LineWidth',2.5)
-ylabel('Durbin-Watson Statistic','FontSize',20)
-axis tight
-box off
-a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
-%%% Save
-h = get(0,'children');
-for i=1:length(h)
-saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'fig');     
-end
-close all;
-
-
-
+    h = legend('Spline Estimated','Standard Estimated','True');
+        set(h,'FontSize',15,'Location','NorthEast');% 
+% %%%% Fig 2
+% Labels = {'Standard', 'Spline'};
+% figure;
+% 
+% %%%%% Plot bar Comp Times
+% subplot 131
+% barplot(Labels,ct_standard,ct_spline)
+% ylabel('Computation time (s)','FontSize',20)
+% set(gca,'xlim',[0.5 2.5])
+% box off
+% a = get(gca,'YTickLabel');
+% set(gca,'YTickLabel',a,'fontsize',16)
+% 
+% %%% Plot bar GR test stat
+% subplot 132
+% barplot(Labels,ts_stand,ts_spline);
+% xlim=[.5 2.5];
+% hold on
+% plot(xlim,[2.2414 2.2414],'--r','LineWidth',2.5)
+% ylabel('Grenander & Rosenblatt Statistic','FontSize',20)
+% axis tight
+% box off
+% a = get(gca,'YTickLabel');
+% set(gca,'YTickLabel',a,'fontsize',16)
+% 
+% %%% Plot bar DW stat
+% subplot 133
+% barplot(Labels,dwstandard,dwspline)
+% hold on
+% plot(xlim,[1 1],'--r','LineWidth',2.5)
+% plot(xlim,[3 3],'--r','LineWidth',2.5)
+% ylabel('Durbin-Watson Statistic','FontSize',20)
+% axis tight
+% box off
+% a = get(gca,'YTickLabel');
+% set(gca,'YTickLabel',a,'fontsize',16)
+% %%% Save
+% h = get(0,'children');
+% for i=1:length(h)
+% saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'fig');     
+% end
+% close all;
+% 
+% 
+% 

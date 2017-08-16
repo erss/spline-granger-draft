@@ -1,9 +1,13 @@
 %%%% Real Data!
 config_spline;
 model_true.noise_type = 'real'; % 'white', 'pink', 'real'
- model_true.sztype = 'sz'; % presz
- model_true.ntwk = [2 7 18 22 42 46 90 80 77 ];     % badchannels = [1,9,21,32,83, 8,31];
+ model_true.sztype = 'presz'; % presz
+% model_true.ntwk = [2 7 18 22 42 46 90 80 77 ];     % badchannels = [1,9,21,32,83, 8,31];
 
+ badchannels = [1,8,9,13,20,21,22,23,24,25,26,31,32,34,38,41,48,49,50,68,69,71,77,78,79,82,83,87,88 ,89];
+ ntwk =     1:94;
+ ntwk(badchannels)=[];
+ model_true.ntwk = ntwk;
  simulate_network;
  infer_network;
  

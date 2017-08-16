@@ -5,7 +5,7 @@ function [ gr_spline, gr_stand] = grstat( model1,model2,model3 )
 %%%%%% NOTE highly dependent on noise used to generate model
 % Define model inputs
 
-nrealizations = model1.nrealizations;
+nrealizations = 10;%model1.nrealizations;
 noise_type = model1.noise_type;
 
     nelectrodes = size(model1.data,1); % number of electrodes
@@ -116,7 +116,9 @@ for electrode = 1:nelectrodes
     Qp = Qp(~any(isnan(Qp),2),:)';
     % pg 476
     gr_spline = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)));
-    
+    figure;
+    plot(Q(1,:),Q(2,:),'k',Q(1,:),Q(4,:),'r',Q(1,:),Q(3,:),'--r',Q(1,:),Q(5,:),'--r')
+    hold on
     %%%%% standard calc
     R = xcov(trials_standard(:,:,1),flag); % autocovariance of estimated signal
 
@@ -134,13 +136,15 @@ for electrode = 1:nelectrodes
     Q(3,:) = interp1q(X2,LB,Q(1,:)')';
     Q(4,:) = interp1q(X2,H1,Q(1,:)')';
     Q(5,:) = interp1q(X2,UB,Q(1,:)')'';
-    
+
     Q = sortrows(Q',1)';
     Qp=Q';
     Qp = Qp(~any(isnan(Qp),2),:)';
+    
+    plot(Q(1,:),Q(4,:),'g',Q(1,:),Q(3,:),'--g',Q(1,:),Q(5,:),'--g')
     % pg 476
     gr_stand = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)));
 end
-
+figure;
 end
 
