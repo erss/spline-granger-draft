@@ -33,7 +33,7 @@ model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_kno
 %%% Define network testing parameters -------------------------------------
 
 model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
-model_true.nsurrogates = 15;   % number of surrogates used for bootstrapping
+model_true.nsurrogates = 1000;   % number of surrogates used for bootstrapping
 model_true.nrealizations = 20; % number of realizations used for spectral testing
 
 

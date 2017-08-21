@@ -1,7 +1,7 @@
 %%%%% single node analysis
 %%% set model coefficitens to single_node_order20 & single_node_low_freq
 clear all;
-ntrials = 2;
+ntrials = 1000;
 ct_spline = zeros(1,ntrials);
 ct_standard = zeros(1,ntrials);
 ts_spline = zeros(1,ntrials);
@@ -31,14 +31,14 @@ for i = 1:ntrials
     [nw, dwspline(i)] = dwstat(model_spline);
     fails = [fails nw];
     
-    [ts_spline(i), ts_stand(i)] = grstat(model_true,model_spline,model_standard);
- 
+    [m2fit, m3fit] = grstat1(model_true,model_spline,model_standard);
+ ts_spline(i) = m2fit.stat;
+ ts_stand(i)  = m3fit.stat;
 end
 
+%%
 
 %%% Fig 1
-figure;
-
 %%% Plot signal trace
 subplot(3,2,1)
 plot(model_true.taxis,model_true.data(1,:),'k', 'LineWidth', 1);
@@ -72,10 +72,21 @@ ylabel('Magnitude','FontSize',18)
 xlabel('Lag (s)','FontSize',18)
 a = get(gca,'XTickLabel');
 set(gca,'XTickLabel',a,'fontsize',16)
+plot([0 0.06],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
+
 
 %%% Plot spectral test
 subplot(3,2,5)
-gof_spectrum(model_true,model_spline,model_standard);
+%gof_spectrum(model_true,model_spline,model_standard);
+xaxis = m3fit.xaxis;
+plot(xaxis,m3fit.estimate,'g','LineWidth',1.5)
+hold on
+plot(xaxis,m3fit.bound1,'--g',xaxis,m3fit.bound2,'--g','LineWidth',1)
+xaxis = m2fit.xaxis;
+plot(xaxis,m2fit.bound1,'--r',xaxis,m2fit.bound2,'--r','LineWidth',1)
+plot(xaxis,m2fit.estimate,'r',xaxis,m2fit.true,'k','LineWidth',1.5)
+
+
 set(gca,'YTickLabel',[]);
 set(gca,'XTickLabel',[]);
 set(gca,'XTick',[]);
@@ -85,7 +96,7 @@ ylabel('Cumulative Density','FontSize',18)
 xlabel('Averaged Spectrum (1/Hz)','FontSize',18)
 a = get(gca,'XTickLabel');
 set(gca,'XTickLabel',a,'fontsize',16)
-
+axis tight
 %%% Plot residual test
 subplot(3,2,6)
 data  = model_true.data;

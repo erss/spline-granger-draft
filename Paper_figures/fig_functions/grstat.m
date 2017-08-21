@@ -1,11 +1,11 @@
-function [ gr_spline, gr_stand] = grstat( model1,model2,model3 )
+function [ m2fit,m3fit] = grstat( model1,model2,model3 )
 %UNTITLED9 Summary of this function goes here
 %   Detailed explanation goes here
 %%% Compare spectrum of true signal and of estimated signal
 %%%%%% NOTE highly dependent on noise used to generate model
 % Define model inputs
 
-nrealizations = 10;%model1.nrealizations;
+nrealizations = 100;%model1.nrealizations;
 noise_type = model1.noise_type;
 
     nelectrodes = size(model1.data,1); % number of electrodes
@@ -116,9 +116,15 @@ for electrode = 1:nelectrodes
     Qp = Qp(~any(isnan(Qp),2),:)';
     % pg 476
     gr_spline = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)));
-    figure;
-    plot(Q(1,:),Q(2,:),'k',Q(1,:),Q(4,:),'r',Q(1,:),Q(3,:),'--r',Q(1,:),Q(5,:),'--r')
-    hold on
+%     figure;
+%     plot(Q(1,:),Q(2,:),'k',Q(1,:),Q(4,:),'r',Q(1,:),Q(3,:),'--r',Q(1,:),Q(5,:),'--r')
+%     hold on
+   m2fit.xaxis = Q(1,:);
+    m2fit.true = Q(2,:);
+    m2fit.estimate = Q(4,:);
+    m2fit.bound1 = Q(3,:);
+    m2fit.bound2 = Q(5,:);
+    m2fit.stat = gr_spline;
     %%%%% standard calc
     R = xcov(trials_standard(:,:,1),flag); % autocovariance of estimated signal
 
@@ -141,10 +147,17 @@ for electrode = 1:nelectrodes
     Qp=Q';
     Qp = Qp(~any(isnan(Qp),2),:)';
     
-    plot(Q(1,:),Q(4,:),'g',Q(1,:),Q(3,:),'--g',Q(1,:),Q(5,:),'--g')
+   % plot(Q(1,:),Q(4,:),'g',Q(1,:),Q(3,:),'--g',Q(1,:),Q(5,:),'--g')
     % pg 476
     gr_stand = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)));
+       m3fit.xaxis = Q(1,:);
+    m3fit.true = Q(2,:);
+    m3fit.estimate = Q(4,:);
+    m3fit.bound1 = Q(3,:);
+    m3fit.bound2 = Q(5,:);
+    m3fit.stat = gr_stand;
 end
-figure;
+% figure;
+% plot(h_true,'k'); hold on; plot(h_standard,'g'); plot(h_spline,'r')
 end
 
