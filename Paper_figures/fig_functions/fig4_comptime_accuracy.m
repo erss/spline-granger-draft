@@ -1,6 +1,8 @@
 %%%% lag v comp time & accuracy
-
+clear all;
 %% Define loop parameters
+load('b_standard_order35_rdi.mat')
+model_coeff_35  = b;
 ntrials = 100;
 model_order_vals = [5:5:50];%[4 10 15 20 25 30 35 40 45 50 70 100];
     T = [2 4 8];
@@ -23,7 +25,7 @@ for time = 1:3
     model_true.T = T(time);   % time in seconds of window
     taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):model_true.T;
     model_true.taxis = taxis;
-    model_true.true_coefficients = nine_node_order20_rdi;
+    model_true.true_coefficients = model_coeff_35;
     model_true.model_coefficients = model_true.true_coefficients;   
     %true adjacency matrix
     adj_true = model_true.true_coefficients;
@@ -73,34 +75,34 @@ for time = 1:3
     
     
     %% plot everything
-    figure;
-    subplot 211
-    [mn, sem] = confidencebds(time_results_standard(:,:,time));
-    A=shadedErrorBar(model_order_vals,mn, 2*sem, '-*b' , 1);
-    hold on;
-    [mn, sem] = confidencebds(time_results_spline(:,:,time));
-    B=shadedErrorBar(model_order_vals,mn, 2*sem, '-*r' , 1);
-    h=legend([A.mainLine,B.mainLine],'Standard','Spline');
-    set(h,'FontSize',13)
-    
-    title('Computation Time vs Lags','FontSize',15)
-    xlabel('Lag','FontSize',13)
-    ylabel('Computation Time (s)','FontSize',13)
-    
-    subplot 212
-    [mn, sem] = confidencebds(accuracy_stand(:,:,time));
-    A=shadedErrorBar(model_order_vals,mn, 2*sem, '-*b' , 1);
-    hold on;
-    [mn, sem] = confidencebds(accuracy_spline(:,:,time));
-    B=shadedErrorBar(model_order_vals,mn, 2*sem , '-*r' , 1);
-    title('Accuracy vs Lags','FontSize',15)
-    xlabel('Lag','FontSize',13)
-    ylim([0 1])
-    ylabel('Accuracy','FontSize',13)
-    h=legend([A.mainLine,B.mainLine],'Standard','Spline');
-    set(h,'FontSize',13)
-    
-    suptitle(num2str(T(time)));
+%     figure;
+%     subplot 211
+%     [mn, sem] = confidencebds(time_results_standard(:,:,time));
+%     A=shadedErrorBar(model_order_vals,mn, 2*sem, '-*b' , 1);
+%     hold on;
+%     [mn, sem] = confidencebds(time_results_spline(:,:,time));
+%     B=shadedErrorBar(model_order_vals,mn, 2*sem, '-*r' , 1);
+%     h=legend([A.mainLine,B.mainLine],'Standard','Spline');
+%     set(h,'FontSize',13)
+%     
+%     title('Computation Time vs Lags','FontSize',15)
+%     xlabel('Lag','FontSize',13)
+%     ylabel('Computation Time (s)','FontSize',13)
+%     
+%     subplot 212
+%     [mn, sem] = confidencebds(accuracy_stand(:,:,time));
+%     A=shadedErrorBar(model_order_vals,mn, 2*sem, '-*b' , 1);
+%     hold on;
+%     [mn, sem] = confidencebds(accuracy_spline(:,:,time));
+%     B=shadedErrorBar(model_order_vals,mn, 2*sem , '-*r' , 1);
+%     title('Accuracy vs Lags','FontSize',15)
+%     xlabel('Lag','FontSize',13)
+%     ylim([0 1])
+%     ylabel('Accuracy','FontSize',13)
+%     h=legend([A.mainLine,B.mainLine],'Standard','Spline');
+%     set(h,'FontSize',13)
+%     
+%     suptitle(num2str(T(time)));
 end
 
 %% Plot on top 
@@ -133,10 +135,10 @@ set(gca,'YTickLabel',a,'fontsize',16)
     
     
     
-    h=legend([A.mainLine,B.mainLine,A2.mainLine,B2.mainLine,A3.mainLine,B3.mainLine],'One Second- Standard','One Second- Spline','Two Seconds- Standard','Two Seconds- Spline','Four Seconds- Standard','Four Seconds- Spline');
+    h=legend([A.mainLine,B.mainLine,A2.mainLine,B2.mainLine,A3.mainLine,B3.mainLine],'Two Seconds- Standard','Two Seconds- Spline','Four Seconds- Standard','Four Seconds- Spline','Eight Seconds- Standard','Eight Seconds- Spline');
     set(h,'FontSize',13)
     title('Computation Time ','FontSize',20)
-    xlabel('Lag','FontSize',18)
+    xlabel('Estimated Model Order','FontSize',18)
     ylabel('Computation Time (s)','FontSize',18)
     xlim([model_order_vals(1) model_order_vals(end)])
 subplot 212
@@ -159,11 +161,11 @@ t = 3;
     hold on;
     [mn, sem] = confidencebds(accuracy_spline(:,:,t));
     B3=shadedErrorBar(model_order_vals,mn, 2*sem , s2(t) , 1);
-    title('Accuracy vs Lags','FontSize',20)
-    xlabel('Lag','FontSize',18)
+    title('Accuracy','FontSize',20)
+    xlabel('Estimated Model Order','FontSize',18)
     ylim([0 1])
     ylabel('Accuracy','FontSize',18)
-    h=legend([A.mainLine,B.mainLine,A2.mainLine,B2.mainLine,A3.mainLine,B3.mainLine],'One Second- Standard','One Second- Spline','Two Seconds- Standard','Two Seconds- Spline','Four Seconds- Standard','Four Seconds- Spline');
+    h=legend([A.mainLine,B.mainLine,A2.mainLine,B2.mainLine,A3.mainLine,B3.mainLine],'Two Seconds- Standard','Two Seconds- Spline','Four Seconds- Standard','Four Seconds- Spline','Eight Seconds- Standard','Eight Seconds- Spline');
     set(h,'FontSize',13)
         xlim([model_order_vals(1) model_order_vals(end)])
 
@@ -172,7 +174,7 @@ set(gca,'YTickLabel',a,'fontsize',16)
 %%
 
 %%% Save
-save('comptimes_accuracy_data')
+save('fig4_comptimes_accuracy_data')
 h = get(0,'children');
 for i=1:length(h)
     saveas(h(i), ['fig4_ctime'  num2str(i) 'lowfreq'], 'fig');
