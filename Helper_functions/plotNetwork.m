@@ -22,15 +22,18 @@ xlabel('node - source', 'FontSize',20);
 axis square
 
 nelectrodes = size(adj,1);
-%%% yticklabel 
-xloc = 0.0*ones(1,nelectrodes)
-text(xloc,[1:nelectrodes],stringy,'FontSize',18);
-ylabh = get(gca,'YLabel');
-set(ylabh,'Position',get(ylabh,'Position') - [.5 0 0])
-%%% xticklabel
-yloc = nelectrodes + 0.9*ones(1,nelectrodes);
-text([1:nelectrodes],yloc,stringy,'FontSize',18);
-xlabh = get(gca,'XLabel');
-set(xlabh,'Position',get(xlabh,'Position') + [0 .5 0])
+if nelectrodes <= 9
+    %%% yticklabel
+    xloc = 0.0*ones(1,nelectrodes)
+    text(xloc,[1:nelectrodes],stringy,'FontSize',18);
+    ylabh = get(gca,'YLabel');
+    set(ylabh,'Position',get(ylabh,'Position') - [.5 0 0])
+    %%% xticklabel
+    yloc = nelectrodes + 0.9*ones(1,nelectrodes);
+    text([1:nelectrodes],yloc,stringy,'FontSize',18);
+    xlabh = get(gca,'XLabel');
+    set(xlabh,'Position',get(xlabh,'Position') + [0 .5 0])
+    
+end
 end
 

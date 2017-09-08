@@ -12,8 +12,9 @@ fig2_single_node_spectral_peak
  %[x, y] =  grstat( model_true,model_spline,model_tester );
 for i = 1:100
   [x, y] =  grstat1( model_true,model_spline,model_tester );
- xx(i)= x.stat
- yy(i)= y.stat
+ xx(i)= x.stat;
+ yy(i)= y.stat;
+ fprintf(num2str(i))
   
 end
 barplot(Labels,yy,xx);

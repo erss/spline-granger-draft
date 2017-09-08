@@ -1,7 +1,7 @@
 %%%%% single node analysis
 %%% set model coefficitens to single_node_order20 & single_node_low_freq
 clear all;
-ntrials = 1000;
+ntrials = 20;
 ct_spline = zeros(1,ntrials);
 ct_standard = zeros(1,ntrials);
 ts_spline = zeros(1,ntrials);
@@ -9,13 +9,45 @@ ts_stand = zeros(1,ntrials);
 dwstandard = zeros(1,ntrials);
 dwspline = zeros(1,ntrials);
 fails =[];
-fails_st =[];
+fails_standard =[];
+
+   
+    
+    
+    %%% Model type ------------------------------------------------------------
+model_true.noise_type = 'white'; % 'white', 'pink', 'real'
+
+%%% Simulation parameters -------------------------------------------------
+
+model_true.sampling_frequency = 500;
+model_true.T = 2;   % time in seconds of window
+model_true.noise = 0.25;
+taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):model_true.T;
+model_true.taxis = taxis;
+
+    %load('large_network_coef.mat');
+   % load('ninenode_exp_stand.mat');
+    model_true.true_coefficients = single_node_low_freq; %%%% MODIFY COEFFICIENTS HERE!
+    model_true.model_coefficients = model_true.true_coefficients;   
+
+%%% Define model inputs for spline Granger & standard Granger -------------
+
+model_true.s = 0.5;                     % tension parameter for spline
+model_true.estimated_model_order = 30;  % model_order used to estimate
+
+number_of_knots      = floor(model_true.estimated_model_order/3);
+model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
+
+%%% Define network testing parameters -------------------------------------
+
+model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
+model_true.nsurrogates = 1000;   % number of surrogates used for bootstrapping
+model_true.nrealizations = 20; % number of realizations used for spectral testing
+
+
 
 for i = 1:ntrials
-    config_spline;
-    model_true.noise_type = 'white';
-    model_true.true_coefficients = single_node_low_freq; %%%% MODIFY COEFFICIENTS HERE!
-    model_true.model_coefficients = model_true.true_coefficients;
+
     simulate_network;
     infer_network;
     
@@ -27,7 +59,7 @@ for i = 1:ntrials
     acc_standard(i) = model_standard.accuracy;
     
     [nw, dwstandard(i)] = dwstat(model_standard);
-    fails_st = [fails nw];
+    fails_standard = [fails_standard nw];
     [nw, dwspline(i)] = dwstat(model_spline);
     fails = [fails nw];
     
@@ -70,8 +102,8 @@ box off
 title('AR Coefficients','FontSize',20);
 ylabel('Magnitude','FontSize',18)
 xlabel('Lag (s)','FontSize',18)
-a = get(gca,'XTickLabel');
-set(gca,'XTickLabel',a,'fontsize',16)
+% a = get(gca,'XTickLabel');
+% set(gca,'XTickLabel',a,'fontsize',16)
 plot([0 0.06],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
 
 

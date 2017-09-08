@@ -61,7 +61,8 @@ disp([num2str(model_spline.computation_time) '']);
 disp(num2str(model_spline.accuracy));
 
 %title(strcat({'Spline, '},num2str(model_spline.computation_time),{' s'},' Overlap, ',num2str(model_spline.accuracy)))
-
+dwstat( model_spline)
+dwstat( model_standard)
 h = get(0,'children');
 for i=1:length(h)
 saveas(h(i), ['fig7_ntwk'  num2str(i)], 'fig');     

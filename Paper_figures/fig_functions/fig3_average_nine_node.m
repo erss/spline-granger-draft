@@ -1,9 +1,40 @@
 %%%%
-ntrials=100;
-config_spline;
-model_true.noise_type = 'white';
+ntrials=20;
+
+fails =[];
+fails_standard =[];
+
+%%% Model type ------------------------------------------------------------
+model_true.noise_type = 'white'; % 'white', 'pink', 'real'
+
+%%% Simulation parameters -------------------------------------------------
+
+model_true.sampling_frequency = 500;
+model_true.T = 2;   % time in seconds of window
+model_true.noise = 0.25;
+taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):model_true.T;
+model_true.taxis = taxis;
+
+if strcmp(model_true.noise_type,'white')
+    %load('large_network_coef.mat');
+   % load('ninenode_exp_stand.mat');
 model_true.true_coefficients = nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
-model_true.model_coefficients = model_true.true_coefficients;
+    model_true.model_coefficients = model_true.true_coefficients;   
+end
+%%% Define model inputs for spline Granger & standard Granger -------------
+
+model_true.s = 0.5;                     % tension parameter for spline
+model_true.estimated_model_order = 30;  % model_order used to estimate
+
+number_of_knots      = floor(model_true.estimated_model_order/3);
+model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
+
+%%% Define network testing parameters -------------------------------------
+
+model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
+model_true.nsurrogates = 1000;   % number of surrogates used for bootstrapping
+model_true.nrealizations = 20; % number of realizations used for spectral testing
+
 
 nelectrodes = size(model_true.model_coefficients,1);
 
@@ -17,16 +48,36 @@ for k = 1:ntrials
     
     simulate_network;
     
-    tic
-    [ adj_spline] = build_ar_splines( model_true);
-    splinetime(k)  = toc;
+%     tic
+%     [ adj_spline] = build_ar_splines( model_true);
+%     splinetime(k)  = toc;
+%     
+%     tic
+%     [ adj_mat] = build_ar( model_true);
+%     standardtime(k)  = toc;
+%     
+%     trials_spline(:,:,k) = adj_spline;
+%     trials_stand(:,:,k) = adj_mat;
+
+infer_network;
+     trials_spline(:,:,k) = model_spline.network;
+     trials_stand(:,:,k) = model_standard.network;
+     splinetime(k)= model_spline.computation_time;
+     standardtime(k)=model_standard.computation_time;
+
+     
+     
+     
+         [nw] = dwstat(model_standard);
+    fails_standard = [fails_standard nw];
+    [nw] = dwstat(model_spline);
+    fails = [fails nw];
     
-    tic
-    [ adj_mat] = build_ar( model_true);
-    standardtime(k)  = toc;
     
-    trials_spline(:,:,k) = adj_spline;
-    trials_stand(:,:,k) = adj_mat;
+%       [m2fit, m3fit] = grstat1(model_true,model_spline,model_standard);
+%  ts_spline(i) = m2fit.stat;
+%  ts_stand(i)  = m3fit.stat;
+ 
     fprintf([num2str(k) ' \n']);
 end
 
@@ -133,11 +184,11 @@ a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
 
 
-h = get(0,'children');
-for i=1:length(h)
-    
-    saveas(h(i), ['fig3_avgntwk'  num2str(i)], 'fig');   
-end
-close all;
+% h = get(0,'children');
+% for i=1:length(h)
+%     
+%     saveas(h(i), ['fig3_avgntwk'  num2str(i)], 'fig');   
+% end
+% close all;
 
 

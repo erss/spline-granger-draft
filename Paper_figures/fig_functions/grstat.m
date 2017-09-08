@@ -5,7 +5,7 @@ function [ m2fit,m3fit] = grstat( model1,model2,model3 )
 %%%%%% NOTE highly dependent on noise used to generate model
 % Define model inputs
 
-nrealizations = 100;%model1.nrealizations;
+nrealizations = 50;%model1.nrealizations;
 noise_type = model1.noise_type;
 
     nelectrodes = size(model1.data,1); % number of electrodes

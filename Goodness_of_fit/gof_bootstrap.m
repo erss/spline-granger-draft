@@ -48,7 +48,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
         
    
         if (adj_mat(electrode,i) || adj_true(electrode,i))
-       %    subplot(nconnections,1,k)
+       %   subplot(nconnections,1,k)
             plot(dt:dt:(model_order/f0),squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
          % plot(squeeze(real(bhat(electrode,i,:))),'r','LineWidth',1.5)
                hold on

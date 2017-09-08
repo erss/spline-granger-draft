@@ -12,15 +12,14 @@ model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_kno
  ntwork =     1:94;
  ntwork(badchannels)=[];
  %ntwork = [ntwork(20) ntwork(49) ntwork(53) ntwork(54)];
- 
- for ii=1:4%:64
- model_true.ntwk =76;%[2 7 18 22 42 46 90 80 77 ]; % i;%[77];     % badchannels = [1,9,21,32,83, 8,31];
+ ntwork = [76 75 70 33 51];
+for i = 1:1
+ model_true.ntwk =ntwork(i); %76;%[2 7 18 22 42 46 90 80 77 ]; % i;%[77];     % badchannels = [1,9,21,32,83, 8,31];
 %  [2 7 18 22 42 46 90 80 77 ]; 
  simulate_network;
  infer_network;
 
- 
- figure;
+figure
 subplot 221
 
 plot(model_true.taxis,model_true.data,'k','LineWidth',2)
@@ -56,15 +55,23 @@ title('Spectrogram','FontSize',20);
 box off
 % a = get(gca,'YTickLabel');
 % set(gca,'YTickLabel',a,'fontsize',16)
+
 title('Estimated Coefficient Fits','FontSize',20);
+plot([0 0.04],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
 
- end
- 
-title(strcat({'Spline, '},num2str(model_spline.computation_time),{' s'},' Overlap, ',num2str(model_spline.accuracy)))
-h = get(0,'children');
-for i=1:length(h)
-saveas(h(i), ['fig5_single'  num2str(i)], 'fig');     
+%title(strcat({'Spline, '},num2str(model_spline.computation_time),{' s'},' Overlap, ',num2str(model_spline.accuracy)))
+% bhat = model_standard.model_coefficients;
+% save(num2str(ntwork(i)),'bhat')
 end
-close all;
+  [notwhite, dwstand]=dwstat( model_standard)
+  [notwhite,dwspline]=dwstat( model_spline)
 
-save('fig5_singlenode')
+
+
+% h = get(0,'children');
+% for i=1:length(h)
+% saveas(h(i), ['fig5_single'  num2str(i)], 'fig');     
+% end
+% close all;
+% 
+% save('fig5_singlenode')

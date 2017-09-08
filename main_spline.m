@@ -1,4 +1,4 @@
-clear all;
+%clear all;
 close all;
 clc;
 %% Configure parameters
@@ -7,7 +7,7 @@ config_spline;
 
 %%% Simulate data
 simulate_network;
-% mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','tapers'); 
+ %mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','tapers'); 
 %%
 %%% Fit Networks
 infer_network;
@@ -40,7 +40,7 @@ plot_data;
 %[ sse ] = gof_sse( model_spline)
 
 % gof_derbin_h( model_true, model_spline)
- gof_bootstrap(model_true,model_spline,model_standard);
+ %gof_bootstrap(model_true,model_spline,model_standard);
 % gof_residuals(model_spline);
 % gof_spectrum(model_true,model_spline,model_standard);
 

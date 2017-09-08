@@ -1,8 +1,9 @@
 %%%% Real Data!
+clear all;
 config_spline;
 model_true.noise_type = 'real'; % 'white', 'pink', 'real'
  model_true.sztype = 'sz'; % presz
- model_true.ntwk = [2 7 18 22 42 46 90 80 77 ];     % badchannels = [1,9,21,32,83, 8,31];
+ model_true.ntwk = [76 75 79 33 51]; %[2 7 18 22 42 46 90 80 77 ];     % badchannels = [1,9,21,32,83, 8,31];
  simulate_network;
  infer_network;
  
@@ -48,7 +49,8 @@ disp([num2str(model_spline.computation_time) '']);
 disp(num2str(model_spline.accuracy));
 
 %title(strcat({'Spline, '},num2str(model_spline.computation_time),{' s'},' Overlap, ',num2str(model_spline.accuracy)))
-
+% dwstat( model_spline)
+% dwstat( model_standard)
 % h = get(0,'children');
 % for i=1:length(h)
 % saveas(h(i), ['fig6_ntwk'  num2str(i)], 'fig');     
