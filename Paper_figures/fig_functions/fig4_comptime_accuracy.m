@@ -3,7 +3,9 @@ clear all;
 %% Define loop parameters
 load('b_standard_order35_rdi.mat')
 model_coeff_35  = b;
-ntrials = 100;
+ntrials = 2;
+
+
 model_order_vals = [5:5:50];%[4 10 15 20 25 30 35 40 45 50 70 100];
     T = [2 4 8];
     time_results_spline = zeros(ntrials,length(model_order_vals),length(T));
@@ -11,7 +13,39 @@ model_order_vals = [5:5:50];%[4 10 15 20 25 30 35 40 45 50 70 100];
     
     accuracy_stand = zeros(ntrials,length(model_order_vals),length(T));
     accuracy_spline = zeros(ntrials,length(model_order_vals),length(T));
-for time = 1:3
+    
+    
+%%% Model type ------------------------------------------------------------
+model_true.noise_type = 'white'; % 'white', 'pink', 'real'
+
+%%% Simulation parameters -------------------------------------------------
+
+model_true.sampling_frequency = 500;
+model_true.noise = 0.25;
+
+if strcmp(model_true.noise_type,'white')
+    %load('large_network_coef.mat');
+   % load('ninenode_exp_stand.mat');
+        model_true.true_coefficients = model_coeff_35;
+
+    model_true.model_coefficients = model_true.true_coefficients;       
+end
+%%% Define model inputs for spline Granger & standard Granger -------------
+
+model_true.s = 0.5;                     % tension parameter for spline
+
+%%% Define network testing parameters -------------------------------------
+
+model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
+model_true.nsurrogates = 1000;   % number of surrogates used for bootstrapping
+model_true.nrealizations = 20; % number of realizations used for spectral testing
+
+    
+    
+    
+    
+    
+for time = 1:length(T)
 
 
 
@@ -19,14 +53,9 @@ for time = 1:3
     %% Declare results
 
     %% Set up sim
-    % use nine node 20 lag in config : nine_node_order20_rdi;
-    config_spline;
-    model_true.noise_type = 'white';
     model_true.T = T(time);   % time in seconds of window
     taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):model_true.T;
-    model_true.taxis = taxis;
-    model_true.true_coefficients = model_coeff_35;
-    model_true.model_coefficients = model_true.true_coefficients;   
+    model_true.taxis = taxis;  
     %true adjacency matrix
     adj_true = model_true.true_coefficients;
     adj_true(adj_true~=0)=1;
@@ -44,14 +73,16 @@ for time = 1:3
             
             model_order = model_order_vals(kk); % order used in model estimation
             model_true.estimated_model_order = model_order;
-            if model_order == 4
-                model_true.cntrl_pts = make_knots(4,3);
-            elseif model_order == 10
-                model_true.cntrl_pts  = make_knots(10,4);
-            else
-                model_true.cntrl_pts  = make_knots(model_order,floor(model_order/3));
-            end
-            
+%             if model_order == 4
+%                 model_true.cntrl_pts = make_knots(4,3);
+%             elseif model_order == 10
+%                 model_true.cntrl_pts  = make_knots(10,4);
+%             else
+%                 model_true.cntrl_pts  = make_knots(model_order,floor(model_order/3));
+%             end%                 
+  
+            model_true.cntrl_pts  = make_knots(model_order,floor(model_order/3));
+
             tic
             [ adj_standard] = build_ar( model_true);
             standardtime  = toc;

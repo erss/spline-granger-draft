@@ -1,21 +1,44 @@
 %%%% Real Data!
 
-config_spline;
+%%% Model type ------------------------------------------------------------
 model_true.noise_type = 'real'; % 'white', 'pink', 'real'
+
  model_true.sztype = 'presz'; % presz
  model_true.estimated_model_order = 20;  % model_order used to estimate
+
+
+%%% Simulation parameters -------------------------------------------------
+
+model_true.sampling_frequency = 500;
+model_true.T = 2;   % time in seconds of window
+model_true.noise = 0.25;
+taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):model_true.T;
+model_true.taxis = taxis;
+
+%%% Define model inputs for spline Granger & standard Granger -------------
+
+model_true.s = 0.5;                     % tension parameter for spline
+model_true.estimated_model_order = 20;  % model_order used to estimate
 
 number_of_knots      = floor(model_true.estimated_model_order/3);
 model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
 
+%%% Define network testing parameters -------------------------------------
+
+model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
+model_true.nsurrogates = 1000;   % number of surrogates used for bootstrapping
+model_true.nrealizations = 20; % number of realizations used for spectral testing
+
+
+
+
+
  badchannels = [1,8,9,13,20,21,22,23,24,25,26,31,32,34,38,41,48,49,50,68,69,71,77,78,79,82,83,87,88 ,89];
  ntwork =     1:94;
  ntwork(badchannels)=[];
- %ntwork = [ntwork(20) ntwork(49) ntwork(53) ntwork(54)];
- ntwork = [76 75 70 33 51];
-for i = 1:1
- model_true.ntwk =ntwork(i); %76;%[2 7 18 22 42 46 90 80 77 ]; % i;%[77];     % badchannels = [1,9,21,32,83, 8,31];
-%  [2 7 18 22 42 46 90 80 77 ]; 
+
+
+ model_true.ntwk =76;
  simulate_network;
  infer_network;
 
@@ -62,7 +85,6 @@ plot([0 0.04],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
 %title(strcat({'Spline, '},num2str(model_spline.computation_time),{' s'},' Overlap, ',num2str(model_spline.accuracy)))
 % bhat = model_standard.model_coefficients;
 % save(num2str(ntwork(i)),'bhat')
-end
   [notwhite, dwstand]=dwstat( model_standard)
   [notwhite,dwspline]=dwstat( model_spline)
 
