@@ -2,7 +2,7 @@
 %%% set model coefficitens to single_node_order20 & single_node_low_freq
 
 clear all;
-ntrials = 20;
+ntrials = 1000;
 ct_spline = zeros(1,ntrials);
 ct_standard = zeros(1,ntrials);
 ts_spline = zeros(1,ntrials);
@@ -151,11 +151,14 @@ a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
 
 % %%% Save
-% h = get(0,'children');
-% for i=1:length(h)
-% saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'fig');     
-% end
-% close all;
-% 
-% 
-% 
+
+save('fig2')
+
+h = get(0,'children');
+for i=1:length(h)
+saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'fig');     
+end
+close all;
+
+
+

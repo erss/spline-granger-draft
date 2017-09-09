@@ -90,10 +90,10 @@ plot([0 0.04],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
 
 
 
-% h = get(0,'children');
-% for i=1:length(h)
-% saveas(h(i), ['fig5_single'  num2str(i)], 'fig');     
-% end
-% close all;
-% 
-% save('fig5_singlenode')
+h = get(0,'children');
+for i=1:length(h)
+saveas(h(i), ['fig5_single'  num2str(i)], 'fig');     
+end
+close all;
+
+save('fig5_singlenode')

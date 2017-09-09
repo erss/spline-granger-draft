@@ -1,7 +1,7 @@
 %%%%% single node analysis
 %%% set model coefficitens to single_node_order20 & single_node_low_freq
 clear all;
-ntrials = 20;
+ntrials = 1000;
 ct_spline = zeros(1,ntrials);
 ct_standard = zeros(1,ntrials);
 ts_spline = zeros(1,ntrials);
@@ -14,7 +14,7 @@ fails_standard =[];
    
     
     
-    %%% Model type ------------------------------------------------------------
+%%% Model type ------------------------------------------------------------
 model_true.noise_type = 'white'; % 'white', 'pink', 'real'
 
 %%% Simulation parameters -------------------------------------------------
@@ -184,15 +184,16 @@ box off
 a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
 
-%%% Save
-% h = get(0,'children');
-% for i=1:length(h)
-%     saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'fig');
-%     
-%     
-%     
-% end
-% close all;
+%%% Save ----------
+
+save('fig1')
+
+
+h = get(0,'children');
+for i=1:length(h)
+    saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'fig');
+end
+close all;
 
 
 

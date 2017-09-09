@@ -3,7 +3,7 @@ clear all;
 %% Define loop parameters
 load('b_standard_order35_rdi.mat')
 model_coeff_35  = b;
-ntrials = 2;
+ntrials = 1000;
 
 
 model_order_vals = [5:5:50];%[4 10 15 20 25 30 35 40 45 50 70 100];
@@ -205,7 +205,7 @@ set(gca,'YTickLabel',a,'fontsize',16)
 %%
 
 %%% Save
-save('fig4_comptimes_accuracy_data')
+save('fig4')
 h = get(0,'children');
 for i=1:length(h)
     saveas(h(i), ['fig4_ctime'  num2str(i) 'lowfreq'], 'fig');

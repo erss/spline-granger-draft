@@ -1,8 +1,11 @@
 %%%%
-ntrials=20;
+clear all;
+ntrials=1000;
 
-fails =[];
-fails_standard =[];
+dw_fails_spline =[];
+dw_fails_standard =[];
+gr_fails_spline =[];
+gr_fails_standard =[];
 
 %%% Model type ------------------------------------------------------------
 model_true.noise_type = 'white'; % 'white', 'pink', 'real'
@@ -69,10 +72,13 @@ infer_network;
      
      
          [nw] = dwstat(model_standard);
-    fails_standard = [fails_standard nw];
+    dw_fails_standard = [dw_fails_standard nw];
     [nw] = dwstat(model_spline);
-    fails = [fails nw];
+    dw_fails_spline = [dw_fails_spline nw];
     
+    [ m2fit,m3fit] = grstat1( model_true,model_standard,model_spline );
+    gr_fails_standard = [ gr_fails_standard m2fit.fails];
+    gr_fails_spline= [ gr_fails_spline m3fit.fails];
     
 %       [m2fit, m3fit] = grstat1(model_true,model_spline,model_standard);
 %  ts_spline(i) = m2fit.stat;
@@ -84,7 +90,7 @@ end
 avg_network = mean(trials_spline,3);
 std_network = std(trials_spline,0,3);
 b = model_true.model_coefficients;
-
+%%
 %%% Figure 1
 figure;
 %%% plot coefficient strengths
@@ -184,11 +190,14 @@ a = get(gca,'YTickLabel');
 set(gca,'YTickLabel',a,'fontsize',16)
 
 
-% h = get(0,'children');
-% for i=1:length(h)
-%     
-%     saveas(h(i), ['fig3_avgntwk'  num2str(i)], 'fig');   
-% end
-% close all;
+%%% SAVE ALL ----------------------------
+save('fig3')
+
+h = get(0,'children');
+for i=1:length(h)
+    
+    saveas(h(i), ['fig3_avgntwk'  num2str(i)], 'fig');   
+end
+close all;
 
 

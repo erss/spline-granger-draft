@@ -74,7 +74,7 @@ for electrode = 1:nelectrodes
     m2fit.estimate = Q(4,:);
     m2fit.bound1 = Q(3,:);
     m2fit.bound2 = Q(5,:);
-    m2fit.stat = gr_spline;
+    m2fit.stat(electrode) = gr_spline;
 %     figure;
 %     plot(Q(1,:),Q(2,:),'k',Q(1,:),Q(4,:),'r',Q(1,:),Q(3,:),'--r',Q(1,:),Q(5,:),'--r')
 %     hold on
@@ -109,10 +109,14 @@ for electrode = 1:nelectrodes
     m3fit.estimate = Q(4,:);
     m3fit.bound1 = Q(3,:);
     m3fit.bound2 = Q(5,:);
-    m3fit.stat = gr_stand;
+    m3fit.stat(electrode) = gr_stand;
   
 end
 % figure;
 % plot(h_true,'k'); hold on; plot(h_standard,'g'); plot(h_spline,'r')
+s = m2fit.stat;
+m2fit.fails = find(s>2.414);
+s = m3fit.stat;
+m3fit.fails = find(s>2.414);
 end
 

@@ -1,6 +1,6 @@
 %%%% Real Data!
  
-
+clear all;
 %%%% Ten seconds of data, compute both spline and standard ----------------
  %%% Model type ------------------------------------------------------------
 model_true.noise_type = 'real'; % 'white', 'pink', 'real'
@@ -117,4 +117,4 @@ saveas(h(i), ['fig7_ntwk'  num2str(i)], 'fig');
 end
 close all;
 
-save('fig7_64network')
+save('fig7')
