@@ -10,7 +10,7 @@ fprintf('fig3');
 fig3_average_nine_node;
 
 fprintf('fig4');
-fig4_comptime_accuracy;
+fig4_revised;
 
 fprintf('fig5');
 fig5_realdata_single;

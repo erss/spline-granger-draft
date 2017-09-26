@@ -67,6 +67,7 @@ for electrode = 1:nelectrodes
     Qp=Q';
     Qp = Qp(~any(isnan(Qp),2),:)';
     % pg 476
+    
     gr_spline = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)));
     
     m2fit.xaxis = Q(1,:);
@@ -74,6 +75,10 @@ for electrode = 1:nelectrodes
     m2fit.estimate = Q(4,:);
     m2fit.bound1 = Q(3,:);
     m2fit.bound2 = Q(5,:);
+    
+      if isnan(gr_spline)
+        gr_stand=0;
+    end
     m2fit.stat(electrode) = gr_spline;
 %     figure;
 %     plot(Q(1,:),Q(2,:),'k',Q(1,:),Q(4,:),'r',Q(1,:),Q(3,:),'--r',Q(1,:),Q(5,:),'--r')
@@ -103,7 +108,9 @@ for electrode = 1:nelectrodes
   % plot(Q(1,:),Q(4,:),'g',Q(1,:),Q(3,:),'--g',Q(1,:),Q(5,:),'--g')
       % pg 476
     gr_stand = max(sqrt(total_observations)*abs(Qp(2,:)-Qp(4,:)));
-    
+    if isnan(gr_stand)
+        gr_stand=0;
+    end
     m3fit.xaxis = Q(1,:);
     m3fit.true = Q(2,:);
     m3fit.estimate = Q(4,:);
@@ -114,9 +121,13 @@ for electrode = 1:nelectrodes
 end
 % figure;
 % plot(h_true,'k'); hold on; plot(h_standard,'g'); plot(h_spline,'r')
-s = m2fit.stat;
-m2fit.fails = find(s>2.414);
-s = m3fit.stat;
-m3fit.fails = find(s>2.414);
+
+
+bfcorrection = 0.05/length(m2fit.stat);
+m2fit.pvals =  pval2grstat(m2fit.stat,'grstatistic');
+m3fit.pvals =  pval2grstat(m3fit.stat,'grstatistic');
+
+m2fit.fails = find(m2fit.pvals<bfcorrection);
+m3fit.fails = find(m3fit.pvals<bfcorrection);
 end
 

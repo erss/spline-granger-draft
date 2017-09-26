@@ -30,7 +30,7 @@ cntrl_pts  = model.cntrl_pts;
 % end
             
 % Construct spline regressors.
-c_pt_times_all = [cntrl_pts(1)-2 cntrl_pts cntrl_pts(end)+2];
+c_pt_times_all = [cntrl_pts(1)-100 cntrl_pts cntrl_pts(end)+100];
 Z = zeros(model_order,length(c_pt_times_all));
 num_c_pts = length(c_pt_times_all);  %number of control points in total
 for i=1:model_order
@@ -83,7 +83,6 @@ for electrode = 1:nelectrodes
 %        ii = find(indx==2);
         Xfull = X * Z0;  % regressors for y_hat = X0*Z0*a0
         [alpha,~,stats] = glmfit(Xfull,y,'normal','constant','off');
-
         yhat(electrode,:) = glmval(alpha,Xfull,'identity','constant','off'); % Get signal estimate.
         b = Z0*alpha;  
 

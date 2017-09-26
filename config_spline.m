@@ -12,7 +12,7 @@ model_true.taxis = taxis;
 if strcmp(model_true.noise_type,'white')
     %load('large_network_coef.mat');
    % load('ninenode_exp_stand.mat');
-    model_true.true_coefficients =single_node_order20;% %%%% MODIFY COEFFICIENTS HERE!
+    model_true.true_coefficients =single_node_high_freq;% %%%% MODIFY COEFFICIENTS HERE!
     model_true.model_coefficients = model_true.true_coefficients;   
 elseif strcmp(model_true.noise_type,'real')
     model_true.sztype = 'sz'; % presz
@@ -29,12 +29,12 @@ model_true.s = 0.5;                     % tension parameter for spline
 model_true.estimated_model_order = 20;  % model_order used to estimate
 
 number_of_knots      = floor(model_true.estimated_model_order/3);
-model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
+model_true.cntrl_pts =[0:5:model_true.estimated_model_order]; %make_knots(model_true.estimated_model_order,number_of_knots);
 
 %%% Define network testing parameters -------------------------------------
 
 model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
-model_true.nsurrogates = 1000;   % number of surrogates used for bootstrapping
-model_true.nrealizations = 20; % number of realizations used for spectral testing
+model_true.nsurrogates = 100;   % number of surrogates used for bootstrapping
+model_true.nrealizations = 3; % number of realizations used for spectral testing
 
 

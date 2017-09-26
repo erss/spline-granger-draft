@@ -27,7 +27,7 @@ s = model.s;
 %% Define control points and build predictors
             
 % Construct spline regressors.
-c_pt_times_all = [cntrl_pts(1)-2 cntrl_pts cntrl_pts(end)+2];
+c_pt_times_all = [cntrl_pts(1)-100 cntrl_pts cntrl_pts(end)+100];
 Z = zeros(model_order,length(c_pt_times_all));
 num_c_pts = length(c_pt_times_all);  %number of control points in total
 for i=1:model_order

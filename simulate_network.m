@@ -13,7 +13,7 @@ elseif strcmp(model_true.noise_type,'real')   %%%%% if real data edit this
     N = model_true.sampling_frequency * model_true.T ;
     
     sz = 9e4:9e4+N-1;
-    pre_sz = 2e4:2e4+N-1;
+    pre_sz = 2e4:2e4+N-1;%2e4:2e4+N-1;
     
     ntwk = model_true.ntwk; 
     data_sz= data(ntwk,sz);

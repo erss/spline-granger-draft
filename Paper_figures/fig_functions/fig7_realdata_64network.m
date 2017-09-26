@@ -18,11 +18,10 @@ model_true.taxis = taxis;
 %%% Define model inputs for spline Granger & standard Granger -------------
 
 model_true.s = 0.5;                     % tension parameter for spline
-model_true.estimated_model_order = 30;  % model_order used to estimate
+model_true.estimated_model_order = 20;  % model_order used to estimate
 
-number_of_knots      = floor(model_true.estimated_model_order/3);
-model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
 
+model_true.cntrl_pts = [0:5:model_true.estimated_model_order];
 %%% Define network testing parameters -------------------------------------
 
 model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
@@ -92,21 +91,21 @@ model_spline_two.computation_time = splinetime2;
 model_spline_two.signal_estimate = yhat2;
 model_spline_two.network = adj_spline2;
 
-%%%%
+%%
 figure;
-subplot 222
+subplot 131
 plotNetwork(model_spline_two.network);
 title('Spline Granger - 2 s','FontSize',20)
-subplot 223
+subplot 132
 plotNetwork(model_standard.network);
 title('Standard Granger - 10 s','FontSize',20)
 disp([num2str(model_standard.computation_time) '']);
-subplot 224
+subplot 133
 plotNetwork(model_spline.network);
 title('Spline Granger - 10 s','FontSize',20)
 disp([num2str(model_spline.computation_time) '']);
 disp(num2str(model_spline.accuracy));
-
+%%
 nw_spline_two = dwstat( model_spline_two);
 
 

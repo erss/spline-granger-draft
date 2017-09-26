@@ -36,7 +36,7 @@ model_true.s = 0.5;                     % tension parameter for spline
 model_true.estimated_model_order = 30;  % model_order used to estimate
 
 number_of_knots      = floor(model_true.estimated_model_order/3);
-model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
+model_true.cntrl_pts = [0:5:30]; %make_knots(model_true.estimated_model_order,number_of_knots);
 
 %%% Define network testing parameters -------------------------------------
 
@@ -58,9 +58,9 @@ for i = 1:ntrials
     acc_spline(i)  = model_spline.accuracy;
     acc_standard(i) = model_standard.accuracy;
     
-    [nw, dwstandard(i)] = dwstat(model_standard);
+    [nw, dwstandard(i),~] = dwstat(model_standard);
     fails_standard = [fails_standard nw];
-    [nw, dwspline(i)] = dwstat(model_spline);
+    [nw, dwspline(i),~] = dwstat(model_spline);
     fails = [fails nw];
     
     [m2fit, m3fit] = grstat1(model_true,model_spline,model_standard);
@@ -105,7 +105,8 @@ xlabel('Lag (s)','FontSize',18)
 % a = get(gca,'XTickLabel');
 % set(gca,'XTickLabel',a,'fontsize',16)
 plot([0 0.06],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
-
+        h = legend('Spline Estimated','Standard Estimated','True ');
+        set(h,'FontSize',15,'Location','NorthEast')
 
 %%% Plot spectral test
 subplot(3,2,5)
@@ -117,18 +118,19 @@ plot(xaxis,m3fit.bound1,'--g',xaxis,m3fit.bound2,'--g','LineWidth',1)
 xaxis = m2fit.xaxis;
 plot(xaxis,m2fit.bound1,'--r',xaxis,m2fit.bound2,'--r','LineWidth',1)
 plot(xaxis,m2fit.estimate,'r',xaxis,m2fit.true,'k','LineWidth',1.5)
-
-
-set(gca,'YTickLabel',[]);
-set(gca,'XTickLabel',[]);
-set(gca,'XTick',[]);
-set(gca,'YTick',[]);
+% 
+% 
+% set(gca,'YTickLabel',[]);
+% set(gca,'XTickLabel',[]);
+% set(gca,'XTick',[]);
+% set(gca,'YTick',[]);
 title('Integrated Spectrum Test','FontSize',20);
 ylabel('Cumulative Density','FontSize',18)
 xlabel('Averaged Spectrum (1/Hz)','FontSize',18)
-a = get(gca,'XTickLabel');
-set(gca,'XTickLabel',a,'fontsize',16)
+% a = get(gca,'XTickLabel');
+% set(gca,'XTickLabel',a,'fontsize',16)
 axis tight
+box off
 %%% Plot residual test
 subplot(3,2,6)
 data  = model_true.data;
@@ -152,13 +154,14 @@ figure;
 
 %%%%% Plot bar Comp Times
 subplot 131
-barplot(Labels,ct_standard,ct_spline)
+barplot(Labels,ct_standard(2:end),ct_spline(2:end))
 ylabel('Computation time (s)','FontSize',20)
-set(gca,'xlim',[0.5 2.5])
-a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
-box off
+ set(gca,'xlim',[0.5 2.5])
+% a = get(gca,'YTickLabel');
+% set(gca,'YTickLabel',a,'fontsize',16)
+ box off
 %  xlim =([.75 2.25]);
+axis tight
 
 %%% Plot bar GR test stat
 subplot 132
@@ -188,12 +191,14 @@ set(gca,'YTickLabel',a,'fontsize',16)
 
 save('fig1')
 
+% 
+ h = get(0,'children');
+ for i=1:length(h)
+     saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'fig');
+     saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'jpg');
 
-h = get(0,'children');
-for i=1:length(h)
-    saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'fig');
-end
-close all;
+ end
+ close all;
 
 
 

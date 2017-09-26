@@ -21,16 +21,17 @@ model_true.taxis = taxis;
 if strcmp(model_true.noise_type,'white')
     %load('large_network_coef.mat');
    % load('ninenode_exp_stand.mat');
-model_true.true_coefficients = nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
+%   load('/Users/erss/Documents/MATLAB/ar_model/Simulation_coefficients/nine_node/b_standard_order35_rdi.mat');
+load('bhat_stand30_tues.mat');
+model_true.true_coefficients =bhat;
+%nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
     model_true.model_coefficients = model_true.true_coefficients;   
 end
 %%% Define model inputs for spline Granger & standard Granger -------------
 
 model_true.s = 0.5;                     % tension parameter for spline
 model_true.estimated_model_order = 30;  % model_order used to estimate
-
-number_of_knots      = floor(model_true.estimated_model_order/3);
-model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
+model_true.cntrl_pts = [0:5:model_true.estimated_model_order];%make_knots(model_true.estimated_model_order,number_of_knots);
 
 %%% Define network testing parameters -------------------------------------
 
@@ -41,11 +42,11 @@ model_true.nrealizations = 20; % number of realizations used for spectral testin
 
 nelectrodes = size(model_true.model_coefficients,1);
 
-trials_spline = zeros(nelectrodes,nelectrodes,ntrials);
+trials_spline = zeros(nelectrodes,nelectrodes,ntrials); 
 trials_stand = zeros(nelectrodes,nelectrodes,ntrials);
 
-splinetime = zeros(1,ntrials);
-standardtime = zeros(1,ntrials);
+splinetimes = zeros(1,ntrials);
+standardtimes = zeros(1,ntrials);
 
 for k = 1:ntrials
     
@@ -62,23 +63,36 @@ for k = 1:ntrials
 %     trials_spline(:,:,k) = adj_spline;
 %     trials_stand(:,:,k) = adj_mat;
 
-infer_network;
+tic
+[ adj_spline] = build_ar_splines( model_true);
+splinetime  = toc;
+[ bhat, yhat] = estimate_coefficient_fits( model_true, adj_spline);
+
+
+model_spline = model_true;
+model_spline.model_coefficients = bhat;
+model_spline.computation_time = splinetime;
+model_spline.signal_estimate = yhat;
+model_spline.network = adj_spline;
+
+
      trials_spline(:,:,k) = model_spline.network;
-     trials_stand(:,:,k) = model_standard.network;
-     splinetime(k)= model_spline.computation_time;
-     standardtime(k)=model_standard.computation_time;
+    % trials_stand(:,:,k) = model_standard.network;
+     splinetimes(k)= model_spline.computation_time;
+     %standardtimes(k)=model_standard.computation_time;
 
      
-     
-     
-         [nw] = dwstat(model_standard);
-    dw_fails_standard = [dw_fails_standard nw];
-    [nw] = dwstat(model_spline);
+         [nw] = dwstat(model_spline);
     dw_fails_spline = [dw_fails_spline nw];
-    
-    [ m2fit,m3fit] = grstat1( model_true,model_standard,model_spline );
-    gr_fails_standard = [ gr_fails_standard m2fit.fails];
-    gr_fails_spline= [ gr_fails_spline m3fit.fails];
+     
+%          [nw] = dwstat(model_standard);
+%     dw_fails_standard = [dw_fails_standard nw];
+
+%     clear m2fit
+%     clear m3fit
+%     [ m2fit,m3fit] = grstat1( model_true,model_standard,model_spline );
+%     gr_fails_standard = [ gr_fails_standard m2fit.fails'];
+%     gr_fails_spline = [ gr_fails_spline m3fit.fails'];
     
 %       [m2fit, m3fit] = grstat1(model_true,model_spline,model_standard);
 %  ts_spline(i) = m2fit.stat;
@@ -103,7 +117,7 @@ caxis([0 1])
 
 %%% plot one instance of spline inference
 subplot 222
-plotNetwork(adj_spline)
+plotNetwork(trials_spline(:,:,1))
 title('Spline Network','FontSize',20)
 colorbar
 caxis([0 1])
@@ -122,47 +136,47 @@ title('Standard Deviation','FontSize',20);
 colorbar
 caxis([0 1])
 %%
-adj_true = model_true.true_coefficients;
-adj_true(adj_true~=0)=1;
-adj_true=sum(adj_true,3);
-adj_true(adj_true~=0)=1;
-
-adj_thresh = bb;
-adj_thresh(adj_thresh >= 0.1)= 1;
-adj_thresh(adj_thresh < 0.1)= 0;
-
-for i = 1:ntrials
-    accspline(i) = network_accuracy(adj_true,trials_spline(:,:,i));
-    accstand(i) = network_accuracy(adj_true,trials_stand(:,:,i));
-    
-    threshspline(i) = network_accuracy(adj_thresh,trials_spline(:,:,i));
-    threshstand(i) = network_accuracy(adj_thresh,trials_stand(:,:,i));
-    
-end
-
-%%% Figure 2
-Labels = {'Standard', 'Spline'};
-figure;
-%%% computational time bar plot
-subplot 131
-barplot(Labels, standardtime,splinetime)
-set(gca,'xlim',[0.5 2.5])
-ylabel('Computation time (s)','FontSize',18)
-
-%%% accuracy bar plot
-subplot 132
-barplot(Labels,accstand,accspline)
-ylabel('Accuracy','FontSize',18)
-set(gca,'xlim',[0.5 2.5])
-ylim([0 1])
+% adj_true = model_true.true_coefficients;
+% adj_true(adj_true~=0)=1;
+% adj_true=sum(adj_true,3);
+% adj_true(adj_true~=0)=1;
+% 
+% adj_thresh = bb;
+% adj_thresh(adj_thresh >= 0.1)= 1;
+% adj_thresh(adj_thresh < 0.1)= 0;
+% 
+% for i = 1:ntrials
+%     accspline(i) = network_accuracy(adj_true,trials_spline(:,:,i));
+%  %  accstand(i) = network_accuracy(adj_true,trials_stand(:,:,i));
+%     
+%     threshspline(i) = network_accuracy(adj_thresh,trials_spline(:,:,i));
+%     threshstand(i) = network_accuracy(adj_thresh,trials_stand(:,:,i));
+%     
+% end
+% 
+% %%% Figure 2
+% Labels = {'Standard', 'Spline'};
+% figure;
+% %%% computational time bar plot
+% subplot 121
+% barplot(Labels, standardtimes(2:end),splinetimes(2:end))
+% set(gca,'xlim',[0.5 2.5])
+% ylabel('Computation time (s)','FontSize',18)
+% 
+% %%% accuracy bar plot
+% subplot 122
+% barplot(Labels,accstand,accspline)
+% ylabel('Accuracy','FontSize',18)
+% set(gca,'xlim',[0.5 2.5])
+% ylim([0 1])
 
 %%% threshold accuracy bar plot
-subplot 133
-barplot(Labels,threshstand,threshspline)
-ylabel('Accuracy (Threshold)','FontSize',18)
-set(gca,'xlim',[0.5 2.5])
-ylim([0 1])
-%%% Figure 3
+% subplot 133
+% barplot(Labels,threshstand,threshspline)
+% ylabel('Accuracy (Threshold)','FontSize',18)
+% set(gca,'xlim',[0.5 2.5])
+% ylim([0 1])
+%% Figure 3
 figure;
 
 %%% plot signals
@@ -181,22 +195,22 @@ for i =1:9
     hold on;
     
 end
-ylim([-100,0]);
+%ylim([-100,0]);
 title('Spectrogram','FontSize',20);
 ylabel('Power (dB)','FontSize',18)
 xlabel('Frequecy (Hz)','FontSize',18)
 box off
-a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
+% a = get(gca,'YTickLabel');
+% set(gca,'YTickLabel',a,'fontsize',16)
 
 
-%%% SAVE ALL ----------------------------
-save('fig3')
+%% SAVE ALL ----------------------------
+save('fig3_standard')
 
 h = get(0,'children');
 for i=1:length(h)
     
-    saveas(h(i), ['fig3_avgntwk'  num2str(i)], 'fig');   
+    saveas(h(i), ['fig3_avgntwk_standardrdi'  num2str(i)], 'fig');   
 end
 close all;
 

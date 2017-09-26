@@ -34,9 +34,7 @@ model_true.taxis = taxis;
 model_true.s = 0.5;                     % tension parameter for spline
 model_true.estimated_model_order = 30;  % model_order used to estimate
 
-number_of_knots      = floor(model_true.estimated_model_order/3);
-model_true.cntrl_pts = make_knots(model_true.estimated_model_order,number_of_knots);
-
+model_true.cntrl_pts = [0:5:model_true.estimated_model_order];
 %%% Define network testing parameters -------------------------------------
 
 model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
@@ -119,12 +117,13 @@ figure;
 
 %%%%% Plot bar Comp Times
 subplot 131
-barplot(Labels,ct_standard,ct_spline)
+barplot(Labels,ct_standard(2:end),ct_spline(2:end))
 ylabel('Computation time (s)','FontSize',20)
 set(gca,'xlim',[0.5 2.5])
 box off
-a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
+% a = get(gca,'YTickLabel');
+% set(gca,'YTickLabel',a,'fontsize',16)
+axis tight
 
 %%% Plot bar GR test stat
 subplot 132
@@ -157,6 +156,8 @@ save('fig2')
 h = get(0,'children');
 for i=1:length(h)
 saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'fig');     
+saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'jpg');     
+
 end
 close all;
 

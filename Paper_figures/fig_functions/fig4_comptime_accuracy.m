@@ -1,8 +1,12 @@
 %%%% lag v comp time & accuracy
 clear all;
 %% Define loop parameters
-load('b_standard_order35_rdi.mat')
-model_coeff_35  = b;
+%load('b_standard_order35_rdi.mat')
+%model_coeff_35  = b;
+
+ load('stand_order30_good.mat')
+ model_coeff_35  = bhat;
+
 ntrials = 1000;
 
 
@@ -160,8 +164,7 @@ t=3;
     hold on;
     [mn, sem] = confidencebds(time_results_spline(:,:,t));
     B3=shadedErrorBar(model_order_vals,mn, 2*sem, s2(t) , 1);
-    a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
+
     
     
     
@@ -199,18 +202,53 @@ t = 3;
     h=legend([A.mainLine,B.mainLine,A2.mainLine,B2.mainLine,A3.mainLine,B3.mainLine],'Two Seconds- Standard','Two Seconds- Spline','Four Seconds- Standard','Four Seconds- Spline','Eight Seconds- Standard','Eight Seconds- Spline');
     set(h,'FontSize',13)
         xlim([model_order_vals(1) model_order_vals(end)])
+%% POSSIBLE ALT FIGURE!
+figure;
+Labels = {'2s','', '4s','', '8s','',};
+subplot 221
 
-    a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
+barplot(Labels,accuracy_stand(:,3,1),accuracy_stand(:,7,1),accuracy_stand(:,3,2),accuracy_stand(:,7,2),accuracy_stand(:,3,3),accuracy_stand(:,7,3))
+title('Standard Accuracy')
+ylabel('Accuracy','FontSize',18)
+axis tight
+ylim([0 1])
+box off
+
+ax1=subplot(2,2,3);
+barplot(Labels,time_results_standard(:,3,1),time_results_standard(:,7,1),time_results_standard(:,3,2),time_results_standard(:,7,2),time_results_standard(:,3,3),time_results_standard(:,7,3))
+title('Standard Computation Time')
+ylabel('Computation Time (s)','FontSize',18)
+axis tight
+
+box off
+
+subplot 222
+
+barplot(Labels,accuracy_spline(:,3,1),accuracy_spline(:,7,1),accuracy_spline(:,3,2),accuracy_spline(:,7,2),accuracy_spline(:,3,3),accuracy_spline(:,7,3))
+title('Spline Accuracy')
+ylabel('Accuracy','FontSize',18)
+axis tight
+ylim([0 1])
+box off
+
+
+ax2= subplot(2,2,4);
+barplot(Labels,time_results_spline(:,3,1),time_results_spline(:,7,1),time_results_spline(:,3,2),time_results_spline(:,7,2),time_results_spline(:,3,3),time_results_spline(:,7,3))
+title('Spline Computation Time')
+ylabel('Computation Time (s)','FontSize',18)
+box off
+axis tight
+linkaxes([ax1,ax2],'xy')
+
 %%
 
 %%% Save
-save('fig4')
-h = get(0,'children');
-for i=1:length(h)
-    saveas(h(i), ['fig4_ctime'  num2str(i) 'lowfreq'], 'fig');
-    
-    
-    
-end
-close all;
+% save('fig4')
+% h = get(0,'children');
+% for i=1:length(h)
+%     saveas(h(i), ['fig4_ctime'  num2str(i) 'lowfreq'], 'fig');
+%     
+%     
+%     
+% end
+% close all;

@@ -1,4 +1,4 @@
-%clear all;
+clear all;
 close all;
 clc;
 %% Configure parameters
@@ -40,9 +40,18 @@ plot_data;
 %[ sse ] = gof_sse( model_spline)
 
 % gof_derbin_h( model_true, model_spline)
- %gof_bootstrap(model_true,model_spline,model_standard);
-% gof_residuals(model_spline);
-% gof_spectrum(model_true,model_spline,model_standard);
+figure;
+ gof_bootstrap(model_true,model_spline,model_standard);
+ gof_residuals(model_spline);
+ gof_spectrum(model_true,model_spline,model_standard);
+ 
+ figure;
+  [faxis, Sxx] = mySpec(model_true.data,f0,'noplot','notapers');
+  plot(faxis,Sxx)
+hold on
+  [faxis, Sxx] = mySpec(model_spline.signal_estimate,f0,'noplot','notapers');
+  plot(faxis,Sxx,'r')
+
 
 % %% Compute g.o.f with Bartlett test.
 % Ij_low = [0,4; 4,8;  8,12; 12,20; 20,30; 30,50];

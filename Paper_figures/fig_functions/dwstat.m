@@ -1,4 +1,4 @@
-function [notwhite, dw] = dwstat( model)
+function [notwhite, dw,pval] = dwstat( model)
 %UNTITLED8 Summary of this function goes here
 %   Detailed explanation goes here
 %%%% goodness_of_fit_residuals
@@ -21,7 +21,7 @@ for electrode = 1:nelectrodes
     residuals(electrode,:) = true_signal-est_signal;
 end
 
- [dw pval] = whiteness(data,residuals);
+ [dw, pval] = whiteness(data,residuals);
 % % A standard rule of thumb is that |dw < 1| or |dw > 3| indicates a high
 % % chance of residuals serial correlation; this implies poor VAR model fit.
  sig = significance(pval,0.05,'FDR')
