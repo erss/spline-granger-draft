@@ -81,8 +81,8 @@ end
 %title(strcat({'Spline, '},num2str(model_spline.computation_time),{' s'},' Overlap, ',num2str(model_spline.accuracy)))
 % bhat = model_standard.model_coefficients;
 % % save(num2str(ntwork(i)),'bhat')
-%   [notwhitestand, dwstand]=dwstat( model_standard);
-%   [notwhitespline,dwspline]=dwstat( model_spline);
+   [notwhitestand, dwstand]=dwstat( model_standard);
+   [notwhitespline,dwspline]=dwstat( model_spline);
 
 
 % 

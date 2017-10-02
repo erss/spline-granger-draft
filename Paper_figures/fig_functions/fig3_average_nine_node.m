@@ -1,6 +1,6 @@
 %%%%
 clear all;
-ntrials=1000;
+ntrials=2;
 
 dw_fails_spline =[];
 dw_fails_standard =[];
@@ -77,7 +77,13 @@ model_spline.network = adj_spline;
 
 
      trials_spline(:,:,k) = model_spline.network;
-    % trials_stand(:,:,k) = model_standard.network;
+     
+     if k == 1
+        tic
+        [ adj_mat] = build_ar( model_true);
+        standardtime(k)  = toc;
+        trials_stand(:,:,1) = adj_mat;
+     end
      splinetimes(k)= model_spline.computation_time;
      %standardtimes(k)=model_standard.computation_time;
 
@@ -136,23 +142,23 @@ title('Standard Deviation','FontSize',20);
 colorbar
 caxis([0 1])
 %%
-% adj_true = model_true.true_coefficients;
-% adj_true(adj_true~=0)=1;
-% adj_true=sum(adj_true,3);
-% adj_true(adj_true~=0)=1;
-% 
-% adj_thresh = bb;
-% adj_thresh(adj_thresh >= 0.1)= 1;
-% adj_thresh(adj_thresh < 0.1)= 0;
-% 
-% for i = 1:ntrials
-%     accspline(i) = network_accuracy(adj_true,trials_spline(:,:,i));
-%  %  accstand(i) = network_accuracy(adj_true,trials_stand(:,:,i));
-%     
-%     threshspline(i) = network_accuracy(adj_thresh,trials_spline(:,:,i));
-%     threshstand(i) = network_accuracy(adj_thresh,trials_stand(:,:,i));
-%     
-% end
+adj_true = model_true.true_coefficients;
+adj_true(adj_true~=0)=1;
+adj_true=sum(adj_true,3);
+adj_true(adj_true~=0)=1;
+
+adj_thresh = bb;
+adj_thresh(adj_thresh >= 0.1)= 1;
+adj_thresh(adj_thresh < 0.1)= 0;
+
+for i = 1:ntrials
+    accspline(i) = network_accuracy(adj_true,trials_spline(:,:,i));
+ %  accstand(i) = network_accuracy(adj_true,trials_stand(:,:,i));
+    
+    threshspline(i) = network_accuracy(adj_thresh,trials_spline(:,:,i));
+    threshstand(i) = network_accuracy(adj_thresh,trials_stand(:,:,i));
+    
+end
 % 
 % %%% Figure 2
 % Labels = {'Standard', 'Spline'};
@@ -198,20 +204,20 @@ end
 %ylim([-100,0]);
 title('Spectrogram','FontSize',20);
 ylabel('Power (dB)','FontSize',18)
-xlabel('Frequecy (Hz)','FontSize',18)
+xlabel('Frequency (Hz)','FontSize',18)
 box off
 % a = get(gca,'YTickLabel');
 % set(gca,'YTickLabel',a,'fontsize',16)
 
 
 %% SAVE ALL ----------------------------
-save('fig3_standard')
-
-h = get(0,'children');
-for i=1:length(h)
-    
-    saveas(h(i), ['fig3_avgntwk_standardrdi'  num2str(i)], 'fig');   
-end
-close all;
+% save('fig3_standard')
+% 
+% h = get(0,'children');
+% for i=1:length(h)
+%     
+%     saveas(h(i), ['fig3_avgntwk_standardrdi'  num2str(i)], 'fig');   
+% end
+% close all;
 
 

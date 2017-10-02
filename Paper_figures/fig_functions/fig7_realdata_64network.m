@@ -83,7 +83,7 @@ simulate_network;
 tic
 [ adj_spline2] = build_ar_splines( model_true);
 splinetime2  = toc;
-[ bhat2,yhat2] = estimate_coefficient_fits( model_true, adj_spline);
+[ bhat2,yhat2] = estimate_coefficient_fits( model_true, adj_spline2);
 
 model_spline_two = model_spline;
 model_spline_two.model_coefficients = bhat2;

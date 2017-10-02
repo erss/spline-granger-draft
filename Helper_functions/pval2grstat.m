@@ -17,12 +17,13 @@ grstatii = interp1q(pval,grstat,pvalii) ;
 nelectrodes = length(in);
 
 if strcmp(Type, 'pvalue') %% if input type is pvalue, output type is grstatistic
-    
+        fprintf('Returning gr statistic:')
+
     [~,i] = min(abs(pvalii-in));
     out = grstatii(i);
     
 elseif strcmp(Type, 'grstatistic') %% if input type is grstatistic, output type pvalue
-    
+    fprintf('Returning p value:')
     if in > 3.6
         fprintf('GR statistic > 3.6; lots of evidence to reject')
         out = 0.0;
