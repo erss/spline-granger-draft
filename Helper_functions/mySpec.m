@@ -1,23 +1,23 @@
-function [faxis, Sxx] = mySpec( x, f0, plot_flag,taper,color )
+function [faxis, Sxx] = mySpec( x, f0,tapers)
 % MYSPEC computes the spectrum of a signal, x, at a sampling frequency, f0.
-%  Plots if PLOT_FLAG = 'yesplot', the default, Uses tapers if taper
+%  Uses tapers if taper
 %  ='tapers', doesn't if taper = 'notapers' (DEFAULT)
 
 
-if ~exist('plot_flag','var') % default is to plot
-    taper = 'yesplot';
+% if ~exist('plot_flag','var') % default is to plot
+%     taper = 'yesplot';
+% end
+
+if ~exist('tapers','var') % default is to not use tapers
+    tapers = 'notapers';
 end
 
-if ~exist('taper','var') % default is to not use tapers
-    taper = 'notapers';
-end
 
+% if ~exist('color','var') % default is black
+%     color = 'k';
+% end
 
-if ~exist('color','var') % default is black
-    color = 'k';
-end
-
-if strcmp(taper,'notapers') %%% -----NO TAPERS------------
+if strcmp(tapers,'notapers') %%% -----NO TAPERS------------
     x = x - ones(size(x)).*mean(x);
     dt = 1/f0;
     T = length(x)/f0;  % total length of recording (seconds)
@@ -33,18 +33,18 @@ if strcmp(taper,'notapers') %%% -----NO TAPERS------------
     faxis = 0:df:fNQ;             % Frequency axis
     
     
-    if strcmp(plot_flag,'yesplot') % plots spectrum
-        plot((faxis),10*log(Sxx),'col',color,'LineWidth',2);
-        %         hold on;
-        %         plot(faxis,0.0625./(faxis.^.33))
-        xlim([0 f0/4]);
-        xlabel('Frequency (Hz)','FontSize',16);
-        ylabel('Power (dB)','FontSize',16);
-        title('Spectrogram','FontSize',16);
-    end
+%     if strcmp(plot_flag,'yesplot') % plots spectrum
+%         plot((faxis),10*log(Sxx),'col',color,'LineWidth',2);
+%         %         hold on;
+%         %         plot(faxis,0.0625./(faxis.^.33))
+%         xlim([0 f0/4]);
+%         xlabel('Frequency (Hz)','FontSize',16);
+%         ylabel('Power (dB)','FontSize',16);
+%         title('Spectrogram','FontSize',16);
+%     end
+%     
     
-    
-elseif strcmp(taper,'tapers') %%% ----USE TAPERS -----------
+elseif strcmp(tapers,'tapers') %%% ----USE TAPERS -----------
     %%% TAPER METHOD
     x = x - ones(size(x)).*mean(x);
     dt = 1/f0;
@@ -52,15 +52,15 @@ elseif strcmp(taper,'tapers') %%% ----USE TAPERS -----------
     
     [Sxx, faxis] = pmtm(x,TW,length(x),f0);
     
-    if strcmp(plot_flag,'yesplot') % plots spectrum
-       % plot(faxis,10*log(Sxx),'k','LineWidth',1.5);
-       plot(faxis,10*log(Sxx),'col',color,'LineWidth',1);
-
-        xlim([0 f0/4]);
-        xlabel('Frequency (Hz)','FontSize',14);
-        ylabel('Power (dB)','FontSize',14);
-        title('Spectrogram','FontSize',14);
-    end
+%     if strcmp(plot_flag,'yesplot') % plots spectrum
+%        % plot(faxis,10*log(Sxx),'k','LineWidth',1.5);
+%        plot(faxis,10*log(Sxx),'col',color,'LineWidth',1);
+% 
+%         xlim([0 f0/4]);
+%         xlabel('Frequency (Hz)','FontSize',14);
+%         ylabel('Power (dB)','FontSize',14);
+%         title('Spectrogram','FontSize',14);
+%     end
 end
 end
 

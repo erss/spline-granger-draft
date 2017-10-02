@@ -4,15 +4,17 @@ function [ UB, LB] = myBootstrap( model, electrode )
 % intervals.
 %
 % INPUTS:
-%  data            = A matrix of electode data with dimensions electrodes x
-%                    time
-%  adj_mat         = adjacencey matrix for corresponding network
-%  model_order     = The number of lags used as used for predictor variables
-%  electrode       = the electrode whose data is used for the model fit
-%  nsurrogates     = number of surrogates
+%  1. electrode  = the electrode whose data is used for the model fit
+%  2. model      = structure that contains the following:
+%      data         = A matrix of electode data with dimensions electrodes 
+%                     x time
+%      adj_mat      = adjacencey matrix for corresponding network
+%      model_order  = The number of lags used as used for predictor variables
+%      nsurrogates  = number of surrogates
 % 
-% OUTPUTS:
-%  bounds         = contains upper and lower confidence bounds
+% OUTPUT
+%  UB: upper bounds
+%  LB: lower bounds
 s = model.s;
 nsurrogates = model.nsurrogates;
 data = model.data;

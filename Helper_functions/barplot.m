@@ -1,6 +1,9 @@
 function barplot(labels,varargin )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+% BARPLOT creates barplots of data showing 2 standard error means.
+%
+% INPUTS:
+%   labels = names of each data
+%   varagin = each vector of data to be plotted
 n = length(varargin);
 
 for k = 1:n

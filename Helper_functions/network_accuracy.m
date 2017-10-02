@@ -1,6 +1,16 @@
 function [ frac, tp, tn, fn, fp] = network_accuracy( A,B )
-% FINDS PROPORTION OF CORRECTLY IDENTIFIED EDGES AND NON-EDGES
-
+% NETWORK_ACCURACY computes the proportion of correctly identified edges
+% and non edges. 
+%
+% INPUTS:
+%  A,B= square binary matrices of same size
+%
+% OUTPUTS:
+%  frac = fraction of correctly identified edges and non-edges
+%   tp  = true positives
+%   tn  = true negatives
+%   fn  = false negatives
+%   fp  = false postives
 diff = A-B;
 frac = length(find(diff~=0))/size(A,1)^2;
 frac = 1-frac;

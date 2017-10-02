@@ -62,7 +62,8 @@ for i = 1:ntrials
     fails = [fails nw];
     
     
-      [m2fit, m3fit] = grstat1(model_true,model_spline,model_standard);
+[m2fit] = grstat(model_true,model_spline)
+    [m3fit] = grstat(model_true,model_standard)
  ts_spline(i) = m2fit.stat;
  ts_stand(i)  = m3fit.stat;
 
@@ -90,14 +91,17 @@ set(gca,'YTick',[]);
 %%% Plot spectrogram
 subplot(2,2,2)
 
-mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','tapers');
-box off
-axis tight
-a = get(gca,'YTickLabel');
-set(gca,'YTickLabel',a,'fontsize',16)
+[faxis, Sxx] =mySpec(model_true.data(1,:),model_true.sampling_frequency,'tapers');
+        plot((faxis),10*log(Sxx),'col','k','LineWidth',2);
+        xlim([0 model_true.sampling_frequency/4]);
+
 title('Spectrogram','FontSize',20);
 ylabel('Power (dB)','FontSize',18)
 xlabel('Frequency (Hz)','FontSize',18)
+box off
+axis tight
+
+
 %%% Plot coefficients
 subplot(2,2,[3 4])
 gof_bootstrap(model_true,model_spline,model_standard);

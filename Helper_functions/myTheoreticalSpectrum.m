@@ -1,6 +1,16 @@
 function [faxis, S ] = myTheoreticalSpectrum( model_coefficients, noise_process, f0)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+% MYTHEORETICALSPECTRUM computes the theoretical spectrum of an AR model
+%   given the model coefficients and process noise.
+%
+% 
+% INPUTS:
+%   model_coefficients = vector containing coefficients in model
+%   noise_process      = noise process
+%   f0                 = sampling frequency
+%
+% OUTPUTS:
+%   faxis = frequency axis
+%   S     = spectrum
 
 T = (length(noise_process))/f0;  % total length of recording (seconds)
 df = 1/T;                          % frequency resolution

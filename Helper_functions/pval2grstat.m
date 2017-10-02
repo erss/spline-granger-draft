@@ -1,6 +1,14 @@
 function [ out ] = pval2grstat( in, Type)
-%UNTITLED5 Summary of this function goes here
-%   Detailed explanation goes here
+% PVAL2GRSTAT = computes the associated p-value to the
+% Grendander-Rosenblatt test statistic and vice versa.
+%  
+% INPUTS:
+% . in   = p-value or gr statisitc
+% . type = indicates whether the value of 'in' 'pvalue' or 'grstatistic'
+%
+% OUTPUTS:
+% . out  = computes the p-value if input is 'grstatistic' or the
+%          grstatistic if input is 'pvalue'
 
 
 
