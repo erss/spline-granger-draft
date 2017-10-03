@@ -1,4 +1,4 @@
-function gof_bootstrap( model1,model2,model3)
+function gof_bootstrap( model_true,model_spline,model_standard)
 %UNTITLED7 Summary of this function goes here
 %   Detailed explanation goes here
 % model1 = true
@@ -6,27 +6,27 @@ function gof_bootstrap( model1,model2,model3)
 % model3 = standard
 %%%% goodness_of_fit_bootstrap_coefficients
 
-noise_type = model1.noise_type;
+noise_type = model_true.noise_type;
 
 
-data = model1.data;
+data = model_true.data;
 nelectrodes = size(data,1);
-model_order = model1.estimated_model_order;
+model_order = model_true.estimated_model_order;
 
-adj_true= model1.network;
-adj_mat = model2.network;
+adj_true= model_true.network;
+adj_mat = model_spline.network;
 if strcmp(noise_type,'white')
-b = model1.true_coefficients;
+b = model_true.true_coefficients;
 nlags = size(b,3);  % true model order
 end
-bhat = model2.model_coefficients;
-b_est_stand = model3.model_coefficients;
+bhat = model_spline.model_coefficients;
+b_est_stand = model_standard.model_coefficients;
 
-f0 = model1.sampling_frequency;
+f0 = model_true.sampling_frequency;
 
 
 dt = 1/f0; % seconds
-cntrl_pts = model1.cntrl_pts;
+cntrl_pts = model_true.cntrl_pts;
 
 for electrode = 1:nelectrodes % plot fit for every electrode in network
  
@@ -34,7 +34,7 @@ for electrode = 1:nelectrodes % plot fit for every electrode in network
        UB = zeros(model_order,nelectrodes);
        LB = zeros(model_order,nelectrodes);
     else
-    [UB,LB]= myBootstrap(model2,electrode);
+    [UB,LB]= myBootstrap(model_spline,electrode);
     end
 
  %  figure;
