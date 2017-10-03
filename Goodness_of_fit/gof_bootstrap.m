@@ -1,10 +1,17 @@
 function gof_bootstrap( model_true,model_spline,model_standard)
-%UNTITLED7 Summary of this function goes here
-%   Detailed explanation goes here
-% model1 = true
-% model2 = spline
-% model3 = standard
-%%%% goodness_of_fit_bootstrap_coefficients
+% GOF_BOOTSTRAP estimates confifence bounds for the coefficient fits using
+% a boostrapping procedure. We use the observed coefficient estimates and 
+% their estimated covariance to generate 10,000 normally distributed 
+% samples of the coefficients.  From the resulting distribution, we 
+% determine the 0.025 and 0.975 quantiles of the predicted history 
+% dependence.  In this way, we use the surrogate distribution to define the 
+% 95% confidence interval for the history dependence estimates. 
+%
+% INPUTS:
+% .  model_true     = model structure used to generate the observed data
+% .  model_spline   = model fit using spline-Granger method and for which
+%                     we compute confidence bounds.
+% .  model_standard = model fit using standard-Granger method
 
 noise_type = model_true.noise_type;
 

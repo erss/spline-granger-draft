@@ -1,9 +1,21 @@
 function [ model_fit] = grstat( model_true,model_estimated)
-%UNTITLED9 Summary of this function goes here
-%   Detailed explanation goes here
-%%% Compare spectrum of true signal and of estimated signal
-%%%%%% NOTE highly dependent on noise used to generate model
-% Define model inputs
+% GRSTAT implements the Grenander and Rosenblatt test of the integrated
+% spectrum, [REF = Spectral Analysis and Time Series, Volume 1: Univariate 
+% Series by M. B. Priestley].
+%
+% INPUTS:
+% . model_true      = the model from which the observed data was generated
+% . model_estimated = the model, either spline-Granger or standard-Granger,
+%                     that was fit to the observed data
+%
+% OUTPUTS:
+% . model_fit = structure containing assessment of the fit model, 
+%               model_estimated's fit to the observed data, model_true.
+%               Structure containing the integrated spectrum of both models
+%               and 95% confidence bounds for the fit signal. Contains
+%               the GR-statistic, and associated pvalue.  Contains signals
+%               that fail the test (implying poor model fit) using
+%               Bonferroni correction.
 
 
     nelectrodes = size(model_true.data,1); % number of electrodes

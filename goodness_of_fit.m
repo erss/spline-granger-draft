@@ -61,6 +61,6 @@ end
 
 %% Coefficients
 % check if the coefficients match
- gof_bootstrap2(model_true,model_spline,model_standard);
+ gof_bootstrap_plot(model_true,model_spline,model_standard);
 
 

@@ -1,7 +1,15 @@
 function [notwhite, dw] = gof_residuals( model)
-%UNTITLED8 Summary of this function goes here
-%   Detailed explanation goes here
-%%%% goodness_of_fit_residuals
+% GOF_RESIDUALS analyzes the goodness of fit of the model residuals. For
+% each signal, it plots the true signal and the estimated signal, the model
+% residuals over time and an autocorrelation plot of the residuals.
+%
+% INPUTS:
+% . model = structure containing data and estimated data.
+%
+% OUTPUTS:
+% . notwhite = signals that fail the Durbin-Watson test for serial
+%              autocorrelation, implying poor model fit.
+% . dw       = the Durbin-Watson statistic
 data  = model.data;
 nelectrodes = size(data,1);
 model_order = model.estimated_model_order;
@@ -39,10 +47,10 @@ for electrode = 1:nelectrodes
     suptitle(num2str(electrode))
 end
 
- [dw pval] = whiteness(data,residuals);
+ [dw, pval] = whiteness(data,residuals);
 % % A standard rule of thumb is that |dw < 1| or |dw > 3| indicates a high
 % % chance of residuals serial correlation; this implies poor VAR model fit.
- sig = significance(pval,0.05,'FDR')
+ sig = significance(pval,0.05,'FDR');
 notwhite = find(sig);
 if isempty(notwhite)
     fprintf('all residuals are white by Durbin-Watson test at significance %g\n',0.05);
