@@ -1,5 +1,8 @@
 
 function b = six_node_order40
+% Returns coefficients for multivariate autoregressive model with 6 signals:
+% . b is 6x6x40 such that entry b(i,j,:) contain the model coefficients for
+%     signal j's influence on signal i.
 a1 = 0.07*[0.1*hann(20)', -0.5*ones(20,1)']';
 a2 = 0.03*[-0.5*ones(20,1)', hann(20)']';    
 %a3 = -0.3*ones(size(a1));

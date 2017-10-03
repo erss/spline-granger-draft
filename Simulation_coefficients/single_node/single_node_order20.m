@@ -1,4 +1,5 @@
 function b = single_node_order20
+% Returns coefficients for univariate AR(20) model
 b = zeros(1,1,20);
 b(1,1,:) = [-0.2314 %%%%% spectral peak, high freq
     0.1613
@@ -21,6 +22,5 @@ b(1,1,:) = [-0.2314 %%%%% spectral peak, high freq
     -0.0285
     0.0185];
 
-% b(1,1,:) = 0.07*hann(20)';
 
 end

@@ -1,6 +1,9 @@
 
 
 function b = three_node_sim_1
+% Returns coefficients for tri-variate autoregressive model:
+% . b is 3x3x40 such that entry b(i,j,:) contain the model coefficients for
+%     signal j's influence on signal i.
 a1 = 0.07*[hann(20)', -0.5*ones(20,1)']';
     a2 = 0.05*[-0.5*ones(20,1)', hann(20)']';
     %a3 = -.3*ones(size(a1));

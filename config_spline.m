@@ -5,23 +5,20 @@ model_true.noise_type = 'white'; % 'white', 'pink', 'real'
 
 model_true.sampling_frequency = 500;
 model_true.T = 2;   % time in seconds of window
-model_true.noise = 0.25;
+model_true.noise = 0.25; % standard deviation of the noise
 taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):model_true.T;
 model_true.taxis = taxis;
 
 if strcmp(model_true.noise_type,'white')
-    %load('large_network_coef.mat');
-   % load('ninenode_exp_stand.mat');
     model_true.true_coefficients =three_node_sim_1;% %%%% MODIFY COEFFICIENTS HERE!
     model_true.model_coefficients = model_true.true_coefficients;   
 elseif strcmp(model_true.noise_type,'real')
     model_true.sztype = 'sz'; % presz
-    nwk =  1:(32+6);
-    badchannels = [1,9,21,32, 8,31]; % % badchannels = [1,9,21,32,83, 8,31];
-    nwk(badchannels) = [];
-    
-    model_true.ntwk = nwk;
- %  model_true.ntwk = [2 7 18 20 21 46 50 55 60 65 70 90 80 72 ];     
+%     nwk =  1:(32+6);
+%     badchannels = [1,9,21,32, 8,31]; % % badchannels = [1,9,21,32,83, 8,31];
+%     nwk(badchannels) = [];
+%     
+%     model_true.ntwk = nwk;
 end
 %%% Define model inputs for spline Granger & standard Granger -------------
 
