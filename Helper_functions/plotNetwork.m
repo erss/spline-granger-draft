@@ -1,4 +1,7 @@
 function plotNetwork( adj)
+% PLOTNETWORK plots the adjacency matrix (adj) such that white defines a 
+%  non-edge and black defines an edge.
+
 imagesc(adj,'AlphaData',0.85); colormap(flipud(gray))
 
 NumTicks = size(adj,2)+1;

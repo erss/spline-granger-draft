@@ -1,4 +1,5 @@
 function [X] = simulate_data(model)
+% SIMULATE_DATA simulates data using AR model.
 seed=0;
 %rng_seed(seed);
     b = model.model_coefficients;

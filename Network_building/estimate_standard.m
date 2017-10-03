@@ -1,16 +1,17 @@
 function [bhat, yhat] = estimate_standard(model, adj_mat )
-% ESTIMATE_COEFFICIENT_FITS builds network model from MVAR spline modeling 
+% ESTIMATE_STANDARD fits standard-Granger model given an predetermined
+% network structure.
 %
 % INPUTS:
-%  data           = A matrix of electode data with dimensions electrodes x
-%                    time
-%  adj_mat        = network configuration
-%  model_order         = The number of lags used as used for predictor variables
-%  c_pt_times     = The number of lags used as used for predictor variables
+%  model           = model structure containing data (with dimensions
+%                    electrodes x time), and estimated model order.
+%  adj_mat        =  desired network configuration
+
 % 
 % OUTPUTS:
 %  bhat   = coefficient estimates
 %  yhat    = signal estimates
+
 
 
 data = model.data;
