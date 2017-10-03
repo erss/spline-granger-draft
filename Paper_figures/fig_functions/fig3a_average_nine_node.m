@@ -22,8 +22,8 @@ if strcmp(model_true.noise_type,'white')
     %load('large_network_coef.mat');
    % load('ninenode_exp_stand.mat');
 %   load('/Users/erss/Documents/MATLAB/ar_model/Simulation_coefficients/nine_node/b_standard_order35_rdi.mat');
-load('bhat_stand30_tues.mat');
-model_true.true_coefficients =bhat;
+%load('bhat_stand30_tues.mat');
+model_true.true_coefficients =nine_node_stand_30;
 %nine_node_order20_rdi; %%%% MODIFY COEFFICIENTS HERE!
     model_true.model_coefficients = model_true.true_coefficients;   
 end

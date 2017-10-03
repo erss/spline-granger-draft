@@ -1,8 +1,8 @@
 %%%% lag v comp time & accuracy
 clear all;
 %% Define loop parameters
-load('bhat_stand30_tues.mat')
-model_coeff_35  = bhat;
+%load('bhat_stand30_tues.mat')
+model_coeff_30  = nine_node_stand_30;
 ntrials = 1000;
 
 
@@ -26,7 +26,7 @@ model_true.noise = 0.25;
 if strcmp(model_true.noise_type,'white')
     %load('large_network_coef.mat');
    % load('ninenode_exp_stand.mat');
-        model_true.true_coefficients = model_coeff_35;
+        model_true.true_coefficients = model_coeff_30;
 
     model_true.model_coefficients = model_true.true_coefficients;       
 end
