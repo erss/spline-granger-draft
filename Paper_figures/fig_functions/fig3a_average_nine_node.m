@@ -1,6 +1,6 @@
 %%%%
 clear all;
-ntrials=2;
+ntrials=1000;
 
 dw_fails_spline =[];
 dw_fails_standard =[];
@@ -214,13 +214,13 @@ box off
 
 
 %% SAVE ALL ----------------------------
-% save('fig3_standard')
-% 
-% h = get(0,'children');
-% for i=1:length(h)
-%     
-%     saveas(h(i), ['fig3_avgntwk_standardrdi'  num2str(i)], 'fig');   
-% end
-% close all;
+save('fig3_a')
+
+h = get(0,'children');
+for i=1:length(h)
+    
+    saveas(h(i), ['fig3_a'  num2str(i)], 'fig');   
+end
+close all;
 
 

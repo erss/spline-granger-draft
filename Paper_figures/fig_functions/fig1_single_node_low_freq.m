@@ -2,7 +2,7 @@
 %%% set model coefficitens to single_node_order20 & single_node_low_freq
 clear all;
 figure;
-ntrials =2;
+ntrials =1000;
 ct_spline = zeros(1,ntrials);
 ct_standard = zeros(1,ntrials);
 ts_spline = zeros(1,ntrials);
@@ -36,8 +36,8 @@ model_true.taxis = taxis;
 model_true.s = 0.5;                     % tension parameter for spline
 model_true.estimated_model_order = 30;  % model_order used to estimate
 
-number_of_knots      = floor(model_true.estimated_model_order/3);
-model_true.cntrl_pts = [0:5:30]; %make_knots(model_true.estimated_model_order,number_of_knots);
+%number_of_knots      = floor(model_true.estimated_model_order/3);
+model_true.cntrl_pts = [0:5:model_true.estimated_model_order]; %make_knots(model_true.estimated_model_order,number_of_knots);
 
 %%% Define network testing parameters -------------------------------------
 
@@ -152,56 +152,56 @@ set(gca,'XTickLabel',[0 model_true.taxis(1:19)],'FontSize',16)
 box off
 %%
 %%%% Fig 2
-% Labels = {'Standard', 'Spline'};
-% figure;
-% 
-% %%%%% Plot bar Comp Times
-% subplot 131
-% barplot(Labels,ct_standard(2:end),ct_spline(2:end))
-% ylabel('Computation time (s)','FontSize',20)
-%  set(gca,'xlim',[0.5 2.5])
-% % a = get(gca,'YTickLabel');
-% % set(gca,'YTickLabel',a,'fontsize',16)
-%  box off
-% %  xlim =([.75 2.25]);
-% axis tight
-% 
-% %%% Plot bar GR test stat
-% subplot 132
-% barplot(Labels,ts_stand,ts_spline);
-% xlim=[.5 2.5];
-% hold on
-% plot(xlim,[2.2414 2.2414],'--r','LineWidth',2.5)
-% ylabel('Grenander & Rosenblatt Statistic','FontSize',20)
-% axis tight
-% box off
+Labels = {'Standard', 'Spline'};
+figure;
+
+%%%%% Plot bar Comp Times
+subplot 131
+barplot(Labels,ct_standard(2:end),ct_spline(2:end))
+ylabel('Computation time (s)','FontSize',20)
+ set(gca,'xlim',[0.5 2.5])
 % a = get(gca,'YTickLabel');
 % set(gca,'YTickLabel',a,'fontsize',16)
-% 
-% %%% Plot bar DW stat
-% subplot 133
-% barplot(Labels,dwstandard,dwspline)
-% hold on
-% plot(xlim,[1 1],'--r','LineWidth',2.5)
-% plot(xlim,[3 3],'--r','LineWidth',2.5)
-% ylabel('Durbin-Watson Statistic','FontSize',20)
-% axis tight
-% box off
+ box off
+%  xlim =([.75 2.25]);
+axis tight
+
+%%% Plot bar GR test stat
+subplot 132
+barplot(Labels,ts_stand,ts_spline);
+xlim=[.5 2.5];
+hold on
+plot(xlim,[2.2414 2.2414],'--r','LineWidth',2.5)
+ylabel('Grenander & Rosenblatt Statistic','FontSize',20)
+axis tight
+box off
+% a = get(gca,'YTickLabel');
+% set(gca,'YTickLabel',a,'fontsize',16)
+
+%%% Plot bar DW stat
+subplot 133
+barplot(Labels,dwstandard,dwspline)
+hold on
+plot(xlim,[1 1],'--r','LineWidth',2.5)
+plot(xlim,[3 3],'--r','LineWidth',2.5)
+ylabel('Durbin-Watson Statistic','FontSize',20)
+axis tight
+box off
 % a = get(gca,'YTickLabel');
 % set(gca,'YTickLabel',a,'fontsize',16)
 
 %%% Save ----------
 
-% save('fig1')
+save('fig1')
+
 % 
-% % 
-%  h = get(0,'children');
-%  for i=1:length(h)
-%      saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'fig');
-%      saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'jpg');
-% 
-%  end
-%  close all;
+ h = get(0,'children');
+ for i=1:length(h)
+     saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'fig');
+     saveas(h(i), ['fig1_single_node'  num2str(i) 'lowfreq'], 'jpg');
+
+ end
+ close all;
 % 
 
 

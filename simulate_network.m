@@ -35,3 +35,4 @@ elseif strcmp(model_true.noise_type,'real')   %%%%% if real data edit this
 else
     fprintf('no data simulated')
 end
+

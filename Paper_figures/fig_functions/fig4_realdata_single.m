@@ -33,7 +33,7 @@ model_true.nrealizations = 20; % number of realizations used for spectral testin
  ntwork =     1:94;
  ntwork(badchannels)=[];
 
-for k = 53 %1:64;%[20 49 53 54]%1:64
+for k = 53
  model_true.ntwk =ntwork(k);%76;
  simulate_network;
  infer_network;
@@ -60,9 +60,23 @@ xlabel('Time (s)','FontSize',18);
 
 subplot 222
 
-list=lines(size(model_true.data,1));
-mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','notapers','k');
+
+[faxis, Sxx] =mySpec(model_true.data(1,:),model_true.sampling_frequency,'notapers');
+        plot((faxis),10*log(Sxx),'col','k','LineWidth',2);
+        xlim([0 model_true.sampling_frequency/4]);
+
+title('Spectrogram','FontSize',20);
+ylabel('Power (dB)','FontSize',18)
+xlabel('Frequency (Hz)','FontSize',18)
 box off
+axis tight
+
+
+
+
+% list=lines(size(model_true.data,1));
+% mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','notapers','k');
+% box off
 ylim([-60 90])
 % a = get(gca,'YTickLabel');
 % set(gca,'YTickLabel',a,'fontsize',16)
@@ -83,13 +97,13 @@ end
 % % save(num2str(ntwork(i)),'bhat')
    [notwhitestand, dwstand]=dwstat( model_standard);
    [notwhitespline,dwspline]=dwstat( model_spline);
-
-
 % 
-h = get(0,'children');
-for i=1:length(h)
-saveas(h(i), ['fig5_single'  num2str(i)], 'fig');     
-end
-close all;
-
-save('fig5_singlenode')
+% 
+% % 
+% h = get(0,'children');
+% for i=1:length(h)
+% saveas(h(i), ['fig5_single'  num2str(i)], 'fig');     
+% end
+% close all;
+% 
+% save('fig5_singlenode')

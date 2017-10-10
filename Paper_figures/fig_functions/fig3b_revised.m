@@ -3,11 +3,13 @@ clear all;
 %% Define loop parameters
 %load('bhat_stand30_tues.mat')
 model_coeff_30  = nine_node_stand_30;
-ntrials = 1000;
+ ntrials = 1000;
+ 
+ 
+ model_order_vals = [5 30];%[4 10 15 20 25 30 35 40 45 50 70 100];
+     T = [2 4 8];
 
 
-model_order_vals = [5 30];%[4 10 15 20 25 30 35 40 45 50 70 100];
-    T = [2 4 8];
     time_results_spline = zeros(ntrials,length(model_order_vals),length(T));
     time_results_standard = zeros(ntrials,length(model_order_vals),length(T));
     
@@ -231,11 +233,11 @@ linkaxes([ax1,ax2],'xy')
 
 %%
 
-%%% Save
-save('fig4')
+% %%% Save
+save('fig3b')
 h = get(0,'children');
 for i=1:length(h)
-    saveas(h(i), ['fig4_ctime'  num2str(i) 'lowfreq'], 'fig');
+    saveas(h(i), ['fig3b'  num2str(i) 'lowfreq'], 'fig');
     
     
     

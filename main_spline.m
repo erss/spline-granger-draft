@@ -7,7 +7,6 @@ config_spline;
 
 %%% Simulate data
 simulate_network;
- %mySpec(model_true.data(1,:),model_true.sampling_frequency,'yesplot','tapers'); 
 %%
 %%% Fit Networks
 infer_network;
