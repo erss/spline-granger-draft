@@ -20,16 +20,41 @@ s = model.s;
 %% Define control points and build predictors
             
 % Construct spline regressors.
-c_pt_times_all = [cntrl_pts(1)-100 cntrl_pts cntrl_pts(end)+100];
+c_pt_times_all = [cntrl_pts(1)-100 cntrl_pts];
 Z = zeros(model_order,length(c_pt_times_all));
 num_c_pts = length(c_pt_times_all);  %number of control points in total
-for i=1:model_order
+for i=1:c_pt_times_all(end-1) %length(t)  %for each 1 ms timepoint, calculate the corresponding row of the glm input matrix
     nearest_c_pt_index = max(find(c_pt_times_all<i));
+%     if i == length(t)
+%       nearest_c_pt_index = max(find(c_pt_times_all<i));
+%     end
     nearest_c_pt_time = c_pt_times_all(nearest_c_pt_index);
     next_c_pt_time = c_pt_times_all(nearest_c_pt_index+1);
+    
     u = (i-nearest_c_pt_time)/(next_c_pt_time-nearest_c_pt_time);
-    p=[u^3 u^2 u 1]*[-s 2-s s-2 s;2*s s-3 3-2*s -s;-s 0 s 0;0 1 0 0];
-    Z(i,:) = [zeros(1,nearest_c_pt_index-2) p zeros(1,num_c_pts-4-(nearest_c_pt_index-2))];
+    
+    
+
+     p=[u^3 u^2 u 1]*[-s 2-s s-2 s;2*s s-3 3-2*s -s;-s 0 s 0;0 1 0 0];
+     Z(i,:) = [zeros(1,nearest_c_pt_index-2) p zeros(1,num_c_pts-4-(nearest_c_pt_index-2))];
+    
+    
+end
+
+for i = c_pt_times_all(end-1)+1:c_pt_times_all(end)
+        nearest_c_pt_index = max(find(c_pt_times_all<i));
+%     if i == length(t)
+%       nearest_c_pt_index = max(find(c_pt_times_all<i));
+%     end
+    nearest_c_pt_time = c_pt_times_all(nearest_c_pt_index);
+    next_c_pt_time = c_pt_times_all(nearest_c_pt_index+1);
+    
+    u = (i-nearest_c_pt_time)/(next_c_pt_time-nearest_c_pt_time);
+    
+   
+     p=[u^3 u^2 u 1]*[-s 2 s-2;2*s -3 3-2*s;-s 0 s;0 1 0];
+      Z(i,:) = [zeros(1,nearest_c_pt_index-2) p zeros(1,num_c_pts-4-(nearest_c_pt_index-2))];
+
 end
 Z0 = kron(eye(nelectrodes-1),Z);   % Nested model spline regressors
 Z1 = kron(eye(nelectrodes),Z);     % Full model spline regressors
