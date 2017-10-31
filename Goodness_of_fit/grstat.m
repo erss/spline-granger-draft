@@ -86,8 +86,6 @@ for electrode = 1:nelectrodes
     model_fit.stat(electrode) = gr_estimated;
 
 end
-% figure;
-% plot(h_true,'k'); hold on; plot(h_standard,'g'); plot(h_spline,'r')
 
 
 bfcorrection = 0.05/length(model_fit.stat);

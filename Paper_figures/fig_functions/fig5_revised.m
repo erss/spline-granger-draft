@@ -107,6 +107,21 @@ subplot 122
 plotNetwork(model_spline.network);
 title('Spline Granger - 10 s','FontSize',20)
 
+%% calc of overlap
+
+i=32;
+indices = 1:i+1:i^2;
+splinenet = adj_spline2;
+standnet = adj_stand2;
+splinenet(indices)=nan;
+standnet(indices)=nan;
+splinenet=splinenet(:);
+standnet=standnet(:);
+
+splinenet(isnan(splinenet))=[];
+standnet(isnan(standnet))=[];
+diff = splinenet-standnet;
+frac =  length(find(diff==0))/length(diff)
 %%
 %nw_spline_two = dwstat( model_spline_two);
 

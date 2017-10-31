@@ -1,10 +1,10 @@
 %%% Model type ------------------------------------------------------------
-model_true.noise_type = 'white'; % 'white', 'pink', 'real'
+model_true.noise_type = 'real'; % 'white', 'pink', 'real'
 
 %%% Simulation parameters -------------------------------------------------
 
 model_true.sampling_frequency = 500;
-model_true.T = 2;   % time in seconds of window
+model_true.T = 3;   % time in seconds of window
 model_true.noise = 0.25; % standard deviation of the noise
 taxis = (1/model_true.sampling_frequency):(1/model_true.sampling_frequency):model_true.T;
 model_true.taxis = taxis;
@@ -18,7 +18,8 @@ elseif strcmp(model_true.noise_type,'real')
 %     badchannels = [1,9,21,32, 8,31]; % % badchannels = [1,9,21,32,83, 8,31];
 %     nwk(badchannels) = [];
 %     
-%     model_true.ntwk = nwk;
+nwk = 1:20; %32;
+     model_true.ntwk = nwk;
 end
 %%% Define model inputs for spline Granger & standard Granger -------------
 

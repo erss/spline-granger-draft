@@ -2,7 +2,7 @@
 %%% set model coefficitens to single_node_order20 & single_node_low_freq
 
 clear all;
-ntrials = 1000;
+ntrials = 1; %1000
 ct_spline = zeros(1,ntrials);
 ct_standard = zeros(1,ntrials);
 ts_spline = zeros(1,ntrials);
@@ -75,7 +75,7 @@ figure;
 %%% Plot signal trace
 subplot(2,2,1)
 plot(model_true.taxis,model_true.data(1,:),'k', 'LineWidth', 1);
-hold on;      
+hold on;   
 plot([0,.2], [min(model_true.data(1,:)), min(model_true.data(1,:))], 'k', 'LineWidth', 2.5);
 box off
 title('Simulated Signal','FontSize',20);
@@ -87,13 +87,13 @@ set(gca,'YTickLabel',[]);
 set(gca,'XTickLabel',[]);
 set(gca,'XTick',[]);
 set(gca,'YTick',[]);
-
+%%
 %%% Plot spectrogram
 subplot(2,2,2)
 
 [faxis, Sxx] =mySpec(model_true.data(1,:),model_true.sampling_frequency,'tapers');
         plot((faxis),10*log(Sxx),'col','k','LineWidth',2);
-        xlim([0 model_true.sampling_frequency/4]);
+xlim=([0 model_true.sampling_frequency/4]);
 
 title('Spectrogram','FontSize',20);
 ylabel('Power (dB)','FontSize',18)
@@ -106,10 +106,10 @@ axis tight
 subplot(2,2,[3 4])
 gof_bootstrap(model_true,model_spline,model_standard);
 box off
-title('AR Coefficients','FontSize',20);
+title('Estimated Model Coefficients','FontSize',20);
 ylabel('Magnitude','FontSize',18)
 xlabel('Lag (s)','FontSize',18)
-
+hold on; 
 plot([0 0.06],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
 
     h = legend('Spline Estimated','Standard Estimated','True');
@@ -121,8 +121,11 @@ figure;
 %%%%% Plot bar Comp Times
 subplot 131
 barplot(Labels,ct_standard(2:end),ct_spline(2:end))
+xlim=[.5 2.5];
+hold on
+plot(xlim,[0 0])
 ylabel('Computation time (s)','FontSize',20)
-set(gca,'xlim',[0.5 2.5])
+
 box off
 axis tight
 
@@ -148,17 +151,17 @@ axis tight
 box off
 
 
-% %%% Save
-
-save('fig2')
-
-h = get(0,'children');
-for i=1:length(h)
-saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'fig');     
-saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'jpg');     
-
-end
-close all;
+%% %%% Save
+% 
+% save('fig2')
+% 
+% h = get(0,'children');
+% for i=1:length(h)
+% saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'fig');     
+% saveas(h(i), ['fig2_single_node'  num2str(i) 'specpeak'], 'jpg');     
+% 
+% end
+% close all;
 
 
 

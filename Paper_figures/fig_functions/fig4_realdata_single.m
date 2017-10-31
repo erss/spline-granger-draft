@@ -26,14 +26,14 @@ model_true.cntrl_pts = [0 5:5:model_true.estimated_model_order];%make_knots(mode
 %%% Define network testing parameters -------------------------------------
 
 model_true.q = 0.05;            % FDR max number acceptable proportion of false discoveries
-model_true.nsurrogates = 1000;   % number of surrogates used for bootstrapping
+model_true.nsurrogates = 100;   % number of surrogates used for bootstrapping
 model_true.nrealizations = 20; % number of realizations used for spectral testing
 
  badchannels = [1,8,9,13,20,21,22,23,24,25,26,31,32,34,38,41,48,49,50,68,69,71,77,78,79,82,83,87,88 ,89];
  ntwork =     1:94;
  ntwork(badchannels)=[];
 
-for k = 53
+for k = 1:64
  model_true.ntwk =ntwork(k);%76;
  simulate_network;
  infer_network;
@@ -86,8 +86,7 @@ title('Spectrogram','FontSize',20);
  subplot(2,2,[3 4])
  gof_bootstrap(model_true,model_spline,model_standard);
 box off
-% a = get(gca,'YTickLabel');
-% set(gca,'YTickLabel',a,'fontsize',16)
+
 
 title('Estimated Coefficient Fits','FontSize',20);
 plot([0 0.04],[0 0],'color',[.57 .57 .57],'LineWidth',1.7)
@@ -95,8 +94,8 @@ end
 %title(strcat({'Spline, '},num2str(model_spline.computation_time),{' s'},' Overlap, ',num2str(model_spline.accuracy)))
 % bhat = model_standard.model_coefficients;
 % % save(num2str(ntwork(i)),'bhat')
-   [notwhitestand, dwstand]=dwstat( model_standard);
-   [notwhitespline,dwspline]=dwstat( model_spline);
+   [notwhitestand, dwstand, p]=dwstat( model_standard);
+   [notwhitespline,dwspline,p]=dwstat( model_spline);
 % 
 % 
 % % 

@@ -153,7 +153,7 @@ adj_thresh(adj_thresh < 0.1)= 0;
 
 for i = 1:ntrials
     accspline(i) = network_accuracy(adj_true,trials_spline(:,:,i));
- %  accstand(i) = network_accuracy(adj_true,trials_stand(:,:,i));
+   accstand(i) = network_accuracy(adj_true,trials_stand(:,:,i));
     
     threshspline(i) = network_accuracy(adj_thresh,trials_spline(:,:,i));
     threshstand(i) = network_accuracy(adj_thresh,trials_stand(:,:,i));
